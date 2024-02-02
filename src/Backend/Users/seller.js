@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import connectDB from './connectDB.js';
+import connectDB from '../connectDB.js';
 
 const app = express();
 app.use(express.json());
@@ -15,11 +15,10 @@ const SellerSchema = new mongoose.Schema({
   verified: Boolean,
   GSTINnumber: String,
   PANnumber: String,
-  sell: Object,
+  selling: Object,
   address: String,
   orders: Object,
   totalSold: Number,
-  totalEarning: Number,
   monthlySold: Number,
 });
 const Seller = mongoose.model('Seller', SellerSchema);

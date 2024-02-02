@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
 import mongoose from 'mongoose';
-import connectDB from './connectDB.js';
+import connectDB from '../connectDB.js';
 
 const app = express();
 app.use(express.json());
@@ -13,9 +13,9 @@ const WorkerSchema = new mongoose.Schema({
   email: String,
   password: String,
   adhaar: String,
-  orders:Object,
+  ordersDevlivered:Object,
   totalDelivered: Number,
-  employTiming: Number,
+  employTiming: String,
   monthlyEarning: Number,
 });
 const Worker = mongoose.model('Worker', WorkerSchema);
