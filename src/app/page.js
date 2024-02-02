@@ -1,10 +1,11 @@
 import React from 'react'
-import Appbar from '../FrontEnd/Appbar'
+import Appbar from '@/Pages/Appbar'
+import Homepage from '@/Pages/Homepage'
 export default function Home() {
   return (
     <div>
-      <h1>Home</h1>
       <Appbar />
+      <Homepage />
     </div>
   )
 }
