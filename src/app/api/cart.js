@@ -1,4 +1,4 @@
-import {mongooseConnect} from "@/lib/mongoose";
+import {mongooseConnect} from "@/Backend/mongoose";
 import {Product} from "@/Backend/Product";
 
 export default async function handle(req,res) {
