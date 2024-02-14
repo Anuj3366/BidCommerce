@@ -2,7 +2,6 @@ import mongoose, {model, Schema, models} from "mongoose";
 
 const ProductSchema = new Schema({
 }, {
-  timestamps: true,
   name: {type:String, required:true},
   description: String,
   price: {type: Number, required: true},
@@ -11,6 +10,9 @@ const ProductSchema = new Schema({
   quantity: {type: Number, required: true},
   rating: Number,
   reviews: Object,
+  bid: false,
+  bidPrice: Number,
+  bidEnd: Date, 
 });
 
 export const Product = models.Product || model('Product', ProductSchema);
