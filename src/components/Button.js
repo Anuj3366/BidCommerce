@@ -1,5 +1,5 @@
 import styled, {css} from "styled-components";
-import {primary} from "@/lib/colors";
+import {primary} from "@/Backend/colors";
 
 export const ButtonStyle = css`
   border:0;
