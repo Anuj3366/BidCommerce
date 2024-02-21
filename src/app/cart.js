@@ -1,3 +1,4 @@
+"use client";
 import Header from "@/components/Header";
 import styled from "styled-components";
 import Center from "@/components/Center";
