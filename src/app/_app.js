@@ -1,3 +1,4 @@
+"use client";
 import { createGlobalStyle } from "styled-components";
 import { CartContextProvider } from "@/components/CartContext";
 
