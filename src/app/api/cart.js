@@ -1,8 +1,8 @@
-import {mongooseConnect} from "@/Backend/mongoose";
+import {connectDB} from "@/Backend/mongoose";
 import {Product} from "@/Backend/Product";
 
 export default async function handle(req,res) {
-  await mongooseConnect();
+  await connectDB();
   const ids = req.body.ids;
   res.json(await Product.find({_id:ids}));
 }

@@ -2,7 +2,7 @@
 import Center from "@/components/Center";
 import Header from "@/components/Header";
 import Title from "@/components/Title";
-import {mongooseConnect} from "@/Backend/mongoose";
+import {connectDB} from "@/Backend/mongoose";
 import {Product} from "@/Backend/Product";
 import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
@@ -61,7 +61,7 @@ export default function ProductPage({product}) {
 }
 
 export async function getServerSideProps(context) {
-  await mongooseConnect();
+  await connectDB();
   const {id} = context.query;
   const product = await Product.findById(id);
   return {
