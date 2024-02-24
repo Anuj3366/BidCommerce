@@ -1,7 +1,7 @@
 const express = require('express');
 const jwt = require('jsonwebtoken');
 const mongoose = require('mongoose');
-const connectDB = require('./connectDB.js');
+const connectDB = require('./mongoDB.js');
 
 const app = express();
 app.use(express.json());

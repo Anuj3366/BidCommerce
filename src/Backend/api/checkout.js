@@ -1,6 +1,6 @@
-const { connectDB } = require('@/Backend/mongoDB.js');
-const { Product } = require('@/Backend/Schemas/Product');
-const { Order } = require('@/Backend/Order');
+const { connectDB } = require('../mongoDB.js');
+const { Product } = require('../Schemas/Product');
+const { Order } = require('../Order');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
 module.exports = async function handler(req, res) {

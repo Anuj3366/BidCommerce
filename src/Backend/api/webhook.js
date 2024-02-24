@@ -1,7 +1,7 @@
-const { connectDB } = require('@/Backend/mongoDB.js');
+const connectDB = require('../mongoDB.js');
 const stripe = require('stripe')(process.env.STRIPE_SK);
-const { buffer } = require('micro');
-const { Order } = require('@/Backend/Order');
+const buffer = require('micro');
+const Order = require('../Order');
 
 const endpointSecret = "whsec_634d3142fd2755bd61adaef74ce0504bd2044848c8aac301ffdb56339a0ca78d";
 

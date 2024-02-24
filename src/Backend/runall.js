@@ -1,8 +1,6 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
-const authorization = require('./api/autorization');
-app.use(authorization);
 const cart = require('./api/cart');
 app.use('/cart', cart);
 const checkout = require('./api/checkout');

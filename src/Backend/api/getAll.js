@@ -1,8 +1,8 @@
-const { Product } = require('@/Backend/Schemas/Product.js');
+const Product = require('../Schemas/Product.js');
 const express = require('express');
 const connectDB = require('../mongoDB.js');
-const { authorization } = require('./autorization.js');
-const { User } = require('../Schemas/Users/user.js');
+const authorization  = require('./autorization.js');
+const User = require('../Schemas/Users/user.js');
 
 const app = express();
 app.use(express.json());
