@@ -1,20 +1,28 @@
-import Header from "@/components/Header";
+"use client"
+import Header from "../components/Appbar/Header";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
-
-export async function getServerSideProps() {
-  const featuredProductId = '640de2b12aa291ebdf213d48';
-  await mongooseConnect();
-  const featuredProduct = await Product.findById(featuredProductId);
-  const newProducts = await Product.find({}, null, {sort: {'_id':-1}, limit:10});
-  return {
-    props: {
-      featuredProduct: JSON.parse(JSON.stringify(featuredProduct)),
-      newProducts: JSON.parse(JSON.stringify(newProducts)),
+import connectDB from "@/Backend/mongoose";
+export default function HomePage() {
+  var featuredProduct = "";
+  var newProducts = "";
+  async function getData() {
+    const featuredProductId = '640de2b12aa291ebdf213d48';
+    await connectDB();
+    featuredProduct = await Product.findById(featuredProductId);
+    featuredProduct = JSON.parse(JSON.stringify(featuredProduct));
+  }
+  getData();
+  fetch("http://localhost:1234/getAllProduct", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
     },
-  };
-}
-export default function HomePage({featuredProduct,newProducts}) {
+  })
+  .then(response => response.json())
+  .then(data => {
+    newProducts = data;
+  });
   return (
     <div>
       <Header />

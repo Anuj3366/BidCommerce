@@ -33,7 +33,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {
+app.post('/signup',authorization, async (req, res) => {
   const { name, email, password } = req.body;
   User.create({ name: name, email: email, password: password }).then(user => {
     console.log("User Created");
@@ -45,7 +45,7 @@ app.post('/signup', async (req, res) => {
     res.status(500).send("Error");
   });
 });
-app.post('/addtask', async (req, res) => {
+app.post('/addtask',authorization, async (req, res) => {
   const { task } = req.body;
   const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, secret);
@@ -55,7 +55,7 @@ app.post('/addtask', async (req, res) => {
   res.status(200).send("Task Added");
 });
 
-app.get('/viewtask', async (req, res) => {
+app.get('/viewtask',authorization, async (req, res) => {
   const token = req.headers.authorization.split(' ')[1];
   const decoded = jwt.verify(token, secret);
   const user = await User.findOne({ email: decoded.email, password: decoded.password });

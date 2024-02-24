@@ -1,9 +1,7 @@
-"use client";
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useContext, useState } from "react";
-import { CartContext } from "@/components/CartContext";
+import { useState } from "react";
 import BarsIcon from "@/components/icons/Bars";
 
 const StyledHeader = styled.header`
@@ -64,7 +62,6 @@ const NavButton = styled.button`
 `;
 
 export default function Header() {
-  const { cartProducts } = useContext(CartContext);
   const [mobileNavActive, setMobileNavActive] = useState(false);
   return (
     <StyledHeader>
@@ -72,11 +69,11 @@ export default function Header() {
         <Wrapper>
           <Logo href={'/'}>BidCommerce</Logo>
           <StyledNav mobileNavActive={mobileNavActive}>
-            <NavLink href={'/'}>Home</NavLink>
-            <NavLink href={'/products'}>All products</NavLink>
-            <NavLink href={'/categories'}>Categories</NavLink>
-            <NavLink href={'/account'}>Account</NavLink>
-            <NavLink href={'/cart'}>Cart ({cartProducts.length})</NavLink>
+            <NavLink href={"/"}>Home</NavLink>
+            <NavLink href={"./products"}>Auction</NavLink>
+            <NavLink href={"./categories"}>Categories</NavLink>
+            <NavLink href={"./account"}>Account</NavLink>
+            <NavLink href={"./cart"}>Cart</NavLink>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />
