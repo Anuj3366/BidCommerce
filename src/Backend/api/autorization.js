@@ -1,10 +1,4 @@
 const jwt = require('jsonwebtoken');
-const express = require('express');
-const connectDB = require('../mongoDB.js');
-
-const app = express();
-app.use(express.json());
-connectDB();
 
 const secret = 'secrettohide';
 
@@ -21,4 +15,3 @@ async function authorization(req, res, next) {
 }
 
 module.exports = authorization;
-

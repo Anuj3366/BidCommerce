@@ -1,12 +1,13 @@
 const Product = require('../Schemas/Product.js');
 const express = require('express');
 const connectDB = require('../mongoDB.js');
-const authorization  = require('./autorization.js');
 const User = require('../Schemas/Users/user.js');
 
 const app = express();
 app.use(express.json());
 connectDB();
+
+const authorization  = require('./autorization.js');
 
 app.get('/getAllProduct', authorization, async (req, res) => {
   const products = await Product.find({ bid: false }, null, { sort: { '_id': -1 } });
