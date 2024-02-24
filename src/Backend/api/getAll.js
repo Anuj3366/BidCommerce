@@ -32,3 +32,15 @@ app.get('/getAllAuction', authorization, async (req, res) => {
     res.status(401).send("Invalid Credentials");
   }
 });
+
+app.get('/getAllSeller', authorization, async (req, res) => {
+  const { email, password } = req.body;
+  const founded = await User.findOne({ email: email, password: password ,userType:"moderator"});
+  if(founded){
+    const products = await User.find({wanTo:"seller"}, null, { sort: { '_id': -1 } });
+    res.json(products);
+  }
+  else{
+    res.status(401).send("Invalid Credentials");
+  }
+});

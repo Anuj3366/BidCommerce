@@ -11,7 +11,7 @@ connectDB();
 const secret = 'secrettohide';
 
 
-app.post('/login', async (req, res) => {
+app.get('/login', async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
   const userType = founded.userType;
@@ -35,5 +35,9 @@ app.post('/signup', async (req, res) => {
     console.log(err);
     res.status(500).send("Error");
   });
+});
+
+app.get('/userType', autorization, async (req, res) => {
+  res.json(req.user.user);
 });
 app.listen(3000, () => console.log('Server running on port 3000'));

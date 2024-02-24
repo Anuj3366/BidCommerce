@@ -7,6 +7,7 @@ const CustomerSchema = new mongoose.Schema({
   orders:Object,
   wishlist:Object,
   userType:{ type: String, enum: ['user' , 'seller', 'worker','moderator','admin'] },
+  wantTo:{ type: String, enum: ['seller', 'worker','moderator'] },
 });
 const Customer = mongoose.model('Customer', CustomerSchema);
 
