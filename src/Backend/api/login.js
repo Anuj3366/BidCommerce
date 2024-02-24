@@ -1,15 +1,13 @@
-import jwt from 'jsonwebtoken';
-import express from 'express';
-import connectDB from '../mongoDB.js';
-import autorization from './autorization.js';
-import { User } from '../Schemas/Users/user.js';
+const jwt = require('jsonwebtoken');
+const express = require('express');
+const connectDB = require('../mongoDB.js');
+const User = require('../Schemas/Users/user.js');
 
 const app = express();
 app.use(express.json());
 connectDB();
 
 const secret = 'secrettohide';
-
 
 app.get('/login', async (req, res) => {
   const { email, password } = req.body;
@@ -35,4 +33,8 @@ app.post('/signup', async (req, res) => {
       console.log(err);
       res.status(500).send("Error");
     });
+});
+
+app.listen(3000, () => {
+  console.log('Server is Running on Port 3000');
 });

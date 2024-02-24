@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const CustomerSchema = new mongoose.Schema({
   name: {type:String, required:true},
   email: {type:String, required:true},
@@ -9,6 +11,7 @@ const CustomerSchema = new mongoose.Schema({
   userType:{ type: String, enum: ['user' , 'seller', 'worker','moderator','admin'] },
   wantTo:{ type: String, enum: ['seller', 'worker','moderator'] },
 });
+
 const Customer = mongoose.model('Customer', CustomerSchema);
 
-
+module.exports = Customer;

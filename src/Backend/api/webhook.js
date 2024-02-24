@@ -1,11 +1,11 @@
-import { connectDB } from "@/Backend/mongoDB.js";
+const { connectDB } = require('@/Backend/mongoDB.js');
 const stripe = require('stripe')(process.env.STRIPE_SK);
-import { buffer } from 'micro';
-import { Order } from "@/Backend/Order";
+const { buffer } = require('micro');
+const { Order } = require('@/Backend/Order');
 
 const endpointSecret = "whsec_634d3142fd2755bd61adaef74ce0504bd2044848c8aac301ffdb56339a0ca78d";
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   await connectDB();
   const sig = req.headers['stripe-signature'];
 
@@ -36,6 +36,6 @@ export default async function handler(req, res) {
   res.status(200).send('ok');
 }
 
-export const config = {
+module.exports.config = {
   api: { bodyParser: false, }
 };

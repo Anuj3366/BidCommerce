@@ -1,6 +1,6 @@
-import { Html, Head, Main, NextScript } from 'next/document'
+const { Html, Head, Main, NextScript } = require('next/document');
 
-export default function Document() {
+module.exports = function Document() {
   return (
     <Html lang="en">
       <Head />

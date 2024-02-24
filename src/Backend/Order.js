@@ -1,4 +1,5 @@
-import {model, models, Schema} from "mongoose";
+const mongoose = require('mongoose');
+const { model, models, Schema } = mongoose;
 
 const OrderSchema = new Schema({
   line_items:Object,
@@ -11,4 +12,6 @@ const OrderSchema = new Schema({
   paid:Boolean,
 });
 
-export const Order = models?.Order || model('Order', OrderSchema);
+const Order = models.Order || model('Order', OrderSchema);
+
+module.exports = Order;

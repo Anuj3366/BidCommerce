@@ -1,3 +1,5 @@
+const mongoose = require('mongoose');
+
 const SellerSchema = new mongoose.Schema({
   email: String,
   shopname: String,
@@ -11,4 +13,7 @@ const SellerSchema = new mongoose.Schema({
   totalSold: Number,
   monthlySold: Number,
 });
+
 const Seller = mongoose.model('Seller', SellerSchema);
+
+module.exports = Seller;

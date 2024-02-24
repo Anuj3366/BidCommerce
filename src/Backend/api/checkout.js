@@ -1,9 +1,9 @@
-import { connectDB } from "@/Backend/mongoDB.js";
-import { Product } from "@/Backend/Schemas/Product";
-import { Order } from "@/Backend/Order";
+const { connectDB } = require('@/Backend/mongoDB.js');
+const { Product } = require('@/Backend/Schemas/Product');
+const { Order } = require('@/Backend/Order');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.json('should be a POST request');
     return;
@@ -42,5 +42,4 @@ export default async function handler(req, res) {
   res.json({
     url: session.url,
   })
-
 }

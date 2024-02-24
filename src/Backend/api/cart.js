@@ -1,8 +1,8 @@
-import {connectDB} from "@/Backend/mongoDB.js";
-import {Product} from "@/Backend/Schemas/Product";
+const { connectDB } = require('@/Backend/mongoDB.js');
+const { Product } = require('@/Backend/Schemas/Product');
 
-export default async function handle(req,res) {
+module.exports = async function handle(req, res) {
   await connectDB();
   const ids = req.body.ids;
-  res.json(await Product.find({_id:ids}));
+  res.json(await Product.find({_id: ids}));
 }

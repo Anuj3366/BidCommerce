@@ -1,7 +1,7 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import connectDB from './connectDB.js';
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const connectDB = require('./connectDB.js');
 
 const app = express();
 app.use(express.json());
@@ -21,3 +21,5 @@ const ItemSchema = new mongoose.Schema({
   sold: Number,
 });
 const Item = mongoose.model('Item', ItemSchema);
+
+module.exports = Item;

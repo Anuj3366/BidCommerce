@@ -1,7 +1,7 @@
-import mongoose, {model, Schema, models} from "mongoose";
+const mongoose = require('mongoose');
+const { model, Schema, models } = mongoose;
 
 const ProductSchema = new Schema({
-}, {
   name: {type:String, required:true},
   id: {type: Number, required: true},
   description: String,
@@ -12,8 +12,10 @@ const ProductSchema = new Schema({
   rating: Number,
   reviews: Object,
   bid: {type:Boolean, required:true},
-  bidPrice: {type:Number, required:bid},
-  bidEnd: {type:Date, required:bid}, 
+  bidPrice: {type:Number, required:function() { return this.bid; }},
+  bidEnd: {type:Date, required:function() { return this.bid; }}, 
 });
 
-export const Product = models.Product || model('Product', ProductSchema);
+const Product = models.Product || model('Product', ProductSchema);
+
+module.exports = Product;

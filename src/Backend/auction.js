@@ -1,7 +1,7 @@
-import express from 'express';
-import jwt from 'jsonwebtoken';
-import mongoose from 'mongoose';
-import connectDB from './connectDB.js';
+const express = require('express');
+const jwt = require('jsonwebtoken');
+const mongoose = require('mongoose');
+const connectDB = require('./mongoDB.js');
 
 const app = express();
 app.use(express.json());
@@ -19,3 +19,5 @@ const AuctionSchema = new mongoose.Schema({
   winner: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
 });
 const Auction = mongoose.model('Auction', AuctionSchema);
+
+module.exports = Auction;

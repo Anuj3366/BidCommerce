@@ -1,9 +1,11 @@
 const jwt = require('jsonwebtoken');
-import express from 'express';
-import connectDB from '../connectDB.js';
+const express = require('express');
+const connectDB = require('../connectDB.js');
+
 const app = express();
 app.use(express.json());
 connectDB();
+
 const secret = 'secrettohide';
 
 async function authorization(req, res, next) {
@@ -12,6 +14,6 @@ async function authorization(req, res, next) {
     const decoded = jwt.verify(token, secret);
     next(decoded);
   } catch (e) {
-    window.location = "/Login";
+    res.status(401).send('Authorization failed');
   }
 }

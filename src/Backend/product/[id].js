@@ -1,15 +1,15 @@
-import Center from "@/components/Center";
-import Header from "@/components/Appbar";
-import Title from "@/components/Title";
-import {connectDB} from "@/Backend/mongoDB.js";
-import {Product} from "@/Backend/Schemas/Product";
-import styled from "styled-components";
-import WhiteBox from "@/components/WhiteBox";
-import ProductImages from "@/components/ProductImages";
-import Button from "@/components/Button";
-import CartIcon from "@/components/icons/CartIcon";
-import {useContext} from "react";
-import {CartContext} from "@/components/CartContext";
+const Center = require('@/components/Center');
+const Header = require('@/components/Appbar');
+const Title = require('@/components/Title');
+const { connectDB } = require('@/Backend/mongoDB.js');
+const { Product } = require('@/Backend/Schemas/Product');
+const styled = require('styled-components');
+const WhiteBox = require('@/components/WhiteBox');
+const ProductImages = require('@/components/ProductImages');
+const Button = require('@/components/Button');
+const CartIcon = require('@/components/icons/CartIcon');
+const { useContext } = require('react');
+const { CartContext } = require('@/components/CartContext');
 
 const ColWrapper = styled.div`
   display: grid;
@@ -29,7 +29,7 @@ const Price = styled.span`
   font-size: 1.4rem;
 `;
 
-export default function ProductPage({product}) {
+module.exports = async function ProductPage({product}) {
   const {addProduct} = useContext(CartContext);
   return (
     <>
@@ -59,7 +59,7 @@ export default function ProductPage({product}) {
   );
 }
 
-export async function getServerSideProps(context) {
+module.exports.getServerSideProps = async function(context) {
   await connectDB();
   const {id} = context.query;
   const product = await Product.findById(id);

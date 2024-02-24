@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const WorkerSchema = new mongoose.Schema({
   email: String,
   adhaar: String,
@@ -7,3 +8,5 @@ const WorkerSchema = new mongoose.Schema({
   monthlyEarning: Number,
 });
 const Worker = mongoose.model('Worker', WorkerSchema);
+
+module.exports = Worker;
