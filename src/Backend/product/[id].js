@@ -2,7 +2,7 @@ import Center from "@/components/Center";
 import Header from "@/components/Appbar";
 import Title from "@/components/Title";
 import {connectDB} from "@/Backend/mongoose";
-import {Product} from "@/Backend/Product";
+import {Product} from "@/Backend/Schemas/Product";
 import styled from "styled-components";
 import WhiteBox from "@/components/WhiteBox";
 import ProductImages from "@/components/ProductImages";

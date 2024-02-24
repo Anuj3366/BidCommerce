@@ -1,5 +1,5 @@
 import { connectDB } from "@/Backend/mongoose";
-import { Product } from "@/Backend/Product";
+import { Product } from "@/Backend/Schemas/Product";
 import { Order } from "@/Backend/Order";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 

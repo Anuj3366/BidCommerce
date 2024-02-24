@@ -2,7 +2,7 @@ import jwt from 'jsonwebtoken';
 import express from 'express';
 import connectDB from '../connectDB.js';
 import autorization from './autorization.js';
-import {User} from '../Users/user.js';
+import {User} from '../Schemas/Users/user.js';
 
 const app = express();
 app.use(express.json());
@@ -36,8 +36,3 @@ app.post('/signup', async (req, res) => {
     res.status(500).send("Error");
   });
 });
-
-app.get('/userType', autorization, async (req, res) => {
-  res.json(req.user.user);
-});
-app.listen(3000, () => console.log('Server running on port 3000'));
