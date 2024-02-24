@@ -1,4 +1,4 @@
-import {connectDB} from "@/Backend/mongoose";
+import {connectDB} from "@/Backend/mongoDB.js";
 import {Product} from "@/Backend/Schemas/Product";
 
 export default async function handle(req,res) {

@@ -1,6 +1,6 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
-import connectDB from '../mongoose.js';
+import connectDB from '../mongoDB.js';
 import autorization from './autorization.js';
 import { User } from '../Schemas/Users/user.js';
 

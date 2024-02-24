@@ -1,6 +1,6 @@
 import { Product } from "@/Backend/Schemas/Product.js";
 import express from 'express';
-import connectDB from '../mongoose.js';
+import connectDB from '../mongoDB.js';
 import {authorization} from './autorization.js';
 import {User} from '../Schemas/Users/user.js';
 import {v4 as uuidv4} from 'uuid';

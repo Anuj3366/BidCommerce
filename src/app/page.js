@@ -2,7 +2,7 @@
 import Header from "../components/Appbar";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
-import connectDB from "@/Backend/mongoose";
+import connectDB from "@/Backend/mongoDB.js";
 export default function HomePage() {
   var featuredProduct = "";
   var newProducts = "";

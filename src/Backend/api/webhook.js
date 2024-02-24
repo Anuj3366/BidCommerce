@@ -1,4 +1,4 @@
-import { connectDB } from "@/Backend/mongoose";
+import { connectDB } from "@/Backend/mongoDB.js";
 const stripe = require('stripe')(process.env.STRIPE_SK);
 import { buffer } from 'micro';
 import { Order } from "@/Backend/Order";
