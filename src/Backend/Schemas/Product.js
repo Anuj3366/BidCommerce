@@ -3,6 +3,7 @@ import mongoose, {model, Schema, models} from "mongoose";
 const ProductSchema = new Schema({
 }, {
   name: {type:String, required:true},
+  id: {type: Number, required: true},
   description: String,
   price: {type: Number, required: true},
   images: [{type:String}],
@@ -10,9 +11,9 @@ const ProductSchema = new Schema({
   quantity: {type: Number, required: true},
   rating: Number,
   reviews: Object,
-  bid: false,
-  bidPrice: Number,
-  bidEnd: Date, 
+  bid: {type:Boolean, required:true},
+  bidPrice: {type:Number, required:bid},
+  bidEnd: {type:Date, required:bid}, 
 });
 
 export const Product = models.Product || model('Product', ProductSchema);

@@ -1,8 +1,8 @@
 const CustomerSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  password: String,
-  address: String,
+  name: {type:String, required:true},
+  email: {type:String, required:true},
+  password: {type:String, required:true},
+  address: {type:String, required:true},
   cart:Object,
   orders:Object,
   wishlist:Object,
