@@ -1,5 +1,5 @@
 import Center from "@/components/Center";
-import Header from "@/components/Appbar/Header";
+import Header from "@/components/Appbar";
 import Title from "@/components/Title";
 import {connectDB} from "@/Backend/mongoose";
 import {Product} from "@/Backend/Product";

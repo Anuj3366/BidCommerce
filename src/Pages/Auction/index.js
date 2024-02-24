@@ -1,10 +1,10 @@
-import Header from "../../components/Appbar/Header";
+import Header from "../../components/Appbar";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
 
 export default function ProductsPage() {
-  const products = "";
+  var products = {};
   fetch("http://localhost:1234/getAllAuction", {
     method: "GET",
     headers: {

@@ -1,5 +1,5 @@
 "use client"
-import Header from "../components/Appbar/Header";
+import Header from "../components/Appbar";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
 import connectDB from "@/Backend/mongoose";
@@ -7,7 +7,7 @@ export default function HomePage() {
   var featuredProduct = "";
   var newProducts = "";
   async function getData() {
-    const featuredProductId = '640de2b12aa291ebdf213d48';
+    const featuredProductId = 'anyprovidedbyadmin';
     await connectDB();
     featuredProduct = await Product.findById(featuredProductId);
     featuredProduct = JSON.parse(JSON.stringify(featuredProduct));

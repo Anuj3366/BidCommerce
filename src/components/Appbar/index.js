@@ -70,10 +70,10 @@ export default function Header() {
           <Logo href={'/'}>BidCommerce</Logo>
           <StyledNav mobileNavActive={mobileNavActive}>
             <NavLink href={"/"}>Home</NavLink>
-            <NavLink href={"./products"}>Auction</NavLink>
-            <NavLink href={"./categories"}>Categories</NavLink>
-            <NavLink href={"./account"}>Account</NavLink>
-            <NavLink href={"./cart"}>Cart</NavLink>
+            <NavLink href={"/Auction"}>Auction</NavLink>
+            <NavLink href={"/categories"}>Categories</NavLink>
+            <NavLink href={"/Account"}>Account</NavLink>
+            <NavLink href={"/Cart"}>Cart</NavLink>
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />
