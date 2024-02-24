@@ -1,7 +1,7 @@
 const SellerSchema = new mongoose.Schema({
+  email: String,
   shopname: String,
   shopemail: String,
-  password: String,
   verified: Boolean,
   GSTINnumber: String,
   PANnumber: String,

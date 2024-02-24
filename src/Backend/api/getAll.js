@@ -1,7 +1,7 @@
-import { Product } from "@/models/Product";
+import { Product } from "@/Backend/Product";
 import express from 'express';
-import connectDB from '../connectDB.js';
-import authorization from './authorization.js';
+import connectDB from '../mongoose.js';
+import {authorization} from './autorization.js';
 
 const app = express();
 app.use(express.json());
