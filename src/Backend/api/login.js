@@ -1,8 +1,8 @@
 import jwt from 'jsonwebtoken';
 import express from 'express';
-import connectDB from '../connectDB.js';
+import connectDB from '../mongoose.js';
 import autorization from './autorization.js';
-import { User } from '../Users/user.js';
+import { User } from '../Schemas/Users/user.js';
 
 const app = express();
 app.use(express.json());

@@ -1,7 +1,6 @@
-import jwt from 'jsonwebtoken';
+const jwt = require('jsonwebtoken');
 import express from 'express';
 import connectDB from '../connectDB.js';
-
 const app = express();
 app.use(express.json());
 connectDB();
