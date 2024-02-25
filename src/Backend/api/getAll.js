@@ -1,20 +1,18 @@
-const Product = require('../Schemas/Product.js');
 const express = require('express');
+const router = express.Router();
+const Product = require('../Schemas/Product.js');
 const connectDB = require('../mongoDB.js');
 const User = require('../Schemas/Users/user.js');
 
-const app = express();
-app.use(express.json());
 connectDB();
-
-const authorization  = require('./autorization.js');
-
-app.get('/getAllProduct', authorization, async (req, res) => {
+const authorization  = require('./authorization.js');
+router.get('/getAllProduct', authorization, async (req, res) => {
   const products = await Product.find({ bid: false }, null, { sort: { '_id': -1 } });
   res.json(products);
 });
 
-app.get('/getAllAuction', authorization, async (req, res) => {
+
+router.get('/getAllAuction', authorization, async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
   if (founded) {
@@ -26,7 +24,7 @@ app.get('/getAllAuction', authorization, async (req, res) => {
   }
 });
 
-app.get('/getAllSeller', authorization, async (req, res) => {
+router.get('/getAllSeller', authorization, async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password, userType: "moderator" });
   if (founded) {
@@ -38,7 +36,7 @@ app.get('/getAllSeller', authorization, async (req, res) => {
   }
 });
 
-app.get('/getuserType', authorization, async (req, res) => {
+router.get('/getuserType', authorization, async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
   if (founded) {
@@ -48,3 +46,5 @@ app.get('/getuserType', authorization, async (req, res) => {
     res.status(401).send("Invalid Credentials");
   }
 });
+console.log("getAll.js");
+module.exports = router;

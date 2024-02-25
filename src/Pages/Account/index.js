@@ -3,7 +3,7 @@ import NavLinks from "../../components/NavLinks";
 import Input from "@/components/Input";
 export default function ProductsPage() {
   var userType = {};
-  fetch('http://localhost:1234/getuserType', {
+  fetch('http://localhost:3000/getuserType', {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

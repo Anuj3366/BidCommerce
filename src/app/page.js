@@ -1,8 +1,8 @@
-"use client"
+"use client";
 import Header from "../components/Appbar";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
-import connectDB from "@/Backend/mongoDB.js";
+import connectDB from "@/Backend/mongoDB";
 export default function HomePage() {
   var featuredProduct = "";
   var newProducts = "";
@@ -13,7 +13,7 @@ export default function HomePage() {
     featuredProduct = JSON.parse(JSON.stringify(featuredProduct));
   }
   getData();
-  fetch("http://localhost:1234/getAllProduct", {
+  fetch("http://localhost:3000/getAllProduct", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

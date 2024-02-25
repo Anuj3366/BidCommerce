@@ -1,13 +1,12 @@
 const express = require('express');
+const router = express.Router();
 const connectDB = require('../mongoDB.js');
-const authorization = require('./autorization.js');
+const authorization = require('./authorization.js');
 const User = require('../Schemas/Users/user.js');
 
-const app = express();
-app.use(express.json());
 connectDB();
 
-app.put('/changePassword', authorization, async (req, res) => {
+router.put('/changePassword', authorization, async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
   if(founded){
@@ -18,3 +17,6 @@ app.put('/changePassword', authorization, async (req, res) => {
     res.status(401).send("Invalid Credentials");
   }
 });
+console.log("update.js");
+
+module.exports = router;

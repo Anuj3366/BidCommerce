@@ -1,15 +1,13 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
+const router = express.Router();
 const connectDB = require('../mongoDB.js');
 const User = require('../Schemas/Users/user.js');
-
-const app = express();
-app.use(express.json());
 connectDB();
 
 const secret = 'secrettohide';
 
-app.get('/login', async (req, res) => {
+router.get('/login', async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
   const userType = founded.userType;
@@ -22,7 +20,7 @@ app.get('/login', async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {
+router.post('/signup', async (req, res) => {
   const { name, email, password, address } = req.body;
   User.create({ name: name, email: email, password: password, address: address, userType: "user" }).then(user => {
     console.log(user, "User Created");
@@ -35,6 +33,6 @@ app.post('/signup', async (req, res) => {
     });
 });
 
-app.listen(3000, () => {
-  console.log('Server is Running on Port 3000');
-});
+console.log("login.js");
+
+module.exports = router;
