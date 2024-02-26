@@ -1,6 +1,9 @@
 const express = require('express');
 const app = express();
 app.use(express.json());
+const router = express.Router();
+app.use('/', router);
+
 const cart = require('./api/cart');
 app.use('/cart', cart);
 console.log("cart ran");
@@ -23,4 +26,8 @@ const webhook = require('./api/webhook');
 app.use('/webhook', webhook);
 console.log("webhook ran");
 
-module.exports = app;
+
+
+app.listen(3000, () => {
+  console.log('Server is running on port 3000');
+});

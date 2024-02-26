@@ -13,7 +13,7 @@ export default function HomePage() {
     featuredProduct = JSON.parse(JSON.stringify(featuredProduct));
   }
   getData();
-  fetch("http://localhost:3000/getAllProduct", {
+  fetch("http://localhost:3000/getAll/getAllProduct", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

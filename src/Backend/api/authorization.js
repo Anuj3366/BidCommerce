@@ -9,8 +9,7 @@ async function authorization(req, res, next) {
     req.user = decoded;
     next();
   } catch (e) {
-    res.status(401).send('Authorization failed');
-    next(e);
+    res.status(401).json({ error: 'Authorization failed', redirectToLogin: true });
   }
 }
 

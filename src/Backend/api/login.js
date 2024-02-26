@@ -22,7 +22,7 @@ router.get('/login', async (req, res) => {
 
 router.post('/signup', async (req, res) => {
   const { name, email, password, address } = req.body;
-  User.create({ name: name, email: email, password: password, address: address, userType: "user" }).then(user => {
+  User.create({ name: name, email: email, password: password, address: address, userType: "user" ,wantTo:"user"}).then(user => {
     console.log(user, "User Created");
     const token = jwt.sign({ email: email, password: password }, secret);
     res.json({ message: 'Creation successfully', token: `Bearer ${token}` });
