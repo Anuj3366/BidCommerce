@@ -1,6 +1,14 @@
 import Header from "../../components/Appbar";
-import NavLinks from "../../components/NavLinks";
 import Input from "@/components/Input";
+const NavLink = styled(Link)`
+  display: block;
+  color:#aaa;
+  text-decoration:none;
+  padding: 10px 0;
+  @media screen and (min-width: 768px) {
+    padding:0;
+  }
+`;
 export default function ProductsPage() {
   var userType = {};
   fetch('http://localhost:3000/getAll/getuserType', {

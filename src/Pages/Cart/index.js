@@ -77,8 +77,8 @@ export default function CartPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    if (cartProducts.length > 0) {
-      fetch('/api/cart', {
+    if (cartProducts && cartProducts.length > 0) {
+      fetch('http://localhost:3000/addToCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -93,6 +93,7 @@ export default function CartPage() {
       setProducts([]);
     }
   }, [cartProducts]);
+
 
   useEffect(() => {
     if (typeof window === 'undefined') {
@@ -113,7 +114,7 @@ export default function CartPage() {
   }
 
   async function goToPayment() {
-    const response = await fetch('/api/checkout', {
+    const response = await fetch('http://localhost:3000/checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -130,11 +131,12 @@ export default function CartPage() {
   }
 
   let total = 0;
-  for (const productId of cartProducts) {
-    const price = products.find(p => p._id === productId)?.price || 0;
-    total += price;
+  if (Array.isArray(cartProducts)) {
+    for (const productId of cartProducts) {
+      const price = products.find(p => p._id === productId)?.price || 0;
+      total += price;
+    }
   }
-
   if (isSuccess) {
     return (
       <>
