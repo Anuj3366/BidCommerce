@@ -2,17 +2,19 @@
 import Header from "../components/Appbar";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
-import connectDB from "@/Backend/mongoDB";
 export default function HomePage() {
-  var featuredProduct = "";
   var newProducts = "";
-  async function getData() {
-    const featuredProductId = 'anyprovidedbyadmin';
-    await connectDB();
-    featuredProduct = await Product.findById(featuredProductId);
-    featuredProduct = JSON.parse(JSON.stringify(featuredProduct));
-  }
-  getData();
+  var featuredProduct = "";
+  fetch("http://localhost:3000/getAll/65dc3da51ec17587c3d020a2", {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
+  .then(response => response.json())
+  .then(data => {
+    featuredProduct = data;
+  });
   fetch("http://localhost:3000/getAll/getAllProduct", {
     method: "GET",
     headers: {
