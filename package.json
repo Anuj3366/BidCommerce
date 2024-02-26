@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"next dev\" \"node ./src/Backend/runall.js\"",
+    "dev": "next dev -p 1234",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"

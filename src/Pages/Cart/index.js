@@ -1,4 +1,3 @@
-"use client";
 import Header from "../../components/Appbar";
 import styled from "styled-components";
 import Center from "@/components/Center";

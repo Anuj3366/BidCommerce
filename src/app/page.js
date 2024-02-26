@@ -5,7 +5,7 @@ import NewProducts from "@/components/NewProducts";
 export default function HomePage() {
   var newProducts = "";
   var featuredProduct = "";
-  fetch("http://localhost:3000/getAll/65dc3da51ec17587c3d020a2", {
+  fetch("http://localhost:3000/getAll/9899854206", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

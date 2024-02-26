@@ -19,7 +19,7 @@ router.get('/getAllAuction', async (req, res) => {
 
 router.get('/:productID', async (req, res) => {
   const productID = req.params.productID;
-  const products = await Product.findById(featuredProductId);
+  const products = await Product.findById(productID);
   res.json(products);
 });
 
