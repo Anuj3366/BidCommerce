@@ -1,10 +1,8 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Schemas/Product.js');
-const connectDB = require('../mongoDB.js');
 const User = require('../Schemas/Users/user.js');
 
-connectDB();
 const authorization = require('./authorization.js');
 router.get('/getAllProduct', async (req, res) => {
   const products = await Product.find({ bid: false }, null, { sort: { '_id': -1 } });

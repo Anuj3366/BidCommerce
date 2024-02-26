@@ -1,10 +1,8 @@
 const Product = require('../Schemas/Product.js');
 const express = require('express');
 const router = express.Router();
-const connectDB = require('../mongoDB.js');
 const User = require('../Schemas/Users/user.js');
 const { v4: uuidv4 } = require('uuid');
-connectDB();
 
 const authorization = require('./authorization.js');
 router.post('/newProduct', authorization, async (req, res) => {

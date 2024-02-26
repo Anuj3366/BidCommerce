@@ -4,7 +4,6 @@ import Center from "@/components/Center";
 import Button from "@/components/Button";
 import { useContext, useEffect, useState } from "react";
 import { CartContext } from "@/components/CartContext";
-import axios from "axios";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 
@@ -76,16 +75,25 @@ export default function CartPage() {
   const [streetAddress, setStreetAddress] = useState('');
   const [country, setCountry] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+
   useEffect(() => {
     if (cartProducts.length > 0) {
-      axios.post('/api/cart', { ids: cartProducts })
-        .then(response => {
-          setProducts(response.data);
-        })
+      fetch('/api/cart', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ids: cartProducts }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          setProducts(data);
+        });
     } else {
       setProducts([]);
     }
   }, [cartProducts]);
+
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;
@@ -95,21 +103,32 @@ export default function CartPage() {
       clearCart();
     }
   }, []);
+
   function moreOfThisProduct(id) {
     addProduct(id);
   }
+
   function lessOfThisProduct(id) {
     removeProduct(id);
   }
+
   async function goToPayment() {
-    const response = await axios.post('/api/checkout', {
-      name, email, city, postalCode, streetAddress, country,
-      cartProducts,
+    const response = await fetch('/api/checkout', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name, email, city, postalCode, streetAddress, country,
+        cartProducts,
+      }),
     });
-    if (response.data.url) {
-      window.location = response.data.url;
+    const data = await response.json();
+    if (data.url) {
+      window.location = data.url;
     }
   }
+
   let total = 0;
   for (const productId of cartProducts) {
     const price = products.find(p => p._id === productId)?.price || 0;
@@ -131,6 +150,7 @@ export default function CartPage() {
       </>
     );
   }
+
   return (
     <>
       <Header />

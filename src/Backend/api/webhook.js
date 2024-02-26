@@ -1,4 +1,3 @@
-const connectDB = require('../mongoDB.js');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 const buffer = require('micro');
 const Order = require('../Order');
@@ -6,18 +5,14 @@ const Order = require('../Order');
 const endpointSecret = "whsec_634d3142fd2755bd61adaef74ce0504bd2044848c8aac301ffdb56339a0ca78d";
 
 module.exports = async function handler(req, res) {
-  await connectDB();
   const sig = req.headers['stripe-signature'];
-
   let event;
-
   try {
     event = stripe.webhooks.constructEvent(await buffer(req), sig, endpointSecret);
   } catch (err) {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
-
   switch (event.type) {
     case 'checkout.session.completed':
       const data = event.data.object;

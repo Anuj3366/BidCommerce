@@ -1,9 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const connectDB = require('../mongoDB.js');
 const User = require('../Schemas/Users/user.js');
-connectDB();
 
 const secret = 'secrettohide';
 

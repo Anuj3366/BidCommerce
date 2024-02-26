@@ -1,4 +1,3 @@
-const { connectDB } = require('../mongoDB.js');
 const { Product } = require('../Schemas/Product');
 const { Order } = require('../Order');
 const stripe = require('stripe')(process.env.STRIPE_SK);
@@ -10,7 +9,6 @@ module.exports = async function handler(req, res) {
     return;
   }
   const { name, email, city, postalCode, streetAddress, country, cartProducts } = req.body;
-  await connectDB();
   const productsIds = cartProducts;
   const uniqueIds = [...new Set(productsIds)];
   const productsInfos = await Product.find({ _id: uniqueIds });
