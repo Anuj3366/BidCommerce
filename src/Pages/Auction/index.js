@@ -5,7 +5,7 @@ import Title from "@/components/Title";
 
 export default function ProductsPage() {
   var products = {};
-  fetch("http://localhost:3000/getAll/getAllAuction", {
+  fetch("http://localhost:3000/getAllAuction", {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

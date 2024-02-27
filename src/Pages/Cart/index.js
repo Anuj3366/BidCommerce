@@ -87,7 +87,12 @@ export default function CartPage() {
       })
         .then(response => response.json())
         .then(data => {
-          setProducts(data);
+          if (data.redirectToLogin) {
+            this.props.history.push('/login');
+          }
+          else {
+            setProducts(data);
+          }
         });
     } else {
       setProducts([]);

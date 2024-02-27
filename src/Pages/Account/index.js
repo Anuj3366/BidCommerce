@@ -11,7 +11,7 @@ const NavLink = styled(Link)`
 `;
 export default function ProductsPage() {
   var userType = {};
-  fetch('http://localhost:3000/getAll/getuserType', {
+  fetch('http://localhost:3000/getuserType', {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
