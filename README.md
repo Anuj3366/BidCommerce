@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# BidCommerce
 
-## Getting Started
+## Description
 
-First, run the development server:
+BidCommerce is a comprehensive e-commerce platform under development. It leverages modern technologies and frameworks to provide a seamless online shopping experience. The platform combines the features of an e-commerce website and an auction platform, with a built-in bid system and a public chat during auctions.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Features
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- **Product Management**: Efficient handling of products using Mongoose schemas.
+- **User Management**: Robust user management system to cater to diverse user needs.
+- **Shopping Cart**: A shopping cart feature that allows users to add their favourite items and proceed to checkout.
+- **Error Handling**: Effective error handling mechanisms to ensure smooth user experience.
+- **Integrated Online Marketplace**: Combines the features of an e-commerce website and an auction platform.
+- **Built-in Bid System**: Allows users to place bids on products.
+- **Public Chat**: Enables users to communicate during auctions.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Technologies Used
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+- Frontend: React, styled-components
+- Backend: Node.js, Express
+- Database: MongoDB (Mongoose)
 
-## Learn More
+## Installation and Setup
 
-To learn more about Next.js, take a look at the following resources:
+Follow these steps to get a local development environment running:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+1. **Clone the repository**
+    ```
+    git clone https://github.com/anuj3366/bidcommerce.git
+    ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+2. **Navigate into the directory**
+    ```
+    cd bidcommerce
+    ```
 
-## Deploy on Vercel
+3. **Install the dependencies**
+    For the frontend, navigate into the frontend directory and run:
+    ```
+    npm install
+    ```
+    For the backend, navigate into the backend directory and run:
+    ```
+    npm install
+    ```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+4. **Start the development servers**
+    For the frontend, navigate into the frontend directory and run:
+    ```
+    npm start
+    ```
+    For the backend, navigate into the backend directory and run:
+    ```
+    npm start
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+Your application should now be running on `localhost`. The frontend will typically be on `localhost:3000`, and the backend will be on `localhost:5000`.
+
+## Deployment
+
+The frontend will be deployed on Netlify, and the backend will be deployed on either Netlify or Render. Detailed instructions for deployment will be provided at a later stage.
+
+
+## Known Issues
+
+- Error in `cart.js`
+- Error while fetching data from `/getAll/getAllProduct`
+
+## Future Work
+
+- Fix known issues
+- Enhance the shopping cart feature
+- Improve the product and user management system
+- Enhance the integrated online marketplace feature
+- add full bid-build-in system
+  add public chat
