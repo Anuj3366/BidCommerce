@@ -16,7 +16,7 @@ BidCommerce is a comprehensive e-commerce platform under development. It leverag
 
 ## Technologies Used
 
-- Frontend: React, styled-components
+- Frontend: NextJs, ReactJs, styled-components
 - Backend: Node.js, Express
 - Database: MongoDB (Mongoose)
 
@@ -35,26 +35,18 @@ Follow these steps to get a local development environment running:
     ```
 
 3. **Install the dependencies**
-    For the frontend, navigate into the frontend directory and run:
-    ```
-    npm install
-    ```
-    For the backend, navigate into the backend directory and run:
+    Navigate into the frontend directory and run:
     ```
     npm install
     ```
 
 4. **Start the development servers**
-    For the frontend, navigate into the frontend directory and run:
-    ```
-    npm start
-    ```
-    For the backend, navigate into the backend directory and run:
+    Navigate into the frontend directory and run:
     ```
     npm start
     ```
 
-Your application should now be running on `localhost`. The frontend will typically be on `localhost:3000`, and the backend will be on `localhost:5000`.
+Your application should now be running on `localhost`. The frontend will typically be on `localhost:1234`, and the backend will be on `localhost:3000`.
 
 ## Deployment
 
