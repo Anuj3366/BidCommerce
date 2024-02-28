@@ -1,3 +1,4 @@
+"use client";
 const Center = require('@/components/Center');
 const Header = require('@/components/Appbar');
 const Title = require('@/components/Title');

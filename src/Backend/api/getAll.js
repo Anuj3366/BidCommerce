@@ -4,6 +4,11 @@ const Product = require('../Schemas/Product.js');
 const User = require('../Schemas/Users/user.js');
 
 const authorization = require('./authorization.js');
+router.get('/getAll/:productID', async (req, res) => {
+  const productID = req.params.productID;
+  const product = await Product.findOne({ '_id':productID });
+  res.json(product);
+});
 router.get('/getAllProduct', async (req, res) => {
   const products = await Product.find({ bid: false }, null, { sort: { '_id': -1 } });
   res.json(products);
@@ -15,11 +20,6 @@ router.get('/getAllAuction', async (req, res) => {
   res.json(products);
 });
 
-router.get('/:productID', async (req, res) => {
-  const productID = req.params.productID;
-  const products = await Product.findById(productID);
-  res.json(products);
-});
 
 
 router.get('/getAllSeller', authorization, async (req, res) => {
