@@ -35,13 +35,13 @@ Follow these steps to get a local development environment running:
     ```
 
 3. **Install the dependencies**
-    Navigate into the frontend directory and run:
+    Navigate into the directory and run:
     ```
     npm install
     ```
 
 4. **Start the development servers**
-    Navigate into the frontend directory and run:
+    Navigate into the directory and run:
     ```
     npm start
     ```
