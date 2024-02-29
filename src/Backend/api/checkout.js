@@ -2,7 +2,7 @@ const { Product } = require('../Schemas/Product');
 const { Order } = require('../Order');
 const stripe = require('stripe')(process.env.STRIPE_SK);
 
-console.log("checkout.js");
+// console.log("checkout.js");
 module.exports = async function handler(req, res) {
   if (req.method !== 'POST') {
     res.json('should be a POST request');

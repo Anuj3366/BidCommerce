@@ -55,8 +55,13 @@ export default function ProductPage({ product }) {
 }
 
 export async function getServerSideProps(context) {
-  const { id } = context.params;
-  const res = await fetch(`http://localhost:3000/getAll/${id}`);
+  const { _id } = context.params;
+  const res = await fetch(`http://localhost:3000/getAll/${_id}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  })
   const product = await res.json();
 
   return {

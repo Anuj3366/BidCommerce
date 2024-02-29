@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 
 const useFeaturedProducts = function () {
-  console.log("useFeaturedProducts started")
+  // console.log("useFeaturedProducts started")
   const [featuredProduct, setFeaturedProduct] = useState({});
 
   useEffect(() => {
