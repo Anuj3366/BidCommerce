@@ -1,3 +1,4 @@
+"use client";
 import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";

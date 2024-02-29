@@ -1,11 +1,12 @@
-import React from "react";
+import { useFeaturedProducts, useNewProducts } from "../Backend/client";
 import Header from "../components/Appbar";
 import Featured from "@/components/Featured";
 import NewProducts from "@/components/NewProducts";
-import { useFeaturedProduct, useNewProducts } from "./client";
 
 export default function HomePage() {
-  const featuredProduct = useFeaturedProduct();
+  console.log("HomePage started");
+  console.log(useFeaturedProducts());
+  const featuredProduct = useFeaturedProducts();
   const newProducts = useNewProducts();
 
   return (

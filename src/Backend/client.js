@@ -1,11 +1,12 @@
 "use client";
 import { useState, useEffect } from "react";
 
-export function useFeaturedProduct() {
+const useFeaturedProducts = function() {
+  console.log("useFeaturedProducts started")
   const [featuredProduct, setFeaturedProduct] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:3000/65dc40601ec17587c3d020a4", {
+    fetch("http://localhost:3000/getAll/65dc40601ec17587c3d020a4", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -20,7 +21,7 @@ export function useFeaturedProduct() {
   return featuredProduct;
 }
 
-export function useNewProducts() {
+const useNewProducts = function() {
   const [newProducts, setNewProducts] = useState([]);
 
   useEffect(() => {
@@ -38,3 +39,5 @@ export function useNewProducts() {
 
   return newProducts;
 }
+
+export { useFeaturedProducts, useNewProducts };
