@@ -23,11 +23,9 @@
     "react-dom": "^18",
     "react-toastify": "^10.0.0",
     "stripe": "^14.17.0",
-    "styled-components": "^6.1.8",
-    "uuid": "^9.0.1"
+    "styled-components": "^6.1.8"
   },
   "devDependencies": {
-    "@types/json5": "^2.2.0",
     "autoprefixer": "^10.0.1",
     "concurrently": "^8.2.2",
     "postcss": "^8",

@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
+import { useFeaturedProducts } from "../Backend/client";
 
 const Bg = styled.div`
   background-color: #222;
@@ -55,7 +56,8 @@ const ButtonsWrapper = styled.div`
   margin-top:25px;
 `;
 
-export default function Featured({ product }) {
+export default function Featured(id) {
+  const product = useFeaturedProducts();
   function addFeaturedToCart() {
     fetch("http://localhost:3000/addToCart", {
       method: "POST",
@@ -76,10 +78,10 @@ export default function Featured({ product }) {
         <ColumnsWrapper>
           <Column>
             <div>
-              <Title>{product.title}</Title>
-              <Desc>{product.description}</Desc>
+              <Title>{product?.title}</Title>
+              <Desc>{product?.description}</Desc>
               <ButtonsWrapper>
-                <ButtonLink href={'/product/' + product._id} outline={1} white={1}>Read more</ButtonLink>
+                <ButtonLink href={'/product/' + product?._id} outline={1} white={1}>Read more</ButtonLink>
                 <Button white onClick={addFeaturedToCart}>
                   <CartIcon />
                   Add to cart

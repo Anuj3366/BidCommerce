@@ -1,9 +1,6 @@
-"use client";;
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
-import {useContext} from "react";
-import {CartContext} from "@/components/CartContext";
 
 const ProductWrapper = styled.div`
   
@@ -58,23 +55,37 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({_id,title,description,price,images}) {
-  const {addProduct} = useContext(CartContext);
-  const url = '/product/'+_id;
+export default function ProductBox({ _id, title, description, price, images }) {
+  const url = '/product/' + _id;
+
+  function addFeaturedToCart() {
+    fetch("http://localhost:3000/addToCart", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId: _id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log("Added to cart", data);
+      });
+  }
+
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
         <div>
-          <img src={images?.[0]} alt=""/>
+          <img src={images?.[0]} alt="" />
         </div>
       </WhiteBox>
       <ProductInfoBox>
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>
-            ${price}
+            ₹{price}
           </Price>
-          <Button block onClick={() => addProduct(_id)} primary outline>
+          <Button block onClick={addFeaturedToCart} primary outline>
             Add to cart
           </Button>
         </PriceRow>

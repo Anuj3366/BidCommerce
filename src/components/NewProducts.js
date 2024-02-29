@@ -2,6 +2,7 @@
 import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
+import { useNewProducts } from "../Backend/client";
 
 const Title = styled.h2`
   font-size: 2rem;
@@ -9,7 +10,8 @@ const Title = styled.h2`
   font-weight: normal;
 `;
 
-export default function NewProducts({products}) {
+export default function NewProducts() {
+  const products = useNewProducts()
   return (
     <Center>
       <Title>New Arrivals</Title>
