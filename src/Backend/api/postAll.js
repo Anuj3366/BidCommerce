@@ -18,4 +18,21 @@ router.post('/newProduct', authorization, async (req, res) => {
   }
 });
 
+router.post('/products/:productID/comment', authorization, async (req, res) => {
+  const { email, password } = req.body;
+  const founded = await User.findOne({ email: email, password: password });
+  if (founded && founded.userType == 'user') {
+    const { productID } = req.params;
+    const { comment } = req.body;
+    const product = await Product({ _id: productID });
+    product.comments.push(comment);
+    const saved = await product.save();
+    res.json(saved);
+  }
+  else {
+    console.log("Invalid access");
+    res.status(403).send("Invalid access");
+  }
+});
+
 module.exports = router;

@@ -69,7 +69,7 @@ export default function Header() {
       <Center>
         <Wrapper>
           <Logo href={'/'}>BidCommerce</Logo>
-          <StyledNav mobileNavActive={mobileNavActive}>
+          <StyledNav>
             <NavLink href={"/"}>Home</NavLink>
             <NavLink href={"/Auction"}>Auction</NavLink>
             <NavLink href={"/categories"}>Categories</NavLink>

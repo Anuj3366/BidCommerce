@@ -43,4 +43,9 @@ router.get('/getuserType', authorization, async (req, res) => {
     res.status(401).send("Invalid Credentials");
   }
 });
+router.get('/product/:productID/comment', async (req, res) => {
+  const { productID } = req.params;
+  const product = await Product.findOne({ _id: productID });
+  res.json(product.comments);
+});
 module.exports = router;
