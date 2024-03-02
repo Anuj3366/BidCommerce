@@ -91,7 +91,8 @@ export default function CartPage() {
         .then(response => response.json())
         .then(data => {
           if (data.redirectToLogin) {
-            this.props.history.push('/login');
+            localStorage.removeItem('token');
+            window.location.href = "/Login";
           }
           else {
             setProducts(data);

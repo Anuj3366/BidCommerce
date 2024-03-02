@@ -71,7 +71,11 @@ export default function Featured(id) {
     })
     .then(response => response.json())
     .then(data => {
-      console.log("Added to cart", data);
+      if(data.redirectToLogin){
+        localStorage.removeItem('token');
+        window.location.href = "/Login";
+      }
+      else console.log("Added to cart", data);
     });
   }
   
@@ -94,7 +98,7 @@ export default function Featured(id) {
             </div>
           </Column>
           <Column>
-            <img src="https://149426355.v2.pressablecdn.com/wp-content/uploads/2021/10/mbp-2021-bbedit-lede.png" alt="" />
+            <img src={product?.images} alt="" />
           </Column>
         </ColumnsWrapper>
       </Center>

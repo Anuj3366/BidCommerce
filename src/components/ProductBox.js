@@ -70,7 +70,11 @@ export default function ProductBox({ _id, title, description, price, images }) {
     })
       .then(response => response.json())
       .then(data => {
-        console.log("Added to cart", data);
+        if(data.redirectToLogin){
+          localStorage.removeItem('token');
+          window.location.href = "/Login";
+        }
+        else console.log("Added to cart", data);
       });
   }
 
@@ -87,7 +91,7 @@ export default function ProductBox({ _id, title, description, price, images }) {
           <Price>
             ₹{price}
           </Price>
-          <Button block onClick={addFeaturedToCart} primary outline>
+          <Button block onClick={addFeaturedToCart} $white $outline>
             Add to cart
           </Button>
         </PriceRow>

@@ -1,7 +1,7 @@
 import styled, {css} from "styled-components";
 
 
-const primary = '#0D3D29';
+const primary = "#0D3D29";
 
 export const ButtonStyle = css`
   border:0;
@@ -13,6 +13,7 @@ export const ButtonStyle = css`
   text-decoration: none;
   font-family: 'Poppins', sans-serif;
   font-weight:500;
+  border: 1px solid;
   svg{
     height: 16px;
     margin-right: 5px;
@@ -23,30 +24,30 @@ export const ButtonStyle = css`
   `}
 
 
-   ${props => props.$white && !props.outline && css`
+   ${props => props.$white && !props['data-outline'] && css`
     background-color: #fff;
     color: #000;
   `}
-  ${props => props.$white && props.outline && css`
+  ${props => props.$white && props['data-outline'] && css`
     background-color: transparent;
     color: #fff;
     border: 1px solid #fff;
   `}
-  ${props => props.$black && !props.outline && css`
+  ${props => props.$black && !props['data-outline'] && css`
     background-color: #000;
     color: #fff;
   `}
-  ${props => props.$black && props.outline && css`
+  ${props => props.$black && props['data-outline'] && css`
     background-color: transparent;
     color: #000;
     border: 1px solid #000;
   `}
-  ${props => props.$primary && !props.outline && css`
+  ${props => props.$primary && !props['data-outline'] && css`
     background-color: ${primary};
     border: 1px solid ${primary};
     color:#fff;
   `}
-  ${props => props.$primary && props.outline && css`
+  ${props => props.$primary && props['data-outline'] && css`
     background-color: transparent;
     border: 1px solid ${primary};
     color:${primary};
@@ -64,8 +65,8 @@ const StyledButton = styled.button`
   ${ButtonStyle}
 `;
 
-export default function Button({children,...rest}) {
+export default function Button({outline, children, ...rest}) {
   return (
-    <StyledButton {...rest}>{children}</StyledButton>
+    <StyledButton data-outline={outline} {...rest}>{children}</StyledButton>
   );
 }

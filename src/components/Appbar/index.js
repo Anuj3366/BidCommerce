@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import BarsIcon from "@/components/icons/Bars";
 
 const StyledHeader = styled.header`

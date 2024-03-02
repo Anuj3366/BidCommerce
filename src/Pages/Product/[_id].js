@@ -61,7 +61,7 @@ export default function ProductPage({ product, comments }) {
                 <Price>₹{product.price}</Price>
               </div>
               <div>
-                <Button primary onClick={() => addProduct(product._id)}>
+                <Button $primary onClick={() => addProduct(product._id)}>
                   <CartIcon />Add to cart
                 </Button>
               </div>
@@ -75,7 +75,7 @@ export default function ProductPage({ product, comments }) {
           <Center><p>Add a comment</p>
 
             <Input type="text" placeholder="Add a comment" />
-            <Button primary onClick={() => addcomment("Hello")}>
+            <Button $primary onClick={() => addcomment("Hello")}>
               Add
             </Button>
           </Center>

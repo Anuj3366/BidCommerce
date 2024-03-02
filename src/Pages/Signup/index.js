@@ -80,7 +80,7 @@ export default function Signup() {
           value={address}
           onChange={(e) => setAddress(e.target.value)}
         />
-        <Button primary onClick={signup}>
+        <Button $primary onClick={signup}>
           Signup
         </Button>
       </Box>

@@ -6,7 +6,7 @@ const useFeaturedProducts = function () {
   const [featuredProduct, setFeaturedProduct] = useState({});
 
   useEffect(() => {
-    fetch("http://localhost:3000/getAll/65dde51a0eb772aaa7764dfc", {
+    fetch("http://localhost:3000/getAll/65e2a8f982c4409b081f6d61", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

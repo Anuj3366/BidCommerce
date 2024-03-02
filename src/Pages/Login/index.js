@@ -66,7 +66,7 @@ export default function Login() {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <Button primary onClick={login}>
+        <Button $primary onClick={login}>
           Login
         </Button>
       </Box>
