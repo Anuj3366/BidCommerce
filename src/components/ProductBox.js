@@ -60,22 +60,25 @@ export default function ProductBox({ _id, title, description, price, images }) {
 
   function addFeaturedToCart() {
     const token = localStorage.getItem('token');
-    fetch("http://localhost:3000/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ productId: _id }),
-    })
-      .then(response => response.json())
-      .then(data => {
-        if(data.redirectToLogin){
-          localStorage.removeItem('token');
-          window.location.href = "/Login";
-        }
-        else console.log("Added to cart", data);
-      });
+    if (!token) window.location.href = "/Login";
+    else {
+      fetch("http://localhost:3000/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId: _id }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.redirectToLogin) {
+            localStorage.removeItem('token');
+            window.location.href = "/Login";
+          }
+          else console.log("Added to cart", data);
+        });
+    }
   }
 
   return (

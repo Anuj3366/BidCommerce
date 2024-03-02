@@ -5,10 +5,10 @@ const User = require('../Schemas/Users/user.js');
 
 const secret = 'secrettohide';
 
-router.get('/login', async (req, res) => {
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   const founded = await User.findOne({ email: email, password: password });
-  const userType = founded.userType;
+  const userType = founded?.userType;
   if (founded) {
     const token = jwt.sign({ email: email, password: password, user: userType }, secret);
     res.json({ message: 'login successfully', token: `${token}` });

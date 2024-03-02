@@ -25,25 +25,24 @@ const Box = styled.div`
 `;
 
 export default function Login() {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
 
   function login() {
-    console.log(username, password);
     fetch("http://localhost:3000/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ username, password }),
+      body: JSON.stringify({ email, password }),
     })
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
           localStorage.setItem('token', data.token);
           console.log("Logged in");
-          router.push('/home');
+          router.push('/');
         } else {
           console.log("Failed to login");
         }
@@ -56,9 +55,9 @@ export default function Login() {
         <Title>Login</Title>
         <Input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <Input
           type="password"

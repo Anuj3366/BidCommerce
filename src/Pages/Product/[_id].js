@@ -27,23 +27,55 @@ const Price = styled.span`
 `;
 
 export default function ProductPage({ product, comments }) {
-  const token = localStorage.getItem('token');
   const addcomment = async (comment) => {
-    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ comment }),
-    });
-    const data = await res?.json();
-    if (data.redirectToLogin) {
+    const token = localStorage?.getItem('token');
+    if (!token) {
       window.location.href = "/login";
+    }
+    else {
+      const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ comment }),
+      });
+      const data = await res?.json();
+      if (data.redirectToLogin) {
+        window.location.href = "/login";
+      }
     }
   }
   if (comments.length == 0) {
     comments = <p>No comments</p>
+  }
+  else {
+    comments = comments.map((comment) => {
+      return <p>{comment}</p>
+    })
+  }
+  function addToCart(product) {
+    const token = localStorage.getItem('token');
+    if (!token) window.location.href = "/Login";
+    else {
+      fetch("http://localhost:3000/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId: product._id }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.redirectToLogin) {
+            localStorage.removeItem('token');
+            window.location.href = "/Login";
+          }
+          else console.log("Added to cart", data);
+        });
+    }
   }
   return (
     <>
@@ -61,7 +93,7 @@ export default function ProductPage({ product, comments }) {
                 <Price>₹{product.price}</Price>
               </div>
               <div>
-                <Button $primary onClick={() => addProduct(product._id)}>
+                <Button $primary onClick={() => addToCart(product)}>
                   <CartIcon />Add to cart
                 </Button>
               </div>
@@ -93,15 +125,30 @@ export async function getServerSideProps(context) {
     headers: {
       "Content-Type": "application/json",
     },
-  })
-  const product = await res?.json();
-  const comments = await fetch(`http://localhost:3000/product/${_id}/comment`, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
-    .then(res => res?.json());
+  });
+
+  if (!res.ok) {
+    console.error(`Error fetching product: ${res.status}`);
+    return { props: {} };
+  }
+
+  const product = await res.json();
+
+  // const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
+  //   method: "GET",
+  //   headers: {
+  //     "Content-Type": "application/json",
+  //   },
+  // });
+
+  // if (!commentsRes.ok) {
+  //   console.error(`Error fetching comments: ${commentsRes.status}`);
+  //   return { props: { product } };
+  // }
+
+  // const comments = await commentsRes.json();
+  const comments = "";
+
   return {
     props: {
       product,

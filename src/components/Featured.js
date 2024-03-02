@@ -60,25 +60,27 @@ export default function Featured(id) {
   const product = useFeaturedProducts();
   function addFeaturedToCart() {
     const token = localStorage.getItem('token');
-  
-    fetch("http://localhost:3000/addToCart", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`
-      },
-      body: JSON.stringify({ productId: product._id }),
-    })
-    .then(response => response.json())
-    .then(data => {
-      if(data.redirectToLogin){
-        localStorage.removeItem('token');
-        window.location.href = "/Login";
-      }
-      else console.log("Added to cart", data);
-    });
+    if (!token) window.location.href = "/Login";
+    else {
+      fetch("http://localhost:3000/addToCart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ productId: product._id }),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.redirectToLogin) {
+            localStorage.removeItem('token');
+            window.location.href = "/Login";
+          }
+          else console.log("Added to cart", data);
+        });
+    }
   }
-  
+
 
   return (
     <Bg>

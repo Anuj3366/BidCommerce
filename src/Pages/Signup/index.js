@@ -45,7 +45,7 @@ export default function Signup() {
         if (data.token) {
           localStorage.setItem('token', data.token);
           console.log("Signed up");
-          router.push('/home');
+          router.push('/');
         } else {
           console.log("Failed to signup");
         }

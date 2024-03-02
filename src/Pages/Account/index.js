@@ -1,3 +1,4 @@
+"use client";
 import Header from "../../components/Appbar";
 import Input from "@/components/Input";
 const NavLink = styled(Link)`
