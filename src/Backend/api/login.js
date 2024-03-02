@@ -11,7 +11,7 @@ router.get('/login', async (req, res) => {
   const userType = founded.userType;
   if (founded) {
     const token = jwt.sign({ email: email, password: password, user: userType }, secret);
-    res.json({ message: 'login successfully', token: `Bearer ${token}` });
+    res.json({ message: 'login successfully', token: `${token}` });
   }
   else {
     res.status(401).send("Invalid Credentials");
@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
   User.create({ name: name, email: email, password: password, address: address, userType: "user" ,wantTo:"user"}).then(user => {
     console.log(user, "User Created");
     const token = jwt.sign({ email: email, password: password }, secret);
-    res.json({ message: 'Creation successfully', token: `Bearer ${token}` });
+    res.json({ message: 'Creation successfully', token: `${token}` });
   })
     .catch(err => {
       console.log(err);
@@ -31,6 +31,6 @@ router.post('/signup', async (req, res) => {
     });
 });
 
-console.log("login.js");
+// console.log("login.js");
 
 module.exports = router;

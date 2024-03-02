@@ -10,11 +10,13 @@ const NavLink = styled(Link)`
   }
 `;
 export default function ProductsPage() {
+  const token = localStorage.getItem('token');
   var userType = {};
   fetch('http://localhost:3000/getuserType', {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
+      "authorization": `Bearer ${token}`
     },
   },).then(response => response.json()).then(data => {
     userType = data;

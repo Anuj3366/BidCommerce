@@ -1,6 +1,6 @@
 const stripe = require('stripe')(process.env.STRIPE_SK);
 const buffer = require('micro');
-const Order = require('../Order');
+const Order = require('../Schemas/Order');
 
 const endpointSecret = "whsec_634d3142fd2755bd61adaef74ce0504bd2044848c8aac301ffdb56339a0ca78d";
 

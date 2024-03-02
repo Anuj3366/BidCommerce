@@ -56,13 +56,15 @@ const Price = styled.div`
 `;
 
 export default function ProductBox({ _id, title, description, price, images }) {
-  const url = '/Product/' + _id;
+  const url = '/product/' + _id;
 
   function addFeaturedToCart() {
+    const token = localStorage.getItem('token');
     fetch("http://localhost:3000/addToCart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
       },
       body: JSON.stringify({ productId: _id }),
     })

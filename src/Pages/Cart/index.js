@@ -79,10 +79,12 @@ export default function CartPage() {
 
   useEffect(() => {
     if (cartProducts && cartProducts.length > 0) {
+      const token = localStorage.getItem('token');
       fetch('http://localhost:3000/addToCart', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          "authorization": `Bearer ${token}`
         },
         body: JSON.stringify({ ids: cartProducts }),
       })
@@ -120,10 +122,14 @@ export default function CartPage() {
   }
 
   async function goToPayment() {
+    const token = localStorage.getItem('token');
+
     const response = await fetch('http://localhost:3000/checkout', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
+        "authorization": `Bearer ${token}`
+
       },
       body: JSON.stringify({
         name, email, city, postalCode, streetAddress, country,

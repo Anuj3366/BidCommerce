@@ -64,6 +64,13 @@ const NavButton = styled.button`
 
 export default function Header() {
   const [mobileNavActive, setMobileNavActive] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+  }, []);
+
   return (
     <StyledHeader>
       <Center>
@@ -73,10 +80,15 @@ export default function Header() {
             <NavLink href={"/"}>Home</NavLink>
             <NavLink href={"/Auction"}>Auction</NavLink>
             <NavLink href={"/categories"}>Categories</NavLink>
-            <NavLink href={"/Account"}>Account</NavLink>
             <NavLink href={"/Cart"}>Cart</NavLink>
-            <NavLink href={"/Login"}>Login</NavLink>
-            <NavLink href={"/Signup"}>SignUp</NavLink>
+            {isLoggedIn ? (
+              <NavLink href={"/Account"}>Account</NavLink>
+            ) : (
+              <>
+                <NavLink href={"/Login"}>Login</NavLink>
+                <NavLink href={"/Signup"}>SignUp</NavLink>
+              </>
+            )}
           </StyledNav>
           <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
             <BarsIcon />

@@ -26,21 +26,23 @@ const Price = styled.span`
   font-size: 1.4rem;
 `;
 
-export default function ProductPage({ product , comments}) {
+export default function ProductPage({ product, comments }) {
+  const token = localStorage.getItem('token');
   const addcomment = async (comment) => {
     const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
       },
       body: JSON.stringify({ comment }),
     });
-    const data = await res.json();
-    if(data.redirectToLogin){
+    const data = await res?.json();
+    if (data.redirectToLogin) {
       window.location.href = "/login";
     }
   }
-  if(comments.length == 0){
+  if (comments.length == 0) {
     comments = <p>No comments</p>
   }
   return (
@@ -71,7 +73,7 @@ export default function ProductPage({ product , comments}) {
         <WhiteBox>
           <Title>Comments</Title>
           <Center><p>Add a comment</p>
-            
+
             <Input type="text" placeholder="Add a comment" />
             <Button primary onClick={() => addcomment("Hello")}>
               Add
@@ -92,14 +94,14 @@ export async function getServerSideProps(context) {
       "Content-Type": "application/json",
     },
   })
-  const product = await res.json();
+  const product = await res?.json();
   const comments = await fetch(`http://localhost:3000/product/${_id}/comment`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
     },
   })
-  .then(res => res.json());
+    .then(res => res?.json());
   return {
     props: {
       product,

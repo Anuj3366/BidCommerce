@@ -59,10 +59,13 @@ const ButtonsWrapper = styled.div`
 export default function Featured(id) {
   const product = useFeaturedProducts();
   function addFeaturedToCart() {
+    const token = localStorage.getItem('token');
+  
     fetch("http://localhost:3000/addToCart", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        "authorization": `Bearer ${token}`
       },
       body: JSON.stringify({ productId: product._id }),
     })
@@ -71,6 +74,7 @@ export default function Featured(id) {
       console.log("Added to cart", data);
     });
   }
+  
 
   return (
     <Bg>
