@@ -3,10 +3,15 @@ import Header from "../../components/Appbar";
 import styled from "styled-components";
 import Center from "@/components/Center";
 import Button from "@/components/Button";
-import { useContext, useEffect, useState } from "react";
-import { CartContext } from "@/components/CartContext";
+import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
+
+const Box = styled.div`
+  background-color: #fff;
+  border-radius: 10px;
+  padding: 30px;
+`;
 
 const ColumnsWrapper = styled.div`
   display: grid;
@@ -16,12 +21,6 @@ const ColumnsWrapper = styled.div`
   }
   gap: 40px;
   margin-top: 40px;
-`;
-
-const Box = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
-  padding: 30px;
 `;
 
 const ProductInfoCell = styled.td`
@@ -66,60 +65,32 @@ const CityHolder = styled.div`
   gap: 5px;
 `;
 
-export default function CartPage() {
-  const { cartProducts, addProduct, removeProduct, clearCart } = useContext(CartContext);
+function CartPage() {
   const [products, setProducts] = useState([]);
-  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
-  const [city, setCity] = useState('');
-  const [postalCode, setPostalCode] = useState('');
-  const [streetAddress, setStreetAddress] = useState('');
-  const [country, setCountry] = useState('');
+  const [address, setAddress] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    if (cartProducts && cartProducts.length > 0) {
-      const token = localStorage.getItem('token');
-      fetch('http://localhost:3000/addToCart', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          "authorization": `Bearer ${token}`
-        },
-        body: JSON.stringify({ ids: cartProducts }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.redirectToLogin) {
-            localStorage.removeItem('token');
-            window.location.href = "/Login";
-          }
-          else {
-            setProducts(data);
-          }
-        });
-    } else {
-      setProducts([]);
-    }
-  }, [cartProducts]);
-
-  useEffect(() => {
-    if (typeof window === 'undefined') {
-      return;
-    }
-    if (window?.location.href.includes('success')) {
-      setIsSuccess(true);
-      clearCart();
-    }
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/getCart', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        "authorization": `Bearer ${token}`
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.redirectToLogin) {
+          localStorage.removeItem('token');
+          window.location.href = "/Login";
+        }
+        else {
+          setProducts(data);
+        }
+      });
   }, []);
-
-  function moreOfThisProduct(id) {
-    addProduct(id);
-  }
-
-  function lessOfThisProduct(id) {
-    removeProduct(id);
-  }
 
   async function goToPayment() {
     const token = localStorage.getItem('token');
@@ -129,11 +100,9 @@ export default function CartPage() {
       headers: {
         'Content-Type': 'application/json',
         "authorization": `Bearer ${token}`
-
       },
       body: JSON.stringify({
-        name, email, city, postalCode, streetAddress, country,
-        cartProducts,
+        email, address, products,
       }),
     });
     const data = await response.json();
@@ -143,26 +112,17 @@ export default function CartPage() {
   }
 
   let total = 0;
-  if (Array.isArray(cartProducts)) {
-    for (const productId of cartProducts) {
-      const price = products.find(p => p._id === productId)?.price || 0;
+  if (Array.isArray(products)) {
+    for (const product of products) {
+      const price = product.price;
       total += price;
     }
   }
   if (isSuccess) {
-    return (
-      <>
-        <Header />
-        <Center>
-          <ColumnsWrapper>
-            <Box>
-              <h1>Thanks for your order!</h1>
-              <p>We will email you when your order will be sent.</p>
-            </Box>
-          </ColumnsWrapper>
-        </Center>
-      </>
-    );
+    window.location.href = "/success";
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 10000);
   }
 
   return (
@@ -172,7 +132,7 @@ export default function CartPage() {
         <ColumnsWrapper>
           <Box>
             <h2>Cart</h2>
-            {!cartProducts?.length && (
+            {!products?.length && (
               <div>Your cart is empty</div>
             )}
             {products?.length > 0 && (
@@ -197,13 +157,13 @@ export default function CartPage() {
                         <Button
                           onClick={() => lessOfThisProduct(product._id)}>-</Button>
                         <QuantityLabel>
-                          {cartProducts.filter(id => id === product._id).length}
+                          {products.filter(item => item._id === product._id).length}
                         </QuantityLabel>
                         <Button
                           onClick={() => moreOfThisProduct(product._id)}>+</Button>
                       </td>
                       <td>
-                        ${cartProducts.filter(id => id === product._id).length * product.price}
+                        ${products.filter(item => item._id === product._id).length * product.price}
                       </td>
                     </tr>
                   ))}
@@ -216,41 +176,19 @@ export default function CartPage() {
               </Table>
             )}
           </Box>
-          {!!cartProducts?.length && (
+          {!!products?.length && (
             <Box>
               <h2>Order information</h2>
-              <Input type="text"
-                placeholder="Name"
-                value={name}
-                name="name"
-                onChange={ev => setName(ev.target.value)} />
               <Input type="text"
                 placeholder="Email"
                 value={email}
                 name="email"
                 onChange={ev => setEmail(ev.target.value)} />
-              <CityHolder>
-                <Input type="text"
-                  placeholder="City"
-                  value={city}
-                  name="city"
-                  onChange={ev => setCity(ev.target.value)} />
-                <Input type="text"
-                  placeholder="Postal Code"
-                  value={postalCode}
-                  name="postalCode"
-                  onChange={ev => setPostalCode(ev.target.value)} />
-              </CityHolder>
               <Input type="text"
-                placeholder="Street Address"
-                value={streetAddress}
-                name="streetAddress"
-                onChange={ev => setStreetAddress(ev.target.value)} />
-              <Input type="text"
-                placeholder="Country"
-                value={country}
-                name="country"
-                onChange={ev => setCountry(ev.target.value)} />
+                placeholder="Address"
+                value={address}
+                name="address"
+                onChange={ev => setAddress(ev.target.value)} />
               <Button black block
                 onClick={goToPayment}>
                 Continue to payment
@@ -262,3 +200,5 @@ export default function CartPage() {
     </>
   );
 }
+
+export default CartPage;

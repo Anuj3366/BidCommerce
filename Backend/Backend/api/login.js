@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
-const User = require('../Schemas/Users/user.js');
+const User = require('../Schemas/Users/customers.js');
 
 const secret = 'secrettohide';
 
