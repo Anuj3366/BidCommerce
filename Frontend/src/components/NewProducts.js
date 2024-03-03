@@ -2,7 +2,7 @@
 import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
-import { useNewProducts } from "../Backend/client";
+import { useNewProducts } from "../components/client";
 
 const Title = styled.h2`
   font-size: 2rem;

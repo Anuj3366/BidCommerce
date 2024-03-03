@@ -103,7 +103,6 @@ export default function CartPage() {
     }
   }, [cartProducts]);
 
-
   useEffect(() => {
     if (typeof window === 'undefined') {
       return;

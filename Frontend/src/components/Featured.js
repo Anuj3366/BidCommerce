@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
-import { useFeaturedProducts } from "../Backend/client";
+import { useFeaturedProducts } from "../components/client";
 
 const Bg = styled.div`
   background-color: #222;
