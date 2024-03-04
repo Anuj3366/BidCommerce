@@ -6,7 +6,6 @@ import Title from "@/components/Title";
 
 export default function ProductsPage() {
   const [products, setProducts] = useState({});
-
   useEffect(() => {
     fetch("http://localhost:3000/getAllAuction", {
       method: "GET",
@@ -25,7 +24,7 @@ export default function ProductsPage() {
       <Header />
       <Center>
         <Title>All Auctions</Title>
-        <ProductsGrid products={products} />
+        <ProductsGrid products={products} bid="true" />
       </Center>
     </>
   );

@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const ModeratorSchema = new mongoose.Schema({
-  email: String,
-  sellerToVerify: [{ type: mongoose.Schema.Types.ObjectId, ref: "Seller" }],
-  workerToVerify: [{ type: mongoose.Schema.Types.ObjectId, ref: "Worker" }],
+  email: {type:String, required:true},
+  password: {type:String, required:true},
+  adhaar: {type:String, required:true},
+  verified: {type:Boolean, required:true},
 });
 
 const Moderator = mongoose.model('Moderator', ModeratorSchema);

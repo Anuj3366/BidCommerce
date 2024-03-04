@@ -8,29 +8,23 @@ app.use(bodyParser.json());
 app.use('/', router);
 const connectDB = require('./mongoDB');
 connectDB();
-// console.log("connectDB ran");
 
 const getAllItems = require('./api/getAll');
 app.use('/', getAllItems);
-// console.log("getAll ran");
 const cart = require('./api/cart');
 app.use('/', cart);
-// console.log("cart ran");
 const checkout = require('./api/checkout');
 app.use('/', checkout);
-// console.log("checkout ran");
 const login = require('./api/login');
 app.use('/', login);
-// console.log("login ran");
 const postAll = require('./api/postAll');
 app.use('/', postAll);
-// console.log("postAll ran");
 const update = require('./api/update');
 app.use('/', update);
-// console.log("update ran");
 const webhook = require('./api/webhook');
 app.use('/', webhook);
-// console.log("webhook ran");
+const account = require('./api/account');
+app.use('/', account);
 
 console.log("All routes are running");
 

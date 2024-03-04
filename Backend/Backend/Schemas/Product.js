@@ -16,6 +16,7 @@ const ProductSchema = new Schema({
     ],
     required: true
   },
+  sellerMail: {type:String, required:true},
   quantity: {type: Number, required: true},
   comment: {type:[String], required:true},
   buyed : {type:Number, required:true},

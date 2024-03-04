@@ -55,9 +55,12 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({ _id, title, description, price, images }) {
-  const url = '/product/' + _id;
+export default function ProductBox({ _id, title, description, price, images, bid }) {
+  let url = '/product/' + _id;
 
+  if (bid === true) {
+    url = '/bid/' + _id;
+  }
   function addFeaturedToCart() {
     const token = localStorage.getItem('token');
     if (!token) window.location.href = "/Login";

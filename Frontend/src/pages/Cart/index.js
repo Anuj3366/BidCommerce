@@ -149,7 +149,7 @@ function CartPage() {
                     <tr key={product._id}>
                       <ProductInfoCell>
                         <ProductImageBox>
-                          <img src={product.images[0]} alt="" />
+                          <img src={product.images} alt="" />
                         </ProductImageBox>
                         {product.title}
                       </ProductInfoCell>

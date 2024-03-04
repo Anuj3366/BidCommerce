@@ -1,22 +1,13 @@
-const Product = require('../Schemas/Product.js');
 const express = require('express');
 const router = express.Router();
+const authorization = require('./authorization.js');
+const Product = require('../Schemas/Product.js');
 const User = require('../Schemas/Users/customers.js');
+const Seller = require('../Schemas/Seller.js');
+const mongoose = require('mongoose');
 
 const authorization = require('./authorization.js');
-router.post('/newProduct', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
-  if (founded && founded.userType != 'user' && founded.userType != 'worker') {
-    const newProduct = new Product({ ...req.body});
-    const saved = await newProduct.save();
-    res.json(saved);
-  }
-  else {
-    console.log("Invalid access");
-    res.status(403).send("Invalid access");
-  }
-});
+
 
 router.post('/product/:productID/comment', authorization, async (req, res) => {
   console.log(req.user);

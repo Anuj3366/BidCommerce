@@ -1,11 +1,9 @@
 const mongoose = require('mongoose');
 const WorkerSchema = new mongoose.Schema({
-  email: String,
-  adhaar: String,
-  ordersDevlivered:Object,
-  totalDelivered: Number,
-  employTiming: String,
-  monthlyEarning: Number,
+  email: {type:String, required:true},
+  password: {type:String, required:true},
+  adhaar: {type:String, required:true},
+  verified: {type:Boolean, required:true},
 });
 const Worker = mongoose.model('Worker', WorkerSchema);
 

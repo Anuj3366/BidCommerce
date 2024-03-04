@@ -33,16 +33,6 @@ router.get('/getAllSeller', authorization, async (req, res) => {
     res.status(401).send("Invalid Credentials");
   }
 });
-router.get('/getuserType', authorization, async (req, res) => {
-  const { email, password } = req.body;
-  const founded = await User.findOne({ email: email, password: password });
-  if (founded) {
-    res.json(founded.userType);
-  }
-  else {
-    res.status(401).send("Invalid Credentials");
-  }
-});
 router.get('/product/:productID/comment', async (req, res) => {
   const { productID } = req.params;
   const product = await Product.findOne({ _id: productID });
