@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
-import { useEffect } from "react";
+import { useEffect ,useState} from "react";
 
 const ProductWrapper = styled.div`
   
@@ -56,7 +56,7 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({ _id, title, description, price, images, bid }) {
+export default function ProductBox({ _id, title, description, price, images, bid ,bidEnd}) {
   let url = '/product/' + _id;
 
   if (bid === true) {
@@ -84,33 +84,24 @@ export default function ProductBox({ _id, title, description, price, images, bid
         });
     }
   }
-  const [product, setProduct] = useState(null);
-  const [userBid, setUserBid] = useState(0);
-
-  useEffect(() => {
-    fetch(`/product/${_id}`)
-      .then(res => res.json())
-      .then(data => setProduct(data))
-      .catch(err => console.error(err));
-  }, [_id]);
-
+  const [userBid, setUserBid] = useState(price);
   const handleBidChange = (event) => {
     setUserBid(event.target.value);
   };
 
   const handleBidSubmit = () => {
-    if (new Date() > new Date(product.bidEnd)) {
+    if (new Date() > new Date(bidEnd)) {
       alert('The bidding period has ended.');
-    } else if (userBid > product.bidPrice) {
+    } else if (userBid > price) {
       fetch(`/bid/${_id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ bidPrice: userBid })
+        body: JSON.stringify({ price: userBid })
       })
         .then(res => res.json())
         .then(data => {
           alert(data.message);
-          setProduct(prevState => ({ ...prevState, bidPrice: userBid }));
+          setProduct(prevState => ({ ...prevState, price: userBid }));
         })
         .catch(err => console.error(err));
     } else {
@@ -129,7 +120,7 @@ export default function ProductBox({ _id, title, description, price, images, bid
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>
-            {bid ? `Current bid: ₹${price}` : `Price: ₹${bidprice}`}
+            {bid ? `Current bid: ₹${price}` : `Price: ₹${price}`}
           </Price>
           {bid ? (
             <>
