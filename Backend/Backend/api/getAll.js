@@ -4,7 +4,7 @@ const Product = require('../Schemas/Product.js');
 const User = require('../Schemas/Users/customers.js');
 
 const authorization = require('./authorization.js');
-router.get('/getAll/:productID', async (req, res) => {
+router.get('/get/:productID', async (req, res) => {
   const productID = req.params.productID;
   const product = await Product.findOne({ '_id':productID });
   res.json(product);

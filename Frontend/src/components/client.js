@@ -3,10 +3,10 @@ import { useState, useEffect } from "react";
 
 const useFeaturedProducts = function () {
   // console.log("useFeaturedProducts started")
-  const [featuredProduct, setFeaturedProduct] = useState({});
+  const [featuredProduct, setFeaturedProduct] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/getAll/65e335669a608127500cfcfa", {
+    fetch("http://localhost:3000/get/65e335669a608127500cfcfa", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

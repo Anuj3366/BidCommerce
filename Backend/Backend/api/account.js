@@ -168,3 +168,5 @@ router.put('/user/:id/promote', authorization, async (req, res) => {
     res.status(500).json({ error: 'Error promoting user' });
   }
 });
+
+module.exports = router;

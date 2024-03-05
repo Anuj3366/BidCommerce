@@ -55,8 +55,7 @@ The frontend will be deployed on Netlify, and the backend will be deployed on ei
 
 ## Known Issues
 
-- Error in `cart.js`
-- Error while fetching data from `/getAll/getAllProduct`
+
 
 ## Future Work
 

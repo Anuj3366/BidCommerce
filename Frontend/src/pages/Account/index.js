@@ -5,15 +5,6 @@ import Input from "@/components/Input";
 import ModeratorPanel from "./moderator";
 import SellerProducts from "./seller"
 import AdminPanel from "./admin";
-const NavLink = styled(Link)`
-  display: block;
-  color:#aaa;
-  text-decoration:none;
-  padding: 10px 0;
-  @media screen and (min-width: 768px) {
-    padding:0;
-  }
-`;
 
 export default function ProductsPage() {
   const [userType, setUserType] = useState('');
@@ -49,11 +40,14 @@ export default function ProductsPage() {
     password: '',
     adhaar: '',
   });
+  const [role, setRole] = useState('');
+
   const handleBecomeSeller = () => {
-    setBecomeSeller(true);
+    setRole('seller');
   };
+
   const handleBecomeWorker = () => {
-    setBecomeWorker(true);
+    setRole('worker');
   };
   const handleSellerDetailsChange = (event) => {
     setSellerDetails({
@@ -127,7 +121,7 @@ export default function ProductsPage() {
           <p>Would you like to become a seller or a worker?</p>
           <button onClick={handleBecomeSeller}>Become a Seller</button>
           <button onClick={handleBecomeWorker}>Become a Worker</button>
-          {becomeSeller && (
+          {role === 'seller' && (
             <div>
               <Input type="text" name="shopname" value={sellerDetails.shopname} onChange={handleSellerDetailsChange} placeholder="Shop Name" required />
               <Input type="text" name="shopemail" value={sellerDetails.shopemail} onChange={handleSellerDetailsChange} placeholder="Shop Email" required />
@@ -137,7 +131,7 @@ export default function ProductsPage() {
               <button onClick={handleSellerSubmit}>Submit</button>
             </div>
           )}
-          {becomeWorker && (
+          {role === 'worker' && (
             <div>
               <Input type="text" name="adhaar" value={workerDetails.adhaar} onChange={handleWorkerDetailsChange} placeholder="Adhaar" required />
               <button onClick={handleWorkerSubmit}>Submit</button>
