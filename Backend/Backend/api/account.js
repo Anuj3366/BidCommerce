@@ -2,7 +2,6 @@ const express = require('express');
 const router = express.Router();
 const Product = require('../Schemas/Product.js');
 const User = require('../Schemas/Users/customers.js');
-const Moderator = require('../Schemas/Users/moderator.js');
 const Seller = require('../Schemas/Users/seller.js');
 const authorization = require('./authorization.js');
 
@@ -50,7 +49,7 @@ router.get('/getSeller', authorization, async (req, res) => {
 
 router.get('/getModerator', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const founded = await Moderator.findOne({ email: email, password: password });
+  const founded = await User.findOne({ email: email, password: password });
   if (founded) {
     res.json(founded);
   }
@@ -155,18 +154,27 @@ router.put('/user/:id/promote', authorization, async (req, res) => {
   }
   const { id } = req.params;
   try {
-    const user = await User.findOne({ _id: id });
-    const newModerator = new Moderator({
-      email: user.email,
-      password: user.password,
-      adhaar: user.adhaar,
-      verified: false,
-    });
-    await newModerator.save();
-    res.status(200).json({ message: 'User promoted to moderator successfully' });
+    await User.findByIdAndUpdate(id, { userType: 'moderator' });
+    res.status(200).json({ message: 'User promoted to moderator' });
   } catch (error) {
     res.status(500).json({ error: 'Error promoting user' });
   }
+
 });
+
+router.get('/admin/:email/users', authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
+  if (!admin) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try {
+    const users = await User.find({ userType: 'user' });
+    res.status(200).json(users);
+  } catch (error) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+}
+);
 
 module.exports = router;

@@ -5,6 +5,8 @@ import Input from "@/components/Input";
 import ModeratorPanel from "./moderator";
 import SellerProducts from "./seller"
 import AdminPanel from "./admin";
+import Center from "@/components/Center";
+
 
 export default function ProductsPage() {
   const [userType, setUserType] = useState('');
@@ -109,45 +111,47 @@ export default function ProductsPage() {
   return (
     <>
       <Header />
-      {userType === "notverified" && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-          <h1>Verification Pending</h1>
-          <p>Your account is currently being verified. This process may take some time.</p>
-          <p>Please check back later.</p>
-        </div>
-      )}
-      {userType === "user" && (
-        <div>
-          <p>Would you like to become a seller or a worker?</p>
-          <button onClick={handleBecomeSeller}>Become a Seller</button>
-          <button onClick={handleBecomeWorker}>Become a Worker</button>
-          {role === 'seller' && (
-            <div>
-              <Input type="text" name="shopname" value={sellerDetails.shopname} onChange={handleSellerDetailsChange} placeholder="Shop Name" required />
-              <Input type="text" name="shopemail" value={sellerDetails.shopemail} onChange={handleSellerDetailsChange} placeholder="Shop Email" required />
-              <Input type="text" name="GSTINnumber" value={sellerDetails.GSTINnumber} onChange={handleSellerDetailsChange} placeholder="GSTIN Number" required />
-              <Input type="text" name="PANnumber" value={sellerDetails.PANnumber} onChange={handleSellerDetailsChange} placeholder="PAN Number" required />
-              <Input type="text" name="address" value={sellerDetails.address} onChange={handleSellerDetailsChange} placeholder="Address" required />
-              <button onClick={handleSellerSubmit}>Submit</button>
-            </div>
-          )}
-          {role === 'worker' && (
-            <div>
-              <Input type="text" name="adhaar" value={workerDetails.adhaar} onChange={handleWorkerDetailsChange} placeholder="Adhaar" required />
-              <button onClick={handleWorkerSubmit}>Submit</button>
-            </div>
-          )}
-        </div>
-      )}
-      {userType === "seller" && (
-        <SellerProducts />
-      )}
-      {userType === "moderator" && (
-        <ModeratorPanel />
-      )}
-      {userType === "admin" && (
-        <AdminPanel adminEmail="admin@gmail.com" />
-      )}
+      <Center>
+        {userType === "notverified" && (
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+            <h1>Verification Pending</h1>
+            <p>Your account is currently being verified. This process may take some time.</p>
+            <p>Please check back later.</p>
+          </div>
+        )}
+        {userType === "user" && (
+          <div>
+            <p>Would you like to become a seller or a worker?</p>
+            <button onClick={handleBecomeSeller}>Become a Seller</button>
+            <button onClick={handleBecomeWorker}>Become a Worker</button>
+            {role === 'seller' && (
+              <div>
+                <Input type="text" name="shopname" value={sellerDetails.shopname} onChange={handleSellerDetailsChange} placeholder="Shop Name" required />
+                <Input type="text" name="shopemail" value={sellerDetails.shopemail} onChange={handleSellerDetailsChange} placeholder="Shop Email" required />
+                <Input type="text" name="GSTINnumber" value={sellerDetails.GSTINnumber} onChange={handleSellerDetailsChange} placeholder="GSTIN Number" required />
+                <Input type="text" name="PANnumber" value={sellerDetails.PANnumber} onChange={handleSellerDetailsChange} placeholder="PAN Number" required />
+                <Input type="text" name="address" value={sellerDetails.address} onChange={handleSellerDetailsChange} placeholder="Address" required />
+                <button onClick={handleSellerSubmit}>Submit</button>
+              </div>
+            )}
+            {role === 'worker' && (
+              <div>
+                <Input type="text" name="adhaar" value={workerDetails.adhaar} onChange={handleWorkerDetailsChange} placeholder="Adhaar" required />
+                <button onClick={handleWorkerSubmit}>Submit</button>
+              </div>
+            )}
+          </div>
+        )}
+        {userType === "seller" && (
+          <SellerProducts />
+        )}
+        {userType === "moderator" && (
+          <ModeratorPanel />
+        )}
+        {userType === "admin" && (
+          <AdminPanel adminEmail="admin@gmail.com" />
+        )}
+      </Center>
     </>
   );
 }

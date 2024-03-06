@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Center from "@/components/Center";
 
 function AdminPanel({ adminEmail }) {
   const [users, setUsers] = useState([]);
@@ -18,15 +19,17 @@ function AdminPanel({ adminEmail }) {
   };
 
   return (
-    <div>
-      <h2>Users</h2>
-      {users.map(user => (
-        <div key={user._id}>
-          <h3>{user.name}</h3>
-          <button onClick={() => promoteUser(user._id)}>Promote to Moderator</button>
-        </div>
-      ))}
-    </div>
+    <Center>
+      <div>
+        <h2>Users</h2>
+        {users.map(user => (
+          <div key={user._id}>
+            <h3>{user.name}</h3>
+            <button onClick={() => promoteUser(user._id)}>Promote to Moderator</button>
+          </div>
+        ))}
+      </div>
+    </Center>
   );
 }
 
