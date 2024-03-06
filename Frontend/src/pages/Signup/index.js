@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
+import Header from '@/components/Appbar';
 
 const Box = styled.div`
   display: flex;
@@ -53,37 +54,40 @@ export default function Signup() {
   }
 
   return (
-    <Center>
-      <Box>
-        <Title>Signup</Title>
-        <Input
-          type="text"
-          placeholder="Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="Address"
-          value={address}
-          onChange={(e) => setAddress(e.target.value)}
-        />
-        <Button $primary onClick={signup}>
-          Signup
-        </Button>
-      </Box>
-    </Center>
+    <>
+      <Header />
+      <Center>
+        <Box>
+          <Title>Signup</Title>
+          <Input
+            type="text"
+            placeholder="Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Input
+            type="text"
+            placeholder="Address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
+          />
+          <Button $primary onClick={signup}>
+            Signup
+          </Button>
+        </Box>
+      </Center>
+    </>
   );
 }

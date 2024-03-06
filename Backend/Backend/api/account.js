@@ -28,7 +28,7 @@ router.get('/checkuserType', authorization, async (req, res) => {
       }
     }
     else {
-      res.json("user")
+      res.json(founded.userType);
     }
   }
   else {
@@ -72,19 +72,6 @@ router.post('/becomeSeller', authorization, async (req, res) => {
   }
 });
 
-router.post('/becomeWorker', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
-  if (founded && founded.userType === "user") {
-    const worker = new Worker({ ...req.body, email, password, verified: false });
-    await worker.save();
-    await User.findOneAndUpdate({ email: email, password: password }, { userType: "worker" });
-    res.json("Worker Created");
-  }
-  else {
-    res.status(401).send("Invalid Access");
-  }
-});
 
 
 router.post('/becomeWorker', authorization, async (req, res) => {
@@ -115,7 +102,7 @@ router.post('/uploadProduct', authorization, async (req, res) => {
 });
 
 
-router.put('/product/:id/quantity',authorization,async (req, res) => {
+router.put('/product/:id/quantity', authorization, async (req, res) => {
   const { email, password } = req.user;
   const seller = await Seller.findOne({ email: email, password: password });
   if (!seller || !seller.verified) {
@@ -161,8 +148,42 @@ router.put('/user/:id/promote', authorization, async (req, res) => {
   }
 
 });
+router.put('/seller/:id/verify', authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
+  if (!moderator) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const { id } = req.params;
+  try {
+    await User.findByIdAndUpdate(id, { userType: 'seller' });
+    await Seller.findByIdAndUpdate(id, { verified: true });
+    res.status(200).json({ message: 'User promoted to Seller' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error promoting user' });
+  }
 
-router.get('/admin/:email/users', authorization, async (req, res) => {
+});
+router.put('/worker/:id/verify', authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
+  if (!moderator) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  const { id } = req.params;
+  try {
+    await User.findByIdAndUpdate(id, { userType: 'worker' });
+    await Worker.findByIdAndUpdate(id, { verified: true });
+    res.status(200).json({ message: 'User promoted to worker' });
+  } catch (error) {
+    res.status(500).json({ error: 'Error promoting user' });
+  }
+
+});
+
+
+
+router.get('/admin/users', authorization, async (req, res) => {
   const { email, password } = req.user;
   const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
   if (!admin) {
@@ -176,5 +197,35 @@ router.get('/admin/:email/users', authorization, async (req, res) => {
   }
 }
 );
+
+router.get('/getseller',authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
+  if (!admin) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try{
+    const wantToseller = await Seller.find({verified:false});
+    res.status(200).json(wantToseller);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+router.get('/getworker',authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
+  if (!admin) {
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
+  try{
+    const wantToseller = await Seller.find({verified:false});
+    res.status(200).json(wantToseller);
+  }
+  catch (error) {
+    res.status(500).json({ error: 'Error fetching users' });
+  }
+});
+
 
 module.exports = router;

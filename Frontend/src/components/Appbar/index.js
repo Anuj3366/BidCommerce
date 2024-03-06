@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import BarsIcon from "@/components/icons/Bars";
 
 const StyledHeader = styled.header`
@@ -70,6 +70,11 @@ export default function Header() {
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
   }, []);
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setIsLoggedIn(false);
+    window.location('/');
+  };
 
   return (
     <StyledHeader>
@@ -82,7 +87,10 @@ export default function Header() {
             <NavLink href={"/categories"}>Categories</NavLink>
             <NavLink href={"/Cart"}>Cart</NavLink>
             {isLoggedIn ? (
-              <NavLink href={"/Account"}>Account</NavLink>
+              <>
+                <NavLink href={"/Account"}>Account</NavLink>
+                <button onClick={handleLogout}>Logout</button>
+              </>
             ) : (
               <>
                 <NavLink href={"/Login"}>Login</NavLink>

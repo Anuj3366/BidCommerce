@@ -11,7 +11,7 @@ import Center from "@/components/Center";
 export default function ProductsPage() {
   const [userType, setUserType] = useState('');
 
-  useEffect(() => {//to get userType
+  useEffect(() => {
     const token = localStorage.getItem('token');
     fetch('http://localhost:3000/checkuserType', {
       method: "GET",
@@ -22,6 +22,9 @@ export default function ProductsPage() {
     })
       .then(response => response.json())
       .then(data => {
+        if(data.redirectToLogin) {
+          window.location.href = "/Login";
+        }
         setUserType(data);
       });
   }, []);
@@ -149,7 +152,7 @@ export default function ProductsPage() {
           <ModeratorPanel />
         )}
         {userType === "admin" && (
-          <AdminPanel adminEmail="admin@gmail.com" />
+          <AdminPanel/>
         )}
       </Center>
     </>

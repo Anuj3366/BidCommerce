@@ -5,6 +5,7 @@ import Button from '@/components/Button';
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
+import Header from '@/components/Appbar';
 
 const Box = styled.div`
   display: flex;
@@ -50,25 +51,28 @@ export default function Login() {
   }
 
   return (
-    <Center>
-      <Box>
-        <Title>Login</Title>
-        <Input
-          type="text"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Button $primary onClick={login}>
-          Login
-        </Button>
-      </Box>
-    </Center>
+    <>
+      <Header />
+      <Center>
+        <Box>
+          <Title>Login</Title>
+          <Input
+            type="text"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+          <Button $primary onClick={login}>
+            Login
+          </Button>
+        </Box>
+      </Center>
+    </>
   );
 }
