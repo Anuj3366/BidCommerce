@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Center from "@/components/Center";
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 
 
 const UserContainer = styled.div`
@@ -21,12 +22,13 @@ function AdminPanel() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch(`http://localhost:3000/admin/users`, {
-      method: "GET",
+      method: 'GET',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        ,
       },
     })
       .then(res => res.json())
@@ -37,12 +39,13 @@ function AdminPanel() {
   }, []);
 
   const promoteUser = (userId) => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch(`http://localhost:3000/user/${userId}/promote`, {
-      method: "PUT",
+      method: 'PUT',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`,
+        ,
       },
     })
       .then(res => res.json())

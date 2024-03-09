@@ -32,7 +32,8 @@ export default function Login() {
 
   function login() {
     fetch("http://localhost:3000/login", {
-      method: "POST",
+      method: 'POST',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
@@ -41,7 +42,6 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token);
           console.log("Logged in");
           router.push('/');
         } else {

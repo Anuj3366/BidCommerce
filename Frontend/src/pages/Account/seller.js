@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Center from "@/components/Center";
+import styled from 'styled-components';
+import Cookies from 'js-cookie';
 
 function SellerProducts() {
   const [products, setProducts] = useState([]);
@@ -36,7 +38,8 @@ function SellerProducts() {
       data.append("cloud_name", "dyoedgbpj");
 
       const res = await fetch('https://api.cloudinary.com/v1_1/dyoedgbpj/image/upload', {
-        method: "POST",
+        method: 'POST',
+        credentials: 'include',
         body: data
       })
 
@@ -51,12 +54,13 @@ function SellerProducts() {
   };
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch('http://localhost:3000/seller/products', {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
+        
       }
     })
       .then(res => {
@@ -70,12 +74,13 @@ function SellerProducts() {
   }, []);
 
   const increaseQuantity = (productId, increaseBy) => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch(`http://localhost:3000/product/${productId}/quantity`, {
       method: 'PUT',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
+        
       },
       body: JSON.stringify({ increaseBy })
     })
@@ -87,13 +92,14 @@ function SellerProducts() {
   const handleProductSubmit = async (event) => {
     event.preventDefault();
     await saveImage();
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     try {
       const response = await fetch('http://localhost:3000/uploadProduct', {
         method: 'POST',
+        credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          "authorization": `Bearer ${token}`
+          
         },
         body: JSON.stringify(productDetails)
       });
@@ -113,21 +119,23 @@ function SellerProducts() {
         <Input type="file" name="images" onChange={handleImageChange} multiple required />
         <Input type="text" name="category" value={productDetails.category} onChange={handleProductDetailsChange} placeholder="Category" required />
         <Input type="number" name="quantity" value={productDetails.quantity} onChange={handleProductDetailsChange} placeholder="Quantity" required />
-        <Input type="checkbox" name="bid" checked={productDetails.bid} onChange={handleProductDetailsChange} /> Bid Item
+        <input type="checkbox" name="bid" checked={productDetails.bid} onChange={handleProductDetailsChange} /> Bid Item
         {productDetails.bid && (
           <>
             <Input type="number" name="bidPrice" value={productDetails.bidPrice} onChange={handleProductDetailsChange} placeholder="Bid Price" required />
             <Input type="date" name="bidEnd" value={productDetails.bidEnd} onChange={handleProductDetailsChange} placeholder="Bid End Date" required />
           </>
         )}
-        <Button $black type="submit">Upload Product</Button>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <Button $black type="submit">Upload Product</Button>
+        </div>
       </form>
       {products.map(product => (
-        <div key={product._id}>
-          <h2>{product.name}</h2>
-          <p>Quantity: {product.quantity}</p>
-          <button onClick={() => increaseQuantity(product._id, 1)}>Increase Quantity</button>
-        </div>
+        <ProductCard key={product._id}>
+          <ProductTitle>{product.name}</ProductTitle>
+          <ProductQuantity>Quantity: {product.quantity}</ProductQuantity>
+          <IncreaseButton onClick={() => increaseQuantity(product._id, 1)}>Increase Quantity</IncreaseButton>
+        </ProductCard>
       ))}
     </Center>
   )

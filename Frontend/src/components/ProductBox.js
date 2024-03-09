@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
-import { useEffect ,useState} from "react";
+import { useEffect, useState } from "react";
+import Cookies from 'js-cookie';
 
 const ProductWrapper = styled.div`
   
@@ -56,21 +57,22 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({ _id, title, description, price, images, bid ,bidEnd}) {
+export default function ProductBox({ _id, title, description, price, images, bid, bidEnd }) {
   let url = '/product/' + _id;
 
   if (bid === true) {
     url = '/bid/' + _id;
   }
   function addFeaturedToCart() {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt')
     if (!token) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
-        method: "POST",
+        method: 'POST',
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`
+          
         },
         body: JSON.stringify({ productId: _id }),
       })
@@ -95,6 +97,7 @@ export default function ProductBox({ _id, title, description, price, images, bid
     } else if (userBid > price) {
       fetch(`/bid/${_id}`, {
         method: 'PUT',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ price: userBid })
       })

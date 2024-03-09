@@ -8,6 +8,7 @@ import AdminPanel from "./admin";
 import Center from "@/components/Center";
 import Button from "@/components/Button";
 import styled from 'styled-components';
+import Cookies from 'js-cookie';
 
 const StyledDiv = styled.div`
   display: flex;
@@ -33,12 +34,13 @@ export default function ProductsPage() {
   const [userType, setUserType] = useState('');
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch('http://localhost:3000/checkuserType', {
-      method: "GET",
+      method: 'GET',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        "authorization": `Bearer ${token}`
+        
       },
     })
       .then(response => response.json())
@@ -85,12 +87,13 @@ export default function ProductsPage() {
   };
   const handleSellerSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     await fetch('http://localhost:3000/becomeSeller', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
+        
       },
       body: JSON.stringify(sellerDetails),
     })
@@ -103,12 +106,13 @@ export default function ProductsPage() {
   };
   const handleWorkerSubmit = async (event) => {
     event.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch('http://localhost:3000/becomeWorker', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
+        
       },
       body: JSON.stringify(workerDetails),
     })

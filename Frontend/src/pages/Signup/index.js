@@ -35,7 +35,8 @@ export default function Signup() {
   function signup() {
     console.log(name, email, password, address);
     fetch("http://localhost:3000/signup", {
-      method: "POST",
+      method: 'POST',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
@@ -44,7 +45,6 @@ export default function Signup() {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          localStorage.setItem('token', data.token);
           console.log("Signed up");
           router.push('/');
         } else {

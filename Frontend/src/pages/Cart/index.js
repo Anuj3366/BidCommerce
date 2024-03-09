@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
+import Cookies from 'js-cookie';
 
 const Box = styled.div`
   background-color: #fff;
@@ -72,12 +73,13 @@ function CartPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     fetch('http://localhost:3000/getCart', {
       method: 'GET',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
+        
       },
     })
       .then(response => response.json())
@@ -93,13 +95,12 @@ function CartPage() {
   }, []);
 
   async function goToPayment() {
-    const token = localStorage.getItem('token');
 
     const response = await fetch('http://localhost:3000/checkout', {
       method: 'POST',
+      credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        "authorization": `Bearer ${token}`
       },
       body: JSON.stringify({
         email, address, products,

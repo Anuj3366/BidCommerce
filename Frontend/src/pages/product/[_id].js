@@ -7,6 +7,7 @@ import ProductImages from '@/components/ProductImages';
 import Button from '@/components/Button';
 import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
+import Cookies from 'js-cookie';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -34,10 +35,11 @@ export default function ProductPage({ product, comments }) {
     }
     else {
       const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
-        method: "POST",
+        method: 'POST',
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`
+          
         },
         body: JSON.stringify({ comment }),
       });
@@ -56,14 +58,15 @@ export default function ProductPage({ product, comments }) {
     })
   }
   function addToCart(product) {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt');
     if (!token) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
-        method: "POST",
+        method: 'POST',
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`
+          
         },
         body: JSON.stringify({ productId: product._id }),
       })
@@ -121,7 +124,8 @@ export default function ProductPage({ product, comments }) {
 export async function getServerSideProps(context) {
   const { _id } = context.params;
   const res = await fetch(`http://localhost:3000/get/${_id}`, {
-    method: "GET",
+    method: 'GET',
+    credentials: 'include',
     headers: {
       "Content-Type": "application/json",
     },
@@ -135,7 +139,8 @@ export async function getServerSideProps(context) {
   const product = await res.json();
 
   const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
-    method: "GET",
+    method: 'GET',
+    credentials: 'include',
     headers: {
       "Content-Type": "application/json",
     },

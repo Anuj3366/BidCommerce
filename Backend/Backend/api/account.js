@@ -5,62 +5,45 @@ const User = require('../Schemas/Users/customers.js');
 const Seller = require('../Schemas/Users/seller.js');
 const Worker = require('../Schemas/Users/worker.js');
 const authorization = require('./authorization.js');
+const bcrypt = require('bcrypt');
 
 router.get('/checkuserType', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
-  if (founded) {
-    if (founded.userType === "seller") {
-      const seller = await Seller.findOne({ email: email, password: password });
-      if (seller && seller.verified) {
-        res.json("seller");
-      }
-      else {
-        res.json("notverified");
-      }
-    }
-    else if (founded.userType === "worker") {
-      const worker = await Worker.findOne({ email: email, password: password });
-      if (worker && worker.verified) {
-        res.json("worker");
-      }
-      else {
-        res.json("notverified");
-      }
+  const founded = req.user;
+  if (founded.userType === "seller") {
+    const seller = await Seller.findOne({ email: founded.email });
+    if (seller && seller.verified && bcrypt.compareSync(seller.password, founded.password)) {
+      res.json("seller");
     }
     else {
-      res.json(founded.userType);
+      res.json("notverified");
+    }
+  }
+  else if (founded.userType === "worker") {
+    const worker = await Worker.findOne({ email: founded.email });
+    if (worker && worker.verified && bcrypt.compareSync(worker.password, founded.password)) {
+      res.json("worker");
+    }
+    else {
+      res.json("notverified");
     }
   }
   else {
-    res.status(401).send("Invalid Credentials");
+    res.json(founded.userType);
   }
 });
 
-
-router.get('/getModerator', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
-  if (founded) {
-    res.json(founded);
-  }
-  else {
-    res.status(401).send("Invalid Access");
-  }
-});
 
 router.post('/becomeSeller', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
+  const founded = req.user;
   if (founded && founded.userType === "user") {
-    const existingSeller = await Seller.findOne({ email });
+    const existingSeller = await Seller.findOne({ email: founded.email });
     if (existingSeller) {
       return res.status(401).send("Seller Already Exist");
     }
     else {
-      const seller = new Seller({ ...req.body, email, password, verified: false, totalSold: 0 });
+      const seller = new Seller({ ...req.body, email: founded.email, password: founded.password, verified: false, totalSold: 0 });
       await seller.save();
-      await User.findOneAndUpdate({ email: email, password: password }, { userType: 'notverified' });
+      await User.findOneAndUpdate({ email: founded.email, password: founded.password }, { userType: 'notverified' });
       return res.json("Seller Created");
     }
   }
@@ -69,21 +52,17 @@ router.post('/becomeSeller', authorization, async (req, res) => {
   }
 });
 
-
-
-
 router.post('/becomeWorker', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const founded = await User.findOne({ email: email, password: password });
+  const founded = req.user;
   if (founded && founded.userType === "user") {
-    const existingWorker = await Worker.findOne({ email: email });
+    const existingWorker = await Worker.findOne({ email: founded.email });
     if (existingWorker) {
       return res.status(401).send("Worker Already Exist");
     }
     else {
-      const worker = new Worker({ email: email, password: password, adhaar: req.body.adhaar, verified: false });
+      const worker = new Worker({ email: founded.email, password: founded.password, adhaar: req.body.adhaar, verified: false });
       await worker.save();
-      await User.findOneAndUpdate({ email: email, password: password }, { userType: 'notverified' });
+      await User.findOneAndUpdate({ email: founded.email, password: founded.password }, { userType: 'notverified' });
       return res.json("Worker Created");
     }
   }
@@ -96,26 +75,23 @@ router.post('/becomeWorker', authorization, async (req, res) => {
 
 router.post('/uploadProduct', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const seller = await Seller.findOne({ email: email, password: password });
-  if (!seller || !seller.verified) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const seller = await Seller.findOne({ email: email});
+  if(seller && bcrypt.compareSync(password, seller.password) && seller.verified){
     const product = new Product({ ...req.body, sellerMail: email });
     await product.save();
     await Seller.updateOne({ email: email, password: password }, { $push: { productId: product._id } });
     res.json({ message: 'Product uploaded' });
+  }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 });
 
 
 router.put('/product/:id/quantity', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const seller = await Seller.findOne({ email: email, password: password });
-  if (!seller || !seller.verified) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const seller = await Seller.findOne({ email: email});
+  if(seller && bcrypt.compareSync(password, seller.password) && seller.verified){
     const { id } = req.params;
     const { increaseBy } = req.body;
     try {
@@ -125,15 +101,15 @@ router.put('/product/:id/quantity', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error updating product quantity' });
     }
   }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 });
 
 router.get('/seller/:email/products', async (req, res) => {
   const { email, password } = req.user;
-  const seller = await Seller.findOne({ email: email, password: password });
-  if (!seller || !seller.verified) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const seller = await Seller.findOne({ email: email});
+  if(seller && bcrypt.compareSync(password, seller.password) && seller.verified){
     try {
       const seller = await Seller.findOne({ email });
       const products = await Product.find({ _id: { $in: seller.productId } });
@@ -142,15 +118,15 @@ router.get('/seller/:email/products', async (req, res) => {
       res.status(500).json({ error: 'Error fetching seller products' });
     }
   }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 });
 
 router.put('/user/:id/promote', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
-  if (!admin) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const admin = await User.findOne({ email: email,userType: 'admin' });
+  if(admin && bcrypt.compareSync(password, admin.password)){
     const { id } = req.params;
     try {
       await User.findByIdAndUpdate(id, { userType: 'moderator' });
@@ -159,14 +135,15 @@ router.put('/user/:id/promote', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error promoting user' });
     }
   }
-});
-router.put('/seller/:email/verify', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
-  if (!moderator) {
+  else{
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  else {
+});
+
+router.put('/seller/:email/verify', authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const moderator = await User.findOne({ email: email,userType: 'moderator' });
+  if(moderator && bcrypt.compareSync(password, moderator.password)){
     const { email } = req.params;
     try {
       const user = await User.findOne({ email: email });
@@ -181,15 +158,15 @@ router.put('/seller/:email/verify', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error promoting user' });
     }
   }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 });
 
 router.put('/worker/:email/verify', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
-  if (!moderator) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const moderator = await User.findOne({ email: email, userType: 'moderator' });
+  if (moderator && bcrypt.compareSync(password, moderator.password)){
     const { email } = req.params;
     try {
       const user = await User.findOne({ email: email });
@@ -204,15 +181,15 @@ router.put('/worker/:email/verify', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error promoting user' });
     }
   }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 });
 
 router.get('/admin/users', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const admin = await User.findOne({ email: email, password: password, userType: 'admin' });
-  if (!admin) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const admin = await User.findOne({ email: email, userType: 'admin' });
+  if(admin && bcrypt.compareSync(password, admin.password)){
     try {
       const users = await User.find({ userType: 'user' });
       res.status(200).json(users);
@@ -220,16 +197,16 @@ router.get('/admin/users', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error fetching users' });
     }
   }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
+  }
 }
 );
 
 router.get('/getseller', authorization, async (req, res) => {
   const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
-  if (!moderator) {
-    return res.status(401).json({ message: 'Unauthorized' });
-  }
-  else {
+  const moderator = await User.findOne({ email: email, userType: 'moderator' });
+  if(moderator && bcrypt.compareSync(password, moderator.password)){
     try {
       const wantToseller = await Seller.find({ verified: false });
       res.status(200).json(wantToseller);
@@ -238,14 +215,15 @@ router.get('/getseller', authorization, async (req, res) => {
       res.status(500).json({ error: 'Error fetching users' });
     }
   }
-});
-router.get('/getworker', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, password: password, userType: 'moderator' });
-  if (!moderator) {
+  else{
     return res.status(401).json({ message: 'Unauthorized' });
   }
-  else {
+});
+
+router.get('/getworker', authorization, async (req, res) => {
+  const { email, password } = req.user;
+  const moderator = await User.findOne({ email: email, userType: 'moderator' });
+  if(bcrypt.compareSync(password, moderator.password)){
     try {
       const wantTowork = await Worker.find({ verified: false });
       res.status(200).json(wantTowork);
@@ -253,6 +231,9 @@ router.get('/getworker', authorization, async (req, res) => {
     catch (error) {
       res.status(500).json({ error: 'Error fetching users' });
     }
+  }
+  else{
+    return res.status(401).json({ message: 'Unauthorized' });
   }
 });
 

@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
 import { useFeaturedProducts } from "../components/client";
+import Cookies from 'js-cookie';
 
 const Bg = styled.div`
   background-color: #222;
@@ -59,14 +60,15 @@ const ButtonsWrapper = styled.div`
 export default function Featured(id) {
   const product = useFeaturedProducts();
   function addFeaturedToCart() {
-    const token = localStorage.getItem('token');
+    const token = Cookies.get('jwt')
     if (!token) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
-        method: "POST",
+        method: 'POST',
+        credentials: 'true',
         headers: {
           "Content-Type": "application/json",
-          "authorization": `Bearer ${token}`
+          
         },
         body: JSON.stringify({ productId: product._id }),
       })

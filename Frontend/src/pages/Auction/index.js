@@ -8,15 +8,16 @@ export default function ProductsPage() {
   const [products, setProducts] = useState({});
   useEffect(() => {
     fetch("http://localhost:3000/getAllAuction", {
-      method: "GET",
+      method: 'GET',
+      credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
     })
-    .then(response => response.json())
-    .then(data => {
-      setProducts(data);
-    });
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+      });
   }, []);
 
   return (

@@ -1,33 +1,27 @@
-const jwt = require('jsonwebtoken');
 const express = require('express');
 const router = express.Router();
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const User = require('../Schemas/Users/customers.js');
+const authorization = require('./authorization.js');
 
 const secret = 'secrettohide';
 
-router.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  const founded = await User.findOne({ email: email, password: password });
-  const userType = founded?.userType;
-  if (founded) {
-    const token = jwt.sign({ email: email, password: password, user: userType }, secret);
-    res.json({ message: 'login successfully', token: `${token}` });
-  }
-  else {
-    res.status(401).send("Invalid Credentials");
-  }
+router.post('/login', authorization, async (req, res) => {
+  return res.json({ message: 'login successfully', user: req.user });
 });
 
 router.post('/signup', async (req, res) => {
   const { name, email, password, address } = req.body;
   const existingUser = await User.findOne({ email: email });
   if (existingUser) {
-    res.status(400).send("User already exists");
-  }
-  else {
-    User.create({ name: name, email: email, password: password, address: address, userType: "user" }).then(user => {
+    res.status(409).send("User already exists");
+  } else {
+    const hashedPassword = bcrypt.hashSync(password, 10);
+    User.create({ name: name, email: email, password: hashedPassword, address: address, userType: "user" }).then(user => {
       console.log(user, "User Created");
-      const token = jwt.sign({ email: email, password: password }, secret);
+      const token = jwt.sign({ email: email, user: user.userType }, secret, { expiresIn: '10d' });
+      res.cookie('jwt',`Bearer ${token}`, { httpOnly: true, maxAge: 10 * 24 * 60 * 60 * 1000 });
       res.json({ message: 'Creation successfully', token: `${token}` });
     })
       .catch(err => {
@@ -37,6 +31,8 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-// console.log("login.js");
+router.get('/isLogin', authorization, (req, res) => {
+  return res.json({ loggedIn: true, user: req.user });
+});
 
 module.exports = router;

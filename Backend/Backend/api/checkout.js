@@ -1,13 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
-const Product = require('../Schemas/Product');
 const Order = require('../Schemas/Order');
 const User = require('../Schemas/Users/customers.js');
 const authorization = require('./authorization');
 
 router.post('/checkout', authorization, async (req, res) => {
-  const { email, address, products } = req.body;
+  const { name, email, address, products } = req.body;
   const customer = req.user;
   const foundUser = await User.findOne({ email: customer.email, password: customer.password });
   if (!foundUser) {
@@ -34,7 +33,7 @@ router.post('/checkout', authorization, async (req, res) => {
   });
 
   const order = new Order({
-    user: foundUser._id,
+    name,
     email,
     address,
     line_items,

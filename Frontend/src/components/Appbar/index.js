@@ -4,6 +4,7 @@ import styled from "styled-components";
 import Center from "@/components/Center";
 import { useState, useEffect } from "react";
 import BarsIcon from "@/components/icons/Bars";
+import Cookies from 'js-cookie';
 
 const StyledHeader = styled.header`
   background-color: #222;
@@ -67,11 +68,18 @@ export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    setIsLoggedIn(!!token);
+    fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
+    })
+    .then(res => res.json())
+    .then(data => {
+      setIsLoggedIn(data.loggedIn);
+    });
   }, []);
+  
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    Cookies.remove('jwt');
     setIsLoggedIn(false);
     window.location.href = '/';
   };

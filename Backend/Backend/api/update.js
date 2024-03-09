@@ -1,14 +1,16 @@
 const express = require('express');
+const bcrypt = require('bcrypt');
 const router = express.Router();
 const authorization = require('./authorization.js');
 const User = require('../Schemas/Users/customers.js');
-
+const Product = require('../Schemas/Product.js');
 
 router.put('/changePassword', authorization, async (req, res) => {
-  const { email, password } = req.body;
-  const founded = await User.findOne({ email: email, password: password });
+  const { email, newPassword } = req.body;
+  const founded = await User.findOne({ email: email });
   if (founded) {
-    const updated = await User.updateOne({ email: email, password: password }, { password: req.body.newPassword });
+    const hashedPassword = bcrypt.hashSync(newPassword, 10);
+    const updated = await User.updateOne({ email: email }, { password: hashedPassword });
     res.json(updated);
   }
   else {
@@ -17,8 +19,8 @@ router.put('/changePassword', authorization, async (req, res) => {
 });
 
 router.put('/bid/:id', authorization, async (req, res) => {
-  const { email, password } = req.body;
-  const founded = await User.findOne({ email: email, password: password });
+  const { email } = req.body;
+  const founded = await User.findOne({ email: email });
   if (founded) {
     const { bidPrice } = req.body;
     Product.findById(req.params.id)

@@ -7,7 +7,7 @@ const useFeaturedProducts = function () {
 
   useEffect(() => {
     fetch("http://localhost:3000/get/65e335669a608127500cfcfa", {
-      method: "GET",
+      method: 'GET',
       headers: {
         "Content-Type": "application/json",
       },
@@ -26,7 +26,7 @@ const useNewProducts = function () {
 
   useEffect(() => {
     fetch("http://localhost:3000/getAllProduct", {
-      method: "GET",
+      method: 'GET',
       headers: {
         "Content-Type": "application/json",
       },

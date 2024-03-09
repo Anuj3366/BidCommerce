@@ -1,9 +1,11 @@
 const express = require('express');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
-app.use(cors());
+app.use(cookieParser());
+app.use(cors({origin: 'http://localhost:1234', credentials: true}));
 app.use(bodyParser.json());
 app.use('/', router);
 const connectDB = require('./mongoDB');
