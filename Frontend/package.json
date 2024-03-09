@@ -11,12 +11,15 @@
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.0",
+    "cloudinary": "^2.0.3",
+    "cloudinary-react": "^1.8.1",
     "eslint": "^8.57.0",
     "eslint-config-next": "^14.1.1",
     "jsonwebtoken": "^9.0.2",
     "micro": "^10.0.1",
     "next": "14.1.1",
     "react": "^18",
+    "react-cloudinary-upload-widget": "^2.0.0",
     "react-dom": "^18",
     "react-toastify": "^10.0.4",
     "styled-components": "^6.1.8"

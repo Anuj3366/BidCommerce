@@ -58,17 +58,17 @@ export default function Login() {
           <Title>Login</Title>
           <Input
             type="text"
-            placeholder="Email"
+            name="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             type="password"
-            placeholder="Password"
+            name="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
-          <Button $primary onClick={login}>
+          <Button $black onClick={login}>
             Login
           </Button>
         </Box>

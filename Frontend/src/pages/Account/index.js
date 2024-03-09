@@ -6,7 +6,28 @@ import ModeratorPanel from "./moderator";
 import SellerProducts from "./seller"
 import AdminPanel from "./admin";
 import Center from "@/components/Center";
+import Button from "@/components/Button";
+import styled from 'styled-components';
 
+const StyledDiv = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-bottom:5vh;
+`;
+
+const InputDiv = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom:5vh;
+  border: 1px solid #000;
+  padding: 20px;
+  border-radius: 10px;
+`;
 
 export default function ProductsPage() {
   const [userType, setUserType] = useState('');
@@ -22,7 +43,7 @@ export default function ProductsPage() {
     })
       .then(response => response.json())
       .then(data => {
-        if(data.redirectToLogin) {
+        if (data.redirectToLogin) {
           window.location.href = "/Login";
         }
         setUserType(data);
@@ -31,8 +52,6 @@ export default function ProductsPage() {
   const [becomeSeller, setBecomeSeller] = useState(false);
   const [becomeWorker, setBecomeWorker] = useState(false);
   const [sellerDetails, setSellerDetails] = useState({
-    email: '',
-    password: '',
     shopname: '',
     shopemail: '',
     GSTINnumber: '',
@@ -41,8 +60,6 @@ export default function ProductsPage() {
     address: '',
   });
   const [workerDetails, setWorkerDetails] = useState({
-    email: '',
-    password: '',
     adhaar: '',
   });
   const [role, setRole] = useState('');
@@ -68,55 +85,48 @@ export default function ProductsPage() {
   };
   const handleSellerSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch('http://localhost:3000/becomeSeller', {
+    const token = localStorage.getItem('token');
+    await fetch('http://localhost:3000/becomeSeller', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "authorization": `Bearer ${token}`
       },
       body: JSON.stringify(sellerDetails),
-    });
-    const data = await response.json();
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setUserType('notverified');
+      })
+      .catch(err => console.error('Error:', err));
   };
   const handleWorkerSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch('http://localhost:3000/becomeWorker', {
+    const token = localStorage.getItem('token');
+    fetch('http://localhost:3000/becomeWorker', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         "authorization": `Bearer ${token}`
       },
       body: JSON.stringify(workerDetails),
-    });
-    const data = await response.json();
+    })
+      .then(res => res.json())
+      .then(data => {
+        console.log(data)
+        setUserType('notverified');
+      })
+      .catch(err => console.error('Error:', err));
+
   };
-  const [productDetails, setProductDetails] = useState({
-    title: '',
-    description: '',
-    price: '',
-    images: '',
-    category: '',
-    quantity: '',
-    bid: false,
-    bidPrice: '',
-    bidEnd: '',
-  });
-  const handleProductDetailsChange = (event) => {
-    setProductDetails({
-      ...productDetails,
-      [event.target.name]: event.target.value,
-    });
-  };
-
-
-
 
   return (
     <>
       <Header />
       <Center>
         {userType === "notverified" && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
             <h1>Verification Pending</h1>
             <p>Your account is currently being verified. This process may take some time.</p>
             <p>Please check back later.</p>
@@ -125,23 +135,27 @@ export default function ProductsPage() {
         {userType === "user" && (
           <div>
             <p>Would you like to become a seller or a worker?</p>
-            <button onClick={handleBecomeSeller}>Become a Seller</button>
-            <button onClick={handleBecomeWorker}>Become a Worker</button>
+            <StyledDiv>
+              <Button onClick={handleBecomeSeller}>Become a Seller</Button>
+              <Button onClick={handleBecomeWorker}>Become a Worker</Button>
+            </StyledDiv>
             {role === 'seller' && (
-              <div>
+              <InputDiv>
+                <h2>Please provide these details</h2>
                 <Input type="text" name="shopname" value={sellerDetails.shopname} onChange={handleSellerDetailsChange} placeholder="Shop Name" required />
                 <Input type="text" name="shopemail" value={sellerDetails.shopemail} onChange={handleSellerDetailsChange} placeholder="Shop Email" required />
                 <Input type="text" name="GSTINnumber" value={sellerDetails.GSTINnumber} onChange={handleSellerDetailsChange} placeholder="GSTIN Number" required />
                 <Input type="text" name="PANnumber" value={sellerDetails.PANnumber} onChange={handleSellerDetailsChange} placeholder="PAN Number" required />
                 <Input type="text" name="address" value={sellerDetails.address} onChange={handleSellerDetailsChange} placeholder="Address" required />
-                <button onClick={handleSellerSubmit}>Submit</button>
-              </div>
+                <Button onClick={handleSellerSubmit} $black>Submit</Button>
+              </InputDiv>
             )}
             {role === 'worker' && (
-              <div>
+              <InputDiv>
+                <h2>Please provide this detail</h2>
                 <Input type="text" name="adhaar" value={workerDetails.adhaar} onChange={handleWorkerDetailsChange} placeholder="Adhaar" required />
-                <button onClick={handleWorkerSubmit}>Submit</button>
-              </div>
+                <Button onClick={handleWorkerSubmit} $black>Submit</Button>
+              </InputDiv>
             )}
           </div>
         )}
@@ -152,7 +166,7 @@ export default function ProductsPage() {
           <ModeratorPanel />
         )}
         {userType === "admin" && (
-          <AdminPanel/>
+          <AdminPanel />
         )}
       </Center>
     </>

@@ -9,6 +9,17 @@ const StyledInput = styled.input`
   box-sizing:border-box;
 `;
 
+const StyledLabel = styled.label`
+  display: block;
+  margin-bottom: 5px;
+  text-transform: capitalize;
+`;
+
 export default function Input(props) {
-  return <StyledInput {...props} />
+  return (
+    <div>
+      <StyledLabel>{props.name}</StyledLabel>
+      <StyledInput {...props} />
+    </div>
+  );
 }

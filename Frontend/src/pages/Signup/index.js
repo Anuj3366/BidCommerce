@@ -17,11 +17,11 @@ const Box = styled.div`
   padding: 3%;
   width: 40%;
   height: 60%;
-  margin: 20% auto;
+  margin: 10% auto;
   @media screen and (max-width: 768px) {
     width: 80%;
     height: 80%;
-    margin: 10% auto;
+    margin: 5% auto;
   }
 `;
 
@@ -61,29 +61,29 @@ export default function Signup() {
           <Title>Signup</Title>
           <Input
             type="text"
-            placeholder="Name"
+            name="Name"
             value={name}
             onChange={(e) => setName(e.target.value)}
           />
           <Input
             type="email"
-            placeholder="Email"
+            name="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
           />
           <Input
             type="password"
-            placeholder="Password"
+            name="Password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
           />
           <Input
             type="text"
-            placeholder="Address"
+            name="Address"
             value={address}
             onChange={(e) => setAddress(e.target.value)}
           />
-          <Button $primary onClick={signup}>
+          <Button $black onClick={signup}>
             Signup
           </Button>
         </Box>

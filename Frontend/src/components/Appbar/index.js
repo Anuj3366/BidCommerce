@@ -73,7 +73,7 @@ export default function Header() {
   const handleLogout = () => {
     localStorage.removeItem('token');
     setIsLoggedIn(false);
-    window.location('/');
+    window.location.href = '/';
   };
 
   return (
