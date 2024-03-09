@@ -4,7 +4,6 @@ import styled from "styled-components";
 import Center from "@/components/Center";
 import { useState, useEffect } from "react";
 import BarsIcon from "@/components/icons/Bars";
-import Cookies from 'js-cookie';
 
 const StyledHeader = styled.header`
   background-color: #222;

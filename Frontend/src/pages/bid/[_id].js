@@ -7,7 +7,6 @@ import ProductImages from '@/components/ProductImages';
 import Button from '@/components/Button';
 import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
-import Cookies from 'js-cookie';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -39,7 +38,6 @@ export default function ProductPage({ product, comments }) {
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          
         },
         body: JSON.stringify({ comment }),
       });
@@ -58,7 +56,7 @@ export default function ProductPage({ product, comments }) {
     })
   }
   function addToCart(product) {
-    const token = Cookies.get('jwt');
+    
     if (!token) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {

@@ -7,8 +7,23 @@ const authorization = require('./authorization.js');
 
 const secret = 'secrettohide';
 
-router.post('/login', authorization, async (req, res) => {
-  return res.json({ message: 'login successfully', user: req.user });
+router.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({
+    email: email
+  });
+  if (!user) {
+    console.log("User not found");
+    return res.status(401).json({ error: 'Authorization failed' });
+  }
+  if (!bcrypt.compareSync(password, user.password)) {
+    console.log("Password not matched");
+    return res.status(401).json({ error: 'Authorization failed' });
+  }
+  const token = jwt.sign({ email: email,password:password}, secret, { expiresIn: '10d' });
+  res.cookie('jwt',token, { httpOnly: true, maxAge: 10 * 24 * 60 * 60 * 1000 });
+  const { password: pass, ...userWithoutPassword } = user.toObject();
+  res.json({ message: 'Login successfully', token: `${token}`,userWithoutPassword });
 });
 
 router.post('/signup', async (req, res) => {
@@ -20,8 +35,8 @@ router.post('/signup', async (req, res) => {
     const hashedPassword = bcrypt.hashSync(password, 10);
     User.create({ name: name, email: email, password: hashedPassword, address: address, userType: "user" }).then(user => {
       console.log(user, "User Created");
-      const token = jwt.sign({ email: email, user: user.userType }, secret, { expiresIn: '10d' });
-      res.cookie('jwt',`Bearer ${token}`, { httpOnly: true, maxAge: 10 * 24 * 60 * 60 * 1000 });
+      const token = jwt.sign({ email: email,password:password}, secret, { expiresIn: '10d' });
+      res.cookie('jwt',token, { httpOnly: true, maxAge: 10 * 24 * 60 * 60 * 1000 });
       res.json({ message: 'Creation successfully', token: `${token}` });
     })
       .catch(err => {

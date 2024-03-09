@@ -3,7 +3,6 @@ import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Center from "@/components/Center";
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 
 function SellerProducts() {
   const [products, setProducts] = useState([]);
@@ -54,7 +53,7 @@ function SellerProducts() {
   };
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    
     fetch('http://localhost:3000/seller/products', {
       method: 'GET',
       credentials: 'include',
@@ -74,7 +73,7 @@ function SellerProducts() {
   }, []);
 
   const increaseQuantity = (productId, increaseBy) => {
-    const token = Cookies.get('jwt');
+    
     fetch(`http://localhost:3000/product/${productId}/quantity`, {
       method: 'PUT',
       credentials: 'include',
@@ -92,7 +91,7 @@ function SellerProducts() {
   const handleProductSubmit = async (event) => {
     event.preventDefault();
     await saveImage();
-    const token = Cookies.get('jwt');
+    
     try {
       const response = await fetch('http://localhost:3000/uploadProduct', {
         method: 'POST',

@@ -5,7 +5,6 @@ import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
 import { useFeaturedProducts } from "../components/client";
-import Cookies from 'js-cookie';
 
 const Bg = styled.div`
   background-color: #222;
@@ -68,7 +67,6 @@ export default function Featured(id) {
         credentials: 'true',
         headers: {
           "Content-Type": "application/json",
-          
         },
         body: JSON.stringify({ productId: product._id }),
       })

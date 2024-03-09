@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
 
 const UserContainer = styled.div`
   display: flex;
@@ -20,13 +19,12 @@ function ModeratorPanel() {
   const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    
     fetch(`http://localhost:3000/getseller`, {
       method: 'GET',
       credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        ,
       },
     })
       .then(res => res.json())
@@ -38,13 +36,12 @@ function ModeratorPanel() {
   }, []);
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    
     fetch(`http://localhost:3000/getworker`, {
       method: 'GET',
       credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        ,
       },
     })
       .then(res => res.json())
@@ -56,14 +53,13 @@ function ModeratorPanel() {
   }, []);
 
   const verifySeller = (sellerId) => {
-    const token = Cookies.get('jwt');
+    
     fetch(`http://localhost:3000/seller/${sellerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          ,
         },
       })
       .then(res => res.json())
@@ -72,14 +68,13 @@ function ModeratorPanel() {
   };
 
   const verifyWorker = (workerId) => {
-    const token = Cookies.get('jwt');
+    
     fetch(`http://localhost:3000/worker/${workerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          ,
         },
       })
       .then(res => res.json())

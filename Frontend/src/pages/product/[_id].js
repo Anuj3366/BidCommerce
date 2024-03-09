@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Center from '@/components/Center';
 import Header from '@/components/Appbar';
 import Title from '@/components/Title';
@@ -7,7 +8,6 @@ import ProductImages from '@/components/ProductImages';
 import Button from '@/components/Button';
 import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
-import Cookies from 'js-cookie';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -27,38 +27,44 @@ const Price = styled.span`
   font-size: 1.4rem;
 `;
 
-export default function ProductPage({ product, comments }) {
+export default function ProductPage({ product }) {
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+
+  useEffect(() => {
+    fetchComments();
+  }, []);
+
+  async function fetchComments() {
+    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const data = await res.json();
+    if (data.comments) {
+      setComments(data.comments);
+    }
+  }
+
   const addcomment = async (comment) => {
-    const token = localStorage?.getItem('token');
-    if (!token) {
-      window.location.href = "/login";
-    }
-    else {
-      const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-          
-        },
-        body: JSON.stringify({ comment }),
-      });
-      const data = await res?.json();
-      if (data.redirectToLogin) {
-        window.location.href = "/login";
-      }
+    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment }),
+    });
+    const data = await res.json();
+    if (data.comment) {
+      setComments(prevComments => [...prevComments, data.comment]);
     }
   }
-  if (comments.length == 0) {
-    comments = <p>No comments</p>
-  }
-  else {
-    comments = comments.map((comment) => {
-      return <p>{comment}</p>
-    })
-  }
+
   function addToCart(product) {
-    const token = Cookies.get('jwt');
     if (!token) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
@@ -66,7 +72,6 @@ export default function ProductPage({ product, comments }) {
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          
         },
         body: JSON.stringify({ productId: product._id }),
       })
@@ -93,7 +98,9 @@ export default function ProductPage({ product, comments }) {
             <p>{product.description}</p>
             <PriceRow>
               <div>
-                <Price>₹{product.price}</Price>
+                <Title>
+                  <Price>₹{product.price}</Price>
+                </Title>
               </div>
               <div>
                 <Button $primary onClick={() => addToCart(product)}>
@@ -107,14 +114,19 @@ export default function ProductPage({ product, comments }) {
       <Center>
         <WhiteBox>
           <Title>Comments</Title>
-          <Center><p>Add a comment</p>
-
-            <Input type="text" placeholder="Add a comment" />
-            <Button $primary onClick={() => addcomment("Hello")}>
+          <Center>
+            <p>Add a comment</p>
+            <Input
+              type="text"
+              placeholder="Add a comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <Button onClick={() => addcomment(newComment)}>
               Add
             </Button>
           </Center>
-          <Center>{comments}</Center>
+          <Center>{comments.join(', ')}</Center>
         </WhiteBox>
       </Center>
     </>
@@ -130,33 +142,6 @@ export async function getServerSideProps(context) {
       "Content-Type": "application/json",
     },
   });
-
-  if (!res.ok) {
-    console.error(`Error fetching product: ${res.status}`);
-    return { props: {} };
-  }
-
   const product = await res.json();
-
-  const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!commentsRes.ok) {
-    console.error(`Error fetching comments: ${commentsRes.status}`);
-    return { props: { product } };
-  }
-
-  const comments = await commentsRes.json();
-
-  return {
-    props: {
-      product,
-      comments,
-    },
-  };
+  return { props: { product } };
 }

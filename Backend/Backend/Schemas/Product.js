@@ -2,10 +2,10 @@ const mongoose = require('mongoose');
 const { model, Schema, models } = mongoose;
 
 const ProductSchema = new Schema({
-  title: {type:String, required:true},
-  description: {type:String, required:true},
-  price: {type: Number, required: true},
-  images: [{type:[String], required:true}],
+  title: { type: String, required: true },
+  description: { type: String, required: true },
+  price: { type: Number, required: true },
+  images: [{ type: [String], required: true }],
   category: {
     type: String,
     enum: [
@@ -16,13 +16,20 @@ const ProductSchema = new Schema({
     ],
     required: true
   },
-  sellerMail: {type:String, required:true},
-  quantity: {type: Number, required: true},
-  comment: {type:[String], required:true},
-  buyed : {type:Number, required:true},
-  reviews: {type:Number, required:true},
-  bid: {type:Boolean, required:true},
-  bidEnd: {type:Date, required:function() { return this.bid; }}, 
+  sellerMail: { type: String, required: true },
+  quantity: { type: Number, required: true },
+  comments: {
+    type: [{
+      user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
+      comment: { type: String, required: true }
+    }],
+    required: true,
+    default: []
+  },
+  buyed: { type: Number, required: true },
+  reviews: { type: Number, required: true },
+  bid: { type: Boolean, required: true },
+  bidEnd: { type: Date, required: function () { return this.bid; } },
 });
 
 const Product = models.Product || model('Product', ProductSchema);

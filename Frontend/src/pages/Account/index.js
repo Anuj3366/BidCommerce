@@ -8,7 +8,7 @@ import AdminPanel from "./admin";
 import Center from "@/components/Center";
 import Button from "@/components/Button";
 import styled from 'styled-components';
-import Cookies from 'js-cookie';
+import Title from "@/components/Title";
 
 const StyledDiv = styled.div`
   display: flex;
@@ -34,13 +34,12 @@ export default function ProductsPage() {
   const [userType, setUserType] = useState('');
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    
     fetch('http://localhost:3000/checkuserType', {
       method: 'GET',
       credentials: 'include',
       headers: {
         "Content-Type": "application/json",
-        
       },
     })
       .then(response => response.json())
@@ -51,8 +50,7 @@ export default function ProductsPage() {
         setUserType(data);
       });
   }, []);
-  const [becomeSeller, setBecomeSeller] = useState(false);
-  const [becomeWorker, setBecomeWorker] = useState(false);
+
   const [sellerDetails, setSellerDetails] = useState({
     shopname: '',
     shopemail: '',
@@ -87,7 +85,7 @@ export default function ProductsPage() {
   };
   const handleSellerSubmit = async (event) => {
     event.preventDefault();
-    const token = Cookies.get('jwt');
+    
     await fetch('http://localhost:3000/becomeSeller', {
       method: 'POST',
       credentials: 'include',
@@ -106,13 +104,11 @@ export default function ProductsPage() {
   };
   const handleWorkerSubmit = async (event) => {
     event.preventDefault();
-    const token = Cookies.get('jwt');
     fetch('http://localhost:3000/becomeWorker', {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        
       },
       body: JSON.stringify(workerDetails),
     })
@@ -128,6 +124,14 @@ export default function ProductsPage() {
   return (
     <>
       <Header />
+      <Center>
+        <Title>Account</Title>
+      </Center>
+      <Center>
+        <h2>Name :${name}</h2>
+        <h2>Your Account Type: {userType}</h2>
+
+      </Center>
       <Center>
         {userType === "notverified" && (
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>

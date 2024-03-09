@@ -2,7 +2,6 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import Cookies from 'js-cookie';
 
 const ProductWrapper = styled.div`
   
@@ -72,7 +71,6 @@ export default function ProductBox({ _id, title, description, price, images, bid
         credentials: 'include',
         headers: {
           "Content-Type": "application/json",
-          
         },
         body: JSON.stringify({ productId: _id }),
       })

@@ -6,7 +6,6 @@ import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
-import Cookies from 'js-cookie';
 
 const Box = styled.div`
   background-color: #fff;
@@ -73,7 +72,7 @@ function CartPage() {
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    const token = Cookies.get('jwt');
+    
     fetch('http://localhost:3000/getCart', {
       method: 'GET',
       credentials: 'include',
