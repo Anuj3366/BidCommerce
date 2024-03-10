@@ -57,14 +57,31 @@ const Price = styled.div`
 `;
 
 export default function ProductBox({ _id, title, description, price, images, bid, bidEnd }) {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => {
+        setIsLoggedIn(data.loggedIn);
+      });
+  }, []);
+
   let url = '/product/' + _id;
+  let buttonText = 'Add to cart';
 
   if (bid === true) {
     url = '/bid/' + _id;
+    buttonText = 'Open Auction';
   }
+
   function addFeaturedToCart() {
-    const token = Cookies.get('jwt')
-    if (!token) window.location.href = "/Login";
+    if (!isLoggedIn) {
+      window.location.href = "/Login";
+    }
     else {
       fetch("http://localhost:3000/addToCart", {
         method: 'POST',
@@ -84,32 +101,6 @@ export default function ProductBox({ _id, title, description, price, images, bid
         });
     }
   }
-  const [userBid, setUserBid] = useState(price);
-  const handleBidChange = (event) => {
-    setUserBid(event.target.value);
-  };
-
-  const handleBidSubmit = () => {
-    if (new Date() > new Date(bidEnd)) {
-      alert('The bidding period has ended.');
-    } else if (userBid > price) {
-      fetch(`/bid/${_id}`, {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ price: userBid })
-      })
-        .then(res => res.json())
-        .then(data => {
-          alert(data.message);
-          setProduct(prevState => ({ ...prevState, price: userBid }));
-        })
-        .catch(err => console.error(err));
-    } else {
-      alert('Your bid must be higher than the current bid.');
-    }
-  };
-
   return (
     <ProductWrapper>
       <WhiteBox href={url}>
@@ -121,20 +112,11 @@ export default function ProductBox({ _id, title, description, price, images, bid
         <Title href={url}>{title}</Title>
         <PriceRow>
           <Price>
-            {bid ? `Current bid: ₹${price}` : `Price: ₹${price}`}
+            {bid ? `₹${price}` : `Price: ₹${price}`}
           </Price>
-          {bid ? (
-            <>
-              <input type="number" value={userBid} onChange={handleBidChange} />
-              <Button block onClick={handleBidSubmit} $white $outline>
-                Place a higher bid
-              </Button>
-            </>
-          ) : (
-            <Button block onClick={addFeaturedToCart} $white $outline>
-              Add to cart
-            </Button>
-          )}
+          <Button block onClick={buttonText === 'Add to cart' ? addFeaturedToCart : null} $white $outline>
+            {buttonText}
+          </Button>
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

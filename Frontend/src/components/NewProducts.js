@@ -2,7 +2,8 @@
 import styled from "styled-components";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
-import { useNewProducts } from "../components/client";
+import { useState, useEffect } from "react";
+
 
 const Title = styled.h2`
   font-size: 2rem;
@@ -11,7 +12,20 @@ const Title = styled.h2`
 `;
 
 export default function NewProducts() {
-  const products = useNewProducts()
+  const [products, setNewProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/getAllProduct", {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setNewProducts(data);
+      });
+  }, []);
   return (
     <Center>
       <Title>New Arrivals</Title>

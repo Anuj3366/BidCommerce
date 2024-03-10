@@ -59,6 +59,16 @@ export const ButtonStyle = css`
       height: 20px;
     }
   `}
+  @media screen and (max-width: 768px) {
+    display : block;
+    ${props => props.textAlign === 'center' && css`
+      margin:auto;
+      text-align: center;
+    `}
+    ${props => props.textAlign === 'start' && css`
+      text-align: start;
+    `}
+  }
 `;
 
 const StyledButton = styled.button`

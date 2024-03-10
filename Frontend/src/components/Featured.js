@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
-import { useFeaturedProducts } from "../components/client";
+import { useState, useEffect } from "react";
 
 const Bg = styled.div`
   background-color: #222;
@@ -57,7 +57,20 @@ const ButtonsWrapper = styled.div`
 `;
 
 export default function Featured(id) {
-  const product = useFeaturedProducts();
+  const [product, setFeaturedProduct] = useState([]);
+
+  useEffect(() => {
+    fetch("http://localhost:3000/get/65e335669a608127500cfcfa", {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setFeaturedProduct(data);
+      });
+  }, []);
   function addFeaturedToCart() {
     const token = Cookies.get('jwt')
     if (!token) window.location.href = "/Login";

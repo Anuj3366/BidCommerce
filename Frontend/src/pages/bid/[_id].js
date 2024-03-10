@@ -25,39 +25,48 @@ const PriceRow = styled.div`
 const Price = styled.span`
   font-size: 1.4rem;
 `;
+const Comment = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+`;
+export default function ProductPage({ product, comments: initialComments }) {
+  const [comments, setComments] = useState(initialComments);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [newComment, setNewComment] = useState("");
 
-export default function ProductPage({ product, comments }) {
-  const addcomment = async (comment) => {
-    const token = localStorage?.getItem('token');
-    if (!token) {
-      window.location.href = "/login";
-    }
-    else {
-      const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ comment }),
-      });
-      const data = await res?.json();
-      if (data.redirectToLogin) {
-        window.location.href = "/login";
-      }
-    }
-  }
-  if (comments.length == 0) {
-    comments = <p>No comments</p>
-  }
-  else {
-    comments = comments.map((comment) => {
-      return <p>{comment}</p>
+  useEffect(() => {
+    fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
     })
+      .then(res => res.json())
+      .then(data => {
+        setIsLoggedIn(data.loggedIn);
+      });
+  }, []);
+
+  const addcomment = async () => {
+    if (!newComment.trim()) {
+      alert("Please enter a comment.");
+      return;
+    }
+    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ comment: newComment }),
+    });
+    const data = await res.json();
+    if (data.comment) {
+      setComments(prevComments => [...prevComments, data.comment]);
+      setNewComment("");
+    }
   }
+
   function addToCart(product) {
-    
-    if (!token) window.location.href = "/Login";
+    if (!isLoggedIn) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
         method: 'POST',
@@ -70,7 +79,6 @@ export default function ProductPage({ product, comments }) {
         .then(response => response.json())
         .then(data => {
           if (data.redirectToLogin) {
-            localStorage.removeItem('token');
             window.location.href = "/Login";
           }
           else console.log("Added to cart", data);
@@ -111,7 +119,11 @@ export default function ProductPage({ product, comments }) {
               Add
             </Button>
           </Center>
-          <Center>{comments}</Center>
+          <Center>
+            <Comment>
+              {comments}
+            </Comment>
+          </Center>
         </WhiteBox>
       </Center>
     </>
@@ -120,40 +132,48 @@ export default function ProductPage({ product, comments }) {
 
 export async function getServerSideProps(context) {
   const { _id } = context.params;
-  const res = await fetch(`http://localhost:3000/get/${_id}`, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
+  try {
+    const res = await fetch(`http://localhost:3000/get/${_id}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-  if (!res.ok) {
-    console.error(`Error fetching product: ${res.status}`);
-    return { props: {} };
+    if (!res.ok) {
+      throw new Error(`Error fetching product: ${res.status}`);
+    }
+
+    const product = await res.json();
+
+    const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!commentsRes.ok) {
+      throw new Error(`Error fetching comments: ${commentsRes.status}`);
+    }
+
+    const comments = await commentsRes.json();
+
+    return {
+      props: {
+        product,
+        comments,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      redirect: {
+        destination: '/error',
+        permanent: false,
+      },
+    };
   }
-
-  const product = await res.json();
-
-  const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-
-  if (!commentsRes.ok) {
-    console.error(`Error fetching comments: ${commentsRes.status}`);
-    return { props: { product } };
-  }
-
-  const comments = await commentsRes.json();
-
-  return {
-    props: {
-      product,
-      comments,
-    },
-  };
 }

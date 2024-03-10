@@ -26,7 +26,10 @@ const PriceRow = styled.div`
 const Price = styled.span`
   font-size: 1.4rem;
 `;
-
+const Comment = styled.p`
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+`;
 export default function ProductPage({ product }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
@@ -64,8 +67,13 @@ export default function ProductPage({ product }) {
     }
   }
 
-  function addToCart(product) {
-    if (!token) window.location.href = "/Login";
+  async function addToCart(product) {
+    const res = await fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await res.json();
+    if (!data.loggedIn) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
         method: 'POST',
@@ -103,7 +111,7 @@ export default function ProductPage({ product }) {
                 </Title>
               </div>
               <div>
-                <Button $primary onClick={() => addToCart(product)}>
+                <Button $primary $center onClick={() => addToCart(product)}>
                   <CartIcon />Add to cart
                 </Button>
               </div>
@@ -126,7 +134,11 @@ export default function ProductPage({ product }) {
               Add
             </Button>
           </Center>
-          <Center>{comments.join(', ')}</Center>
+          <Center>
+            <Comment>
+              {comments}
+            </Comment>
+          </Center>
         </WhiteBox>
       </Center>
     </>
@@ -135,13 +147,33 @@ export default function ProductPage({ product }) {
 
 export async function getServerSideProps(context) {
   const { _id } = context.params;
-  const res = await fetch(`http://localhost:3000/get/${_id}`, {
-    method: 'GET',
-    credentials: 'include',
-    headers: {
-      "Content-Type": "application/json",
-    },
-  });
-  const product = await res.json();
-  return { props: { product } };
+  try {
+    const res = await fetch(`http://localhost:3000/get/${_id}`, {
+      method: 'GET',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!res.ok) {
+      throw new Error(`Error fetching product: ${res.status}`);
+    }
+
+    const product = await res.json();
+
+    return {
+      props: {
+        product,
+      },
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      redirect: {
+        destination: '/error',
+        permanent: false,
+      },
+    };
+  }
 }

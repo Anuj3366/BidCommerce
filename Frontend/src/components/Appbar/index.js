@@ -3,6 +3,7 @@ import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
 import { useState, useEffect } from "react";
+import CloseIcon from "@/components/icons/Close";
 import BarsIcon from "@/components/icons/Bars";
 
 const StyledHeader = styled.header`
@@ -33,6 +34,7 @@ const StyledNav = styled.nav`
   right: 0;
   padding: 70px 20px 20px;
   background-color: #222;
+  z-index: 9999; // Add a high z-index
   @media screen and (min-width: 768px) {
     display: flex;
     position: static;
@@ -56,7 +58,7 @@ const NavButton = styled.button`
   color: white;
   cursor: pointer;
   position: relative;
-  z-index: 3;
+  z-index: 191;
   @media screen and (min-width: 768px) {
     display: none;
   }
@@ -71,12 +73,12 @@ export default function Header() {
       method: 'GET',
       credentials: 'include',
     })
-    .then(res => res.json())
-    .then(data => {
-      setIsLoggedIn(data.loggedIn);
-    });
+      .then(res => res.json())
+      .then(data => {
+        setIsLoggedIn(data.loggedIn);
+      });
   }, []);
-  
+
   const handleLogout = () => {
     Cookies.remove('jwt');
     setIsLoggedIn(false);
@@ -88,7 +90,7 @@ export default function Header() {
       <Center>
         <Wrapper>
           <Logo href={'/'}>BidCommerce</Logo>
-          <StyledNav>
+          <StyledNav mobileNavActive={mobileNavActive}>
             <NavLink href={"/"}>Home</NavLink>
             <NavLink href={"/Auction"}>Auction</NavLink>
             <NavLink href={"/categories"}>Categories</NavLink>
@@ -105,8 +107,8 @@ export default function Header() {
               </>
             )}
           </StyledNav>
-          <NavButton onClick={() => setMobileNavActive(prev => !prev)}>
-            <BarsIcon />
+          <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
+            {mobileNavActive ? <CloseIcon /> : <BarsIcon />}
           </NavButton>
         </Wrapper>
       </Center>

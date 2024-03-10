@@ -1,8 +1,8 @@
+"use clients"
 import React, { useEffect, useState } from 'react';
 import ProductsGrid from "@/components/ProductsGrid";
 import Header from '@/components/Appbar';
 import Center from '@/components/Center';
-import { useNewProducts } from "@/components/client";
 
 function CategoryPage() {
   const [products, setProducts] = useState([]);
@@ -13,12 +13,16 @@ function CategoryPage() {
   };
 
   useEffect(() => {
-    function fetchProducts() {
-      const newProduct = useNewProducts()
-      setProducts(newProduct)
-    }
-
-    fetchProducts();
+    fetch("http://localhost:3000/getAllProduct", {
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+      },
+    })
+      .then(response => response.json())
+      .then(data => {
+        setProducts(data);
+      });
   }, []);
 
   return (

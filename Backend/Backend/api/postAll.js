@@ -2,9 +2,6 @@ const express = require('express');
 const router = express.Router();
 const authorization = require('./authorization.js');
 const Product = require('../Schemas/Product.js');
-const User = require('../Schemas/Users/customers.js');
-const Seller = require('../Schemas/Users/seller.js');
-const mongoose = require('mongoose');
 
 
 router.post('/product/:productID/comment', authorization, async (req, res) => {
