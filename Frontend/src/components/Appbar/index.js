@@ -34,7 +34,7 @@ const StyledNav = styled.nav`
   right: 0;
   padding: 70px 20px 20px;
   background-color: #222;
-  z-index: 9999; // Add a high z-index
+  z-index: 9999;
   @media screen and (min-width: 768px) {
     display: flex;
     position: static;
@@ -80,11 +80,15 @@ export default function Header() {
   }, []);
 
   const handleLogout = () => {
-    Cookies.remove('jwt');
-    setIsLoggedIn(false);
-    window.location.href = '/';
+    fetch('http://localhost:3000/logout', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(() => {
+        setIsLoggedIn(false);
+        window.location.href = '/';
+      });
   };
-
   return (
     <StyledHeader>
       <Center>

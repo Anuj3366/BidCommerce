@@ -128,7 +128,7 @@ export default function ProductsPage() {
         <Title>Account</Title>
       </Center>
       <Center>
-        <h2>Name :${name}</h2>
+        {/* <h2>Name :${name}</h2> */}
         <h2>Your Account Type: {userType}</h2>
 
       </Center>

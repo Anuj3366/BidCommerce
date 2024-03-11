@@ -50,4 +50,9 @@ router.get('/isLogin', authorization, (req, res) => {
   return res.json({ loggedIn: true, user: req.user });
 });
 
+router.get('/logout', (req, res) => {
+  res.clearCookie('jwt');
+  res.json({ message: 'Logout successful' });
+});
+
 module.exports = router;
