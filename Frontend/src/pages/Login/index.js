@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
 import Header from '@/components/Appbar';
+import { toast } from 'sonner';
 
 const Box = styled.div`
   display: flex;
@@ -42,10 +43,10 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          console.log("Logged in");
           router.push('/');
+          toast.success('Welcome! You are now logged in!')
         } else {
-          console.log("Failed to login");
+          toast.error('Invalid email or password') 
         }
       });
   }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { toast } from 'sonner';
 
 const UserContainer = styled.div`
   display: flex;
@@ -19,7 +20,7 @@ function ModeratorPanel() {
   const [workers, setWorkers] = useState([]);
 
   useEffect(() => {
-    
+
     fetch(`http://localhost:3000/getseller`, {
       method: 'GET',
       credentials: 'include',
@@ -32,11 +33,14 @@ function ModeratorPanel() {
         console.log(data);
         setSellers(data);
       })
-      .catch(err => console.error('Fetching users failed: ', err));
+      .catch(err => {
+        toast.error('Fetching users failed');
+        console.error('Fetching users failed: ', err)
+      });
   }, []);
 
   useEffect(() => {
-    
+
     fetch(`http://localhost:3000/getworker`, {
       method: 'GET',
       credentials: 'include',
@@ -49,11 +53,14 @@ function ModeratorPanel() {
         console.log(data);
         setWorkers(data);
       })
-      .catch(err => console.error('Fetching users failed: ', err));
+      .catch(err => {
+        toast.error('Fetching users failed');
+        console.error('Fetching users failed: ', err)
+      });
   }, []);
 
   const verifySeller = (sellerId) => {
-    
+
     fetch(`http://localhost:3000/seller/${sellerId}/verify`,
       {
         method: 'PUT',
@@ -63,13 +70,19 @@ function ModeratorPanel() {
         },
       })
       .then(res => res.json())
-      .then(data => console.log(data.message))
-      .catch(err => console.error(err));
-  };
-
-  const verifyWorker = (workerId) => {
+      .then(data => {
+        toast.success(sellerId, " Seller verified")
+        console.log(data.message)
+      })
+      .catch(err => {
+        toast.error("Error")
+        console.error(err)
+      });
+    };
     
-    fetch(`http://localhost:3000/worker/${workerId}/verify`,
+    const verifyWorker = (workerId) => {
+      
+      fetch(`http://localhost:3000/worker/${workerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',
@@ -78,8 +91,14 @@ function ModeratorPanel() {
         },
       })
       .then(res => res.json())
-      .then(data => console.log(data.message))
-      .catch(err => console.error(err));
+      .then(data => {
+        toast.success(workerId," worker verified")
+        console.log(data.message)
+      })
+      .catch(err => {
+        toast.error("Error")
+        console.error(err)
+      });
   };
   return (
     <div>

@@ -7,6 +7,7 @@ import ProductImages from '@/components/ProductImages';
 import Button from '@/components/Button';
 import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
+import { toast } from 'sonner';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -47,7 +48,7 @@ export default function ProductPage({ product, comments: initialComments }) {
 
   const addcomment = async () => {
     if (!newComment.trim()) {
-      alert("Please enter a comment.");
+      toast.warning("Please Enter a Comment")
       return;
     }
     const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
@@ -62,6 +63,7 @@ export default function ProductPage({ product, comments: initialComments }) {
     if (data.comment) {
       setComments(prevComments => [...prevComments, data.comment]);
       setNewComment("");
+      toast.success("Comment Added")
     }
   }
 
@@ -81,7 +83,10 @@ export default function ProductPage({ product, comments: initialComments }) {
           if (data.redirectToLogin) {
             window.location.href = "/Login";
           }
-          else console.log("Added to cart", data);
+          else{ 
+            toast.success("Added to cart")
+            console.log("Added to cart", data)
+          };
         });
     }
   }

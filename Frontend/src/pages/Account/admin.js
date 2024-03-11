@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Center from "@/components/Center";
 import styled from 'styled-components';
-
+import { toast } from 'sonner';
 
 const UserContainer = styled.div`
   display: flex;
@@ -21,7 +21,7 @@ function AdminPanel() {
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
-    
+
     fetch(`http://localhost:3000/admin/users`, {
       method: 'GET',
       credentials: 'include',
@@ -37,7 +37,7 @@ function AdminPanel() {
   }, []);
 
   const promoteUser = (userId) => {
-    
+
     fetch(`http://localhost:3000/user/${userId}/promote`, {
       method: 'PUT',
       credentials: 'include',
@@ -47,10 +47,14 @@ function AdminPanel() {
     })
       .then(res => res.json())
       .then(data => {
+        toast.success(userId, " Moderator Verified")
         console.log(data.message);
         setUsers(users.filter(user => user._id !== userId));
       })
-      .catch(err => console.error(err));
+      .catch(err => {
+        toast.error("Failed to Verify Moderator")
+        console.error(err)
+      });
   };
 
   return (

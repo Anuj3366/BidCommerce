@@ -5,6 +5,8 @@ import Center from "@/components/Center";
 import { useState, useEffect } from "react";
 import CloseIcon from "@/components/icons/Close";
 import BarsIcon from "@/components/icons/Bars";
+import { Toaster, toast } from 'sonner'
+
 
 const StyledHeader = styled.header`
   background-color: #222;
@@ -87,35 +89,39 @@ export default function Header() {
       .then(() => {
         setIsLoggedIn(false);
         window.location.href = '/';
+        toast.success('You are now logged out');
       });
   };
   return (
-    <StyledHeader>
-      <Center>
-        <Wrapper>
-          <Logo href={'/'}>BidCommerce</Logo>
-          <StyledNav mobileNavActive={mobileNavActive}>
-            <NavLink href={"/"}>Home</NavLink>
-            <NavLink href={"/Auction"}>Auction</NavLink>
-            <NavLink href={"/categories"}>Categories</NavLink>
-            <NavLink href={"/Cart"}>Cart</NavLink>
-            {isLoggedIn ? (
-              <>
-                <NavLink href={"/Account"}>Account</NavLink>
-                <button onClick={handleLogout}>Logout</button>
-              </>
-            ) : (
-              <>
-                <NavLink href={"/Login"}>Login</NavLink>
-                <NavLink href={"/Signup"}>SignUp</NavLink>
-              </>
-            )}
-          </StyledNav>
-          <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
-            {mobileNavActive ? <CloseIcon /> : <BarsIcon />}
-          </NavButton>
-        </Wrapper>
-      </Center>
-    </StyledHeader>
+    <>
+      <Toaster />
+      <StyledHeader>
+        <Center>
+          <Wrapper>
+            <Logo href={'/'}>BidCommerce</Logo>
+            <StyledNav mobileNavActive={mobileNavActive}>
+              <NavLink href={"/"}>Home</NavLink>
+              <NavLink href={"/Auction"}>Auction</NavLink>
+              <NavLink href={"/categories"}>Categories</NavLink>
+              <NavLink href={"/Cart"}>Cart</NavLink>
+              {isLoggedIn ? (
+                <>
+                  <NavLink href={"/Account"}>Account</NavLink>
+                  <button onClick={handleLogout}>Logout</button>
+                </>
+              ) : (
+                <>
+                  <NavLink href={"/Login"}>Login</NavLink>
+                  <NavLink href={"/Signup"}>SignUp</NavLink>
+                </>
+              )}
+            </StyledNav>
+            <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
+              {mobileNavActive ? <CloseIcon /> : <BarsIcon />}
+            </NavButton>
+          </Wrapper>
+        </Center>
+      </StyledHeader>
+    </>
   );
 }

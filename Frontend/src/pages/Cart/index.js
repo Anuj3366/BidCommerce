@@ -6,6 +6,7 @@ import Button from "@/components/Button";
 import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
+import { toast } from 'sonner';
 
 const Box = styled.div`
   background-color: #fff;

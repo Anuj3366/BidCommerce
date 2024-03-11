@@ -9,6 +9,8 @@ import Center from "@/components/Center";
 import Button from "@/components/Button";
 import styled from 'styled-components';
 import Title from "@/components/Title";
+import { toast } from 'sonner';
+
 
 const StyledDiv = styled.div`
   display: flex;
@@ -45,6 +47,7 @@ export default function ProductsPage() {
       .then(response => response.json())
       .then(data => {
         if (data.redirectToLogin) {
+          toast.warning('Please login first');
           window.location.href = "/Login";
         }
         setUserType(data);
@@ -99,23 +102,25 @@ export default function ProductsPage() {
       .then(data => {
         console.log(data)
         setUserType('notverified');
+        toast.info('Your account is being verified');
       })
       .catch(err => console.error('Error:', err));
-  };
-  const handleWorkerSubmit = async (event) => {
-    event.preventDefault();
-    fetch('http://localhost:3000/becomeWorker', {
-      method: 'POST',
-      credentials: 'include',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(workerDetails),
-    })
+    };
+    const handleWorkerSubmit = async (event) => {
+      event.preventDefault();
+      fetch('http://localhost:3000/becomeWorker', {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(workerDetails),
+      })
       .then(res => res.json())
       .then(data => {
         console.log(data)
         setUserType('notverified');
+        toast.info('Your account is being verified');
       })
       .catch(err => console.error('Error:', err));
 

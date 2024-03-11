@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Center from "@/components/Center";
-import styled from 'styled-components';
+import { toast } from 'sonner';
+
 
 function SellerProducts() {
   const [products, setProducts] = useState([]);
@@ -53,13 +54,13 @@ function SellerProducts() {
   };
 
   useEffect(() => {
-    
+
     fetch('http://localhost:3000/seller/products', {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        
+
       }
     })
       .then(res => {
@@ -73,38 +74,45 @@ function SellerProducts() {
   }, []);
 
   const increaseQuantity = (productId, increaseBy) => {
-    
+
     fetch(`http://localhost:3000/product/${productId}/quantity`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        
       },
       body: JSON.stringify({ increaseBy })
     })
       .then(res => res.json())
-      .then(data => console.log(data.message))
-      .catch(err => console.error(err));
+      .then(data => {
+        toast.success("Quantity Increased")
+        console.log(data.message)
+      })
+      .catch(err => {
+        toast.error("Error Please Reload")
+        console.error(err)
+      });
   };
 
   const handleProductSubmit = async (event) => {
     event.preventDefault();
     await saveImage();
-    
+
     try {
       const response = await fetch('http://localhost:3000/uploadProduct', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
-          
+
         },
         body: JSON.stringify(productDetails)
       });
       const data = await response.json();
+      toast.success("Product Added")
       console.log(data.message);
     } catch (err) {
+      toast.success("Error in Adding Product")
       console.error(err);
     }
   };

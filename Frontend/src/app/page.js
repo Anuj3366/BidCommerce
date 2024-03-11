@@ -4,11 +4,11 @@ import NewProducts from "../components/NewProducts";
 
 export default function HomePage() {
   return (
-    <div>
+    <>
       <Header />
       <Featured />
       <NewProducts />
-    </div>
+    </>
   );
 }
 
