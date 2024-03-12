@@ -43,14 +43,16 @@ export default function Login() {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          router.push('/');
           toast.success('Welcome! You are now logged in!')
+          setTimeout(() => {
+            router.push('/');
+          }, 2000);
         } else {
-          toast.error('Invalid email or password') 
+          toast.error('Invalid email or password')
         }
       });
   }
-  
+
 
   return (
     <>
