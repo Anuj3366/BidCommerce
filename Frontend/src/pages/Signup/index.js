@@ -6,6 +6,8 @@ import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
 import Header from '@/components/Appbar';
+import { toast } from 'sonner';
+
 
 const Box = styled.div`
   display: flex;
@@ -25,6 +27,7 @@ const Box = styled.div`
   }
 `;
 
+
 export default function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -33,6 +36,11 @@ export default function Signup() {
   const router = useRouter();
 
   function signup() {
+    const passwordRegex = /^(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{6,}$/;
+    if (!passwordRegex.test(password)) {
+      toast.info("Password must be at least 6 characters long and contain at least one number and one special character.");
+      return;
+    }
     console.log(name, email, password, address);
     fetch("http://localhost:3000/signup", {
       method: 'POST',
@@ -45,10 +53,12 @@ export default function Signup() {
       .then((res) => res.json())
       .then((data) => {
         if (data.token) {
-          console.log("Signed up");
-          router.push('/');
+          toast.success("Signup successful");
+          setTimeout(() => {
+            router.push('/');
+          },2000);
         } else {
-          console.log("Failed to signup");
+          toast.success("Failed to signup");
         }
       });
   }

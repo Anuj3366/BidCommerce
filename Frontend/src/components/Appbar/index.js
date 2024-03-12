@@ -88,8 +88,10 @@ export default function Header() {
     })
       .then(() => {
         setIsLoggedIn(false);
-        window.location.href = '/';
         toast.success('You are now logged out');
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
       });
   };
   return (

@@ -32,11 +32,24 @@ const InputDiv = styled.div`
   border-radius: 10px;
 `;
 
+const AccountInfo = styled.div`
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 20px;
+  margin-bottom: 20px;
+`;
+
+const RoleDiv = styled.div`
+  background-color: #f8f9fa;
+  border-radius: 5px;
+  padding: 20px;
+`;
+
 export default function ProductsPage() {
-  const [userType, setUserType] = useState('');
+  const [userData, setUserData] = useState('');
 
   useEffect(() => {
-    
+
     fetch('http://localhost:3000/checkuserType', {
       method: 'GET',
       credentials: 'include',
@@ -50,7 +63,7 @@ export default function ProductsPage() {
           toast.warning('Please login first');
           window.location.href = "/Login";
         }
-        setUserType(data);
+        setUserData(data._doc);
       });
   }, []);
 
@@ -88,38 +101,61 @@ export default function ProductsPage() {
   };
   const handleSellerSubmit = async (event) => {
     event.preventDefault();
-    
+    if (!sellerDetails.shopname.trim()) {
+      toast.error('Shop name is required');
+      return;
+    }
+    sellerDetails.shopemail = userData.email;
+    const gstinRegex = /^[\d]{2}[a-zA-Z]{5}[\d]{4}[a-zA-Z]{1}[\d]{1}[zZ]{1}[\d]{1}$/;
+    if (!sellerDetails.GSTINnumber.trim() || !gstinRegex.test(sellerDetails.GSTINnumber)) {
+      toast.error('Valid GSTIN number is required');
+      return;
+    }
+    const panRegex = /^[a-zA-Z]{5}[\d]{4}[a-zA-Z]{1}$/;
+    if (!sellerDetails.PANnumber.trim() || !panRegex.test(sellerDetails.PANnumber)) {
+      toast.error('Valid PAN number is required');
+      return;
+    }
+    if (!sellerDetails.address.trim()) {
+      toast.error('Address is required');
+      return;
+    }
     await fetch('http://localhost:3000/becomeSeller', {
       method: 'POST',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        
+
       },
       body: JSON.stringify(sellerDetails),
     })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        setUserType('notverified');
+        setUserData(userData.userType = 'notverified');
         toast.info('Your account is being verified');
       })
       .catch(err => console.error('Error:', err));
-    };
-    const handleWorkerSubmit = async (event) => {
-      event.preventDefault();
-      fetch('http://localhost:3000/becomeWorker', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(workerDetails),
-      })
+  };
+  const handleWorkerSubmit = async (event) => {
+    event.preventDefault();
+    const adhaarRegex = /^[\d]{12}$/;
+    if (!workerDetails.adhaar.trim() || !adhaarRegex.test(workerDetails.adhaar)) {
+      toast.error('Valid Adhaar number is required');
+      return;
+    }
+    fetch('http://localhost:3000/becomeWorker', {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(workerDetails),
+    })
       .then(res => res.json())
       .then(data => {
         console.log(data)
-        setUserType('notverified');
+        setUserData(userData.userType = 'notverified');
         toast.info('Your account is being verified');
       })
       .catch(err => console.error('Error:', err));
@@ -133,20 +169,22 @@ export default function ProductsPage() {
         <Title>Account</Title>
       </Center>
       <Center>
-        {/* <h2>Name :${name}</h2> */}
-        <h2>Your Account Type: {userType}</h2>
-
+        <AccountInfo>
+          <h2>Name : {userData.name}</h2>
+          <h2>Email : {userData.email}</h2>
+          <h2>Your Account Type: {userData.userType}</h2>
+        </AccountInfo>
       </Center>
       <Center>
-        {userType === "notverified" && (
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '70vh' }}>
+        {userData.userType === "notverified" && (
+          <RoleDiv>
             <h1>Verification Pending</h1>
             <p>Your account is currently being verified. This process may take some time.</p>
             <p>Please check back later.</p>
-          </div>
+          </RoleDiv>
         )}
-        {userType === "user" && (
-          <div>
+        {userData.userType === "user" && (
+          <RoleDiv>
             <p>Would you like to become a seller or a worker?</p>
             <StyledDiv>
               <Button onClick={handleBecomeSeller}>Become a Seller</Button>
@@ -156,7 +194,6 @@ export default function ProductsPage() {
               <InputDiv>
                 <h2>Please provide these details</h2>
                 <Input type="text" name="shopname" value={sellerDetails.shopname} onChange={handleSellerDetailsChange} placeholder="Shop Name" required />
-                <Input type="text" name="shopemail" value={sellerDetails.shopemail} onChange={handleSellerDetailsChange} placeholder="Shop Email" required />
                 <Input type="text" name="GSTINnumber" value={sellerDetails.GSTINnumber} onChange={handleSellerDetailsChange} placeholder="GSTIN Number" required />
                 <Input type="text" name="PANnumber" value={sellerDetails.PANnumber} onChange={handleSellerDetailsChange} placeholder="PAN Number" required />
                 <Input type="text" name="address" value={sellerDetails.address} onChange={handleSellerDetailsChange} placeholder="Address" required />
@@ -170,15 +207,15 @@ export default function ProductsPage() {
                 <Button onClick={handleWorkerSubmit} $black>Submit</Button>
               </InputDiv>
             )}
-          </div>
+          </RoleDiv>
         )}
-        {userType === "seller" && (
+        {userData.userType === "seller" && (
           <SellerProducts />
         )}
-        {userType === "moderator" && (
+        {userData.userType === "moderator" && (
           <ModeratorPanel />
         )}
-        {userType === "admin" && (
+        {userData.userType === "admin" && (
           <AdminPanel />
         )}
       </Center>
