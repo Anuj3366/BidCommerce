@@ -5,6 +5,7 @@ import Button from "@/components/Button";
 import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
 import { useState, useEffect } from "react";
+import { toast } from 'sonner';
 
 const Image = styled.img`
   width: 300px;
@@ -95,7 +96,7 @@ export default function Featured(id) {
             localStorage.removeItem('token');
             window.location.href = "/Login";
           }
-          else console.log("Added to cart", data);
+          else toast.success("Added to cart");
         });
     }
   }

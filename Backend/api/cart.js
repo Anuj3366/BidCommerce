@@ -16,14 +16,15 @@ router.post('/addToCart', authorization, async (req, res) => {
     return res.status(404).json({ message: 'Product not found' });
   }
   if (foundUser.cart.find(item => item.productId.toString() === productId)) {
-    return res.status(400).json({ message: 'Product already in cart' });
+    item.quantity += 1;
+    await foundUser.save();
   }
   if (product.quantity === 0) {
     return res.status(400).json({ message: 'Product out of stock' });
   }
   foundUser.cart.push({ productId: product._id, quantity: 1 });
   await foundUser.save();
-  await Product.updateOne({ _id: productId }, { $inc: { buyed: 1 } });
+  await Product.updateOne({ _id: productId }, { $inc: { quantity: -1 }} ,{ $inc: { buyed: 1 } });
   res.json({ message: 'Added to cart' });
 });
 

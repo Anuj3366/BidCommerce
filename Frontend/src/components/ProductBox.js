@@ -2,11 +2,17 @@ import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { toast } from 'sonner';
 
 const ProductWrapper = styled.div`
   
 `;
 
+const Image = styled.img`
+  width: 100%;  
+  height: 100%; 
+  object-fit: fill;
+`;
 const WhiteBox = styled(Link)`
   background-color: #fff;
   padding: 20px;
@@ -97,7 +103,7 @@ export default function ProductBox({ _id, title, description, price, images, bid
             localStorage.removeItem('token');
             window.location.href = "/Login";
           }
-          else console.log("Added to cart", data);
+          else toast.success("Added to cart");
         });
     }
   }
@@ -105,7 +111,7 @@ export default function ProductBox({ _id, title, description, price, images, bid
     <ProductWrapper>
       <WhiteBox href={url}>
         <div>
-          <img src={images?.[0]} alt="" />
+          <Image src={images?.[0]} alt="" />
         </div>
       </WhiteBox>
       <ProductInfoBox>

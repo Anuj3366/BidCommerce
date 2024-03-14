@@ -8,20 +8,25 @@ import Table from "@/components/Table";
 import Input from "@/components/Input";
 import { toast } from 'sonner';
 
+
 const Box = styled.div`
-  background-color: #fff;
-  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   padding: 30px;
+  border-radius: 10px;
+  background-color: #fff;
 `;
 
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
+  gap: 40px;
+  margin-top: 40px;
   @media screen and (min-width: 768px) {
     grid-template-columns: 1.2fr .8fr;
   }
-  gap: 40px;
-  margin-top: 40px;
 `;
 
 const ProductInfoCell = styled.td`
@@ -33,53 +38,33 @@ const ProductImageBox = styled.div`
   height: 100px;
   padding: 2px;
   border: 1px solid rgba(0, 0, 0, 0.1);
-  display:flex;
+  display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 10px;
-  img{
-    max-width: 60px;
-    max-height: 60px;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
   }
   @media screen and (min-width: 768px) {
     padding: 10px;
     width: 100px;
     height: 100px;
-    img{
-      max-width: 80px;
-      max-height: 80px;
-    }
   }
-`;
-
-const QuantityLabel = styled.span`
-  padding: 0 15px;
-  display: block;
-  @media screen and (min-width: 768px) {
-    display: inline-block;
-    padding: 0 10px;
-  }
-`;
-
-const CityHolder = styled.div`
-  display:flex;
-  gap: 5px;
 `;
 
 function CartPage() {
   const [products, setProducts] = useState([]);
-  const [email, setEmail] = useState('');
   const [address, setAddress] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
-    
     fetch('http://localhost:3000/getCart', {
       method: 'GET',
       credentials: 'include',
       headers: {
         'Content-Type': 'application/json',
-        
       },
     })
       .then(response => response.json())
@@ -95,7 +80,6 @@ function CartPage() {
   }, []);
 
   async function goToPayment() {
-
     const response = await fetch('http://localhost:3000/checkout', {
       method: 'POST',
       credentials: 'include',
@@ -103,12 +87,14 @@ function CartPage() {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        email, address, products,
+        address, products,
       }),
     });
     const data = await response.json();
     if (data.url) {
       window.location = data.url;
+    } else if (data.message === 'Product out of stock') {
+      toast.error('Product out of stock');
     }
   }
 
@@ -150,28 +136,18 @@ function CartPage() {
                     <tr key={product._id}>
                       <ProductInfoCell>
                         <ProductImageBox>
-                          <img src={product.images} alt="" />
+                          <img src={product.images?.[0]} alt="" />
                         </ProductImageBox>
                         {product.title}
                       </ProductInfoCell>
-                      <td>
-                        <Button
-                          onClick={() => lessOfThisProduct(product._id)}>-</Button>
-                        <QuantityLabel>
-                          {products.filter(item => item._id === product._id).length}
-                        </QuantityLabel>
-                        <Button
-                          onClick={() => moreOfThisProduct(product._id)}>+</Button>
-                      </td>
-                      <td>
-                        ${products.filter(item => item._id === product._id).length * product.price}
-                      </td>
+                      <td>{product.quantity}</td>
+                      <td>{product.price * product.quantity}</td>
                     </tr>
                   ))}
                   <tr>
                     <td></td>
                     <td></td>
-                    <td>${total}</td>
+                    <td>{total}</td>
                   </tr>
                 </tbody>
               </Table>
@@ -180,11 +156,6 @@ function CartPage() {
           {!!products?.length && (
             <Box>
               <h2>Order information</h2>
-              <Input type="text"
-                placeholder="Email"
-                value={email}
-                name="email"
-                onChange={ev => setEmail(ev.target.value)} />
               <Input type="text"
                 placeholder="Address"
                 value={address}
@@ -203,3 +174,4 @@ function CartPage() {
 }
 
 export default CartPage;
+

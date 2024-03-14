@@ -85,7 +85,6 @@ export default function ProductPage({ product, comments: initialComments }) {
           }
           else{ 
             toast.success("Added to cart")
-            console.log("Added to cart", data)
           };
         });
     }

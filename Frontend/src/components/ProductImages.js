@@ -21,7 +21,7 @@ const ImageButtons = styled.div`
 
 const ImageButton = styled.div`
   border: 2px solid ${props => props.active ? '#ccc' : 'transparent'};
-  height: 60px; // Increased the height for better visibility
+  height: 60px;
   padding: 2px;
   cursor: pointer;
   border-radius: 5px;

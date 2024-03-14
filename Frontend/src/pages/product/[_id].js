@@ -92,7 +92,7 @@ export default function ProductPage({ product }) {
             localStorage.removeItem('token');
             window.location.href = "/Login";
           }
-          else console.log("Added to cart", data);
+          else toast.success("Added to cart");
         });
     }
   }
