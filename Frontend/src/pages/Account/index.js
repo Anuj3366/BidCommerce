@@ -172,7 +172,9 @@ export default function ProductsPage() {
         <AccountInfo>
           <h2>Name : {userData.name}</h2>
           <h2>Email : {userData.email}</h2>
-          <h2>Your Account Type: {userData.userType}</h2>
+          {userData.userType !== "user" && (
+            <h2>Your Account Type: {userData.userType}</h2>
+          )}
         </AccountInfo>
       </Center>
       <Center>

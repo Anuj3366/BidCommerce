@@ -6,7 +6,7 @@ const secret = 'secrettohide';
 
 async function authorization(req, res, next) {
   if(!req.cookies.jwt){ 
-    console.log("No jwt cookie");
+    // console.log("No jwt cookie");
     return res.status(401).json({ error: 'Authorization failed', redirectToLogin: true });
   }
   const token = req.cookies.jwt;
@@ -14,6 +14,7 @@ async function authorization(req, res, next) {
     const decoded = jwt.verify(token, secret);
     const user = await User.findOne({ email: decoded.email });
     if (user && bcrypt.compareSync(decoded.password, user.password)) {
+      // console.log(user);
       req.user = user;
       next();
     } else {

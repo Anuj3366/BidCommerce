@@ -47,8 +47,7 @@ function AdminPanel() {
     })
       .then(res => res.json())
       .then(data => {
-        toast.success(userId, " Moderator Verified")
-        console.log(data.message);
+        toast.success("New Moderator Verified")
         setUsers(users.filter(user => user._id !== userId));
       })
       .catch(err => {

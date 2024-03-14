@@ -6,6 +6,12 @@ import ButtonLink from "@/components/ButtonLink";
 import CartIcon from "@/components/icons/CartIcon";
 import { useState, useEffect } from "react";
 
+const Image = styled.img`
+  width: 300px;
+  height: 200px;
+  object-fit: cover; 
+`;
+
 const Bg = styled.div`
   background-color: #222;
   color:#fff;
@@ -60,7 +66,7 @@ export default function Featured(id) {
   const [product, setFeaturedProduct] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/get/65e335669a608127500cfcfa", {
+    fetch("http://localhost:3000/get/65f2855694db0e6b6f6aebe7", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -113,7 +119,7 @@ export default function Featured(id) {
             </div>
           </Column>
           <Column>
-            <img src={product?.images} alt="" />
+            {product?.images && <Image src={product.images[0]} alt="" />}
           </Column>
         </ColumnsWrapper>
       </Center>

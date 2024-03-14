@@ -5,7 +5,10 @@ const ProductSchema = new Schema({
   title: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
-  images: [{ type: [String], required: true }],
+  images: [{
+    type: Object,
+    required: true
+  }],
   category: {
     type: String,
     enum: [
@@ -26,8 +29,8 @@ const ProductSchema = new Schema({
     required: true,
     default: []
   },
-  buyed: { type: Number, required: true },
-  reviews: { type: Number, required: true },
+  reviews: { type: Array, default: [] },
+  buyed: { type: Number, default: 0 },
   bid: { type: Boolean, required: true },
   bidEnd: { type: Date, required: function () { return this.bid; } },
 });

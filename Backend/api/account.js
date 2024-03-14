@@ -9,7 +9,6 @@ const bcrypt = require('bcrypt');
 
 router.get('/checkuserType', authorization, async (req, res) => {
   const founded = req.user;
-  // founded without password
   const { password, ...user } = founded;
 
   if (founded.userType === "seller") {
@@ -48,7 +47,7 @@ router.post('/becomeSeller', authorization, async (req, res) => {
     else {
       const seller = new Seller({ ...req.body, email: founded.email, password: founded.password, verified: false, totalSold: 0 });
       await seller.save();
-      await User.findOneAndUpdate({ email: founded.email, password: founded.password }, { userType: 'notverified' });
+      await User.findOneAndUpdate({ email: founded.email }, { userType: 'notverified' });
       return res.json("Seller Created");
     }
   }
@@ -67,7 +66,7 @@ router.post('/becomeWorker', authorization, async (req, res) => {
     else {
       const worker = new Worker({ email: founded.email, password: founded.password, adhaar: req.body.adhaar, verified: false });
       await worker.save();
-      await User.findOneAndUpdate({ email: founded.email, password: founded.password }, { userType: 'notverified' });
+      await User.findOneAndUpdate({ email: founded.email }, { userType: 'notverified' });
       return res.json("Worker Created");
     }
   }
@@ -81,10 +80,10 @@ router.post('/becomeWorker', authorization, async (req, res) => {
 router.post('/uploadProduct', authorization, async (req, res) => {
   const { email, password } = req.user;
   const seller = await Seller.findOne({ email: email });
-  if (seller && bcrypt.compareSync(password, seller.password) && seller.verified) {
+  if (seller && seller.verified) {
     const product = new Product({ ...req.body, sellerMail: email });
     await product.save();
-    await Seller.updateOne({ email: email, password: password }, { $push: { productId: product._id } });
+    await Seller.updateOne({ email: email }, { $push: { productId: product._id } });
     res.json({ message: 'Product uploaded' });
   }
   else {
@@ -96,7 +95,7 @@ router.post('/uploadProduct', authorization, async (req, res) => {
 router.put('/product/:id/quantity', authorization, async (req, res) => {
   const { email, password } = req.user;
   const seller = await Seller.findOne({ email: email });
-  if (seller && bcrypt.compareSync(password, seller.password) && seller.verified) {
+  if (seller && seller.verified) {
     const { id } = req.params;
     const { increaseBy } = req.body;
     try {
@@ -111,10 +110,10 @@ router.put('/product/:id/quantity', authorization, async (req, res) => {
   }
 });
 
-router.get('/seller/:email/products', async (req, res) => {
+router.get('/seller/products', authorization, async (req, res) => {
   const { email, password } = req.user;
   const seller = await Seller.findOne({ email: email });
-  if (seller && bcrypt.compareSync(password, seller.password) && seller.verified) {
+  if (seller && seller.verified) {
     try {
       const seller = await Seller.findOne({ email });
       const products = await Product.find({ _id: { $in: seller.productId } });
@@ -129,9 +128,8 @@ router.get('/seller/:email/products', async (req, res) => {
 });
 
 router.put('/user/:id/promote', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const admin = await User.findOne({ email: email, userType: 'admin' });
-  if (admin && bcrypt.compareSync(password, admin.password)) {
+  const admin = req.user;
+  if (admin.userType === "admin") {
     const { id } = req.params;
     try {
       await User.findByIdAndUpdate(id, { userType: 'moderator' });
@@ -146,9 +144,8 @@ router.put('/user/:id/promote', authorization, async (req, res) => {
 });
 
 router.put('/seller/:email/verify', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, userType: 'moderator' });
-  if (moderator && bcrypt.compareSync(password, moderator.password)) {
+  const moderator = req.user;
+  if (moderator.userType === "moderator") {
     const { email } = req.params;
     try {
       const user = await User.findOne({ email: email });
@@ -169,9 +166,8 @@ router.put('/seller/:email/verify', authorization, async (req, res) => {
 });
 
 router.put('/worker/:email/verify', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, userType: 'moderator' });
-  if (moderator && bcrypt.compareSync(password, moderator.password)) {
+  const moderator = req.user;
+  if (moderator.userType === "moderator") {
     const { email } = req.params;
     try {
       const user = await User.findOne({ email: email });
@@ -192,9 +188,8 @@ router.put('/worker/:email/verify', authorization, async (req, res) => {
 });
 
 router.get('/admin/users', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const admin = await User.findOne({ email: email, userType: 'admin' });
-  if (admin && bcrypt.compareSync(password, admin.password)) {
+  const admin = req.user;
+  if (admin.userType === "admin") {
     try {
       const users = await User.find({ userType: 'user' });
       res.status(200).json(users);
@@ -209,9 +204,8 @@ router.get('/admin/users', authorization, async (req, res) => {
 );
 
 router.get('/getseller', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, userType: 'moderator' });
-  if (moderator && bcrypt.compareSync(password, moderator.password)) {
+  const moderator = req.user;
+  if (moderator.userType === "moderator") {
     try {
       const wantToseller = await Seller.find({ verified: false });
       res.status(200).json(wantToseller);
@@ -226,9 +220,8 @@ router.get('/getseller', authorization, async (req, res) => {
 });
 
 router.get('/getworker', authorization, async (req, res) => {
-  const { email, password } = req.user;
-  const moderator = await User.findOne({ email: email, userType: 'moderator' });
-  if (bcrypt.compareSync(password, moderator.password)) {
+  const moderator = req.user;
+  if (moderator.userType === "moderator") {
     try {
       const wantTowork = await Worker.find({ verified: false });
       res.status(200).json(wantTowork);
