@@ -23,7 +23,7 @@ const ProductSchema = new Schema({
   quantity: { type: Number, required: true },
   comments: {
     type: [{
-      user: { type: mongoose.Schema.Types.ObjectId, ref:mongoose.model('Customer'), required: true },
+      user: { type: mongoose.Schema.Types.ObjectId, ref:'Customer', required: true },
       comment: { type: String, required: true }
     }],
     required: true,
