@@ -4,12 +4,10 @@ const authorization = require('./authorization.js');
 const Product = require('../Schemas/Product.js');
 const User = require('../Schemas/Users/customers.js');
 
+
 router.post('/addToCart', authorization, async (req, res) => {
   const customer = req.user;
   const foundUser = await User.findOne({ email: customer.email });
-  if (!foundUser) {
-    return res.status(404).json({ message: 'User not found' });
-  }
   const productId = req.body.productId;
   const product = await Product.findOne({ _id: productId });
   if (!product) {
@@ -18,8 +16,10 @@ router.post('/addToCart', authorization, async (req, res) => {
   const item = foundUser.cart.find(item => item.productId.toString() === productId);
   if (item) {
     item.quantity += 1;
+    foundUser.markModified('cart');
     await foundUser.save();
-  } else {
+  }
+  else {
     if (product.quantity === 0) {
       return res.status(400).json({ message: 'Product out of stock' });
     }
@@ -39,13 +39,51 @@ router.get('/getCart', authorization, async (req, res) => {
   res.json(foundUser.cart);
 });
 
-router.post('/removeFromCart', authorization, async (req, res) => {
+
+router.put('/increaseQuantity', authorization, async (req, res) => {
   const productId = req.body.productId;
   const customer = req.user;
   const foundUser = await User.findOne({ email: customer.email });
-  if (!foundUser) {
-    return res.status(404).json({ message: 'User not found' });
+  const product = await Product.findOne({ _id: productId });
+  if (!product || product.quantity <= 0) {
+    return res.status(400).json({ message: 'Product out of stock' });
   }
+  const item = foundUser.cart.find(item => item.productId.toString() === productId);
+  if (!item) {
+    return res.status(404).json({ message: 'Product not found in cart' });
+  }
+  if (product.quantity > item.quantity) {
+    item.quantity += 1;
+    foundUser.markModified('cart');
+    await foundUser.save();
+  }
+  else {
+    return res.status(400).json({ message: 'Product out of stock' });
+  }
+  res.json({ message: 'Increased quantity' });
+});
+
+router.put('/decreaseQuantity', authorization, async (req, res) => {
+  const productId = req.body.productId;
+  const customer = req.user;
+  const foundUser = await User.findOne({ email: customer.email });
+  const item = foundUser.cart.find(item => item.productId.toString() === productId);
+  if (!item || item.quantity === 1) {
+    return res.status(400).json({ message: 'Cannot decrease quantity' });
+  }
+  item.quantity -= 1;
+  product.quantity += 1;
+  foundUser.markModified('cart');
+  await foundUser.save();
+  await product.save();
+  res.json({ message: 'Decreased quantity' });
+});
+
+
+router.put('/removeFromCart', authorization, async (req, res) => {
+  const productId = req.body.productId;
+  const customer = req.user;
+  const foundUser = await User.findOne({ email: customer.email });
   const updatedCart = foundUser.cart.filter(item => item.productId.toString() !== productId);
   foundUser.cart = updatedCart;
   await foundUser.save();

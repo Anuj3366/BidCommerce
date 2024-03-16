@@ -5,14 +5,10 @@ const CustomerSchema = new mongoose.Schema({
   email: { type: String, required: true },
   password: { type: String, required: true },
   address: { type: String, required: true },
-  cart: {
-    type: [
-      { productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product'}},
-      { quantity: Number }
-    ],
-    required: true,
-    default: []
-  },
+  cart: [{
+    productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+    quantity: Number
+  }],
   orders: Object,
   wishlist: Object,
   userType: { type: String, enum: ['user', 'seller', 'worker', 'moderator', 'admin', 'notverified'] },

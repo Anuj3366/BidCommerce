@@ -1,8 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Product = require('../Schemas/Product.js');
-const User = require('../Schemas/Users/customers.js');
-const authorization = require('./authorization.js');
 
 
 router.get('/get/:productID', async (req, res) => {

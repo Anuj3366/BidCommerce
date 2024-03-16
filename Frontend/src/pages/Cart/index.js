@@ -61,7 +61,7 @@ function CartPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetch('http://localhost:3000/getCart', {
+    fetch("http://localhost:3000/getCart", {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -83,10 +83,11 @@ function CartPage() {
           setTotal(totalCost);
         }
       });
+      console.log(products);
   }, []);
 
   async function goToPayment() {
-    const response = await fetch('http://localhost:3000/checkout', {
+    const response = await fetch("http://localhost:3000/checkout", {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -110,6 +111,64 @@ function CartPage() {
       window.location.href = "/";
     }, 10000);
   }
+  async function removeFromCart(productId) {
+    const response = await fetch("http://localhost:3000/removeFromCart", {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId }),
+    });
+    const data = await response.json();
+    if (data.message === 'Removed from cart') {
+      setProducts(products.filter(item => item.productId._id !== productId));
+    }
+    toast.success("Removed from cart");
+  }
+
+  async function decreaseQuantity(productId) {
+    const response = await fetch("http://localhost:3000/decreaseQuantity", {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId }),
+    });
+    const data = await response.json();
+    if (data.message === 'Decreased quantity') {
+      setProducts(products.map(item =>
+        item.productId._id === productId
+          ? { ...item, quantity: item.quantity - 1 }
+          : item
+      ));
+      toast.success('Decreased quantity');
+    }
+  }
+
+  async function increaseQuantity(productId) {
+    const response = await fetch("http://localhost:3000/increaseQuantity", {
+      method: 'PUT',
+      credentials: 'include',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ productId }),
+    });
+    const data = await response.json();
+    if (data.message === 'Increased quantity') {
+      setProducts(products.map(item =>
+        item.productId._id === productId
+          ? { ...item, quantity: item.quantity + 1 }
+          : item
+      ));
+      toast.success('Increased quantity');
+    } else {
+      toast.error('Failed to increase quantity');
+    }
+  }
+  
   return (
     <>
       <Header />
@@ -125,8 +184,11 @@ function CartPage() {
                 <thead>
                   <tr>
                     <th>Product</th>
+                    <th></th>
                     <th>Quantity</th>
+                    <th></th>
                     <th>Price</th>
+                    <th>Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -138,11 +200,19 @@ function CartPage() {
                         </ProductImageBox>
                         {item.productId.title}
                       </ProductInfoCell>
+                      <td><button onClick={() => decreaseQuantity(item.productId)}>-</button></td>
                       <td>{item.quantity}</td>
+                      <td><button onClick={() => increaseQuantity(item.productId)}>+</button></td>
                       <td>₹{item.productId.price * item.quantity}</td>
+                      <td>
+                        <button onClick={() => removeFromCart(item.productId)}>x</button>
+                      </td>
                     </tr>
                   ))}
+
                   <tr>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td>₹{total}</td>

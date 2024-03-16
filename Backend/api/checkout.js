@@ -28,8 +28,8 @@ router.post('/checkout', authorization, async (req, res) => {
     payment_method_types: ['card'],
     line_items,
     mode: 'payment',
-    success_url: 'http://localhost:3000/success',
-    cancel_url: 'http://localhost:3000/cancel',
+    success_url: 'http://localhost:1234/success',
+    cancel_url: 'http://localhost:1234/cancel',
   });
 
   const order = new Order({

@@ -11,12 +11,12 @@ app.use('/', router);
 const connectDB = require('./mongoDB');
 connectDB();
 
-const getAllItems = require('./api/getAll');
-app.use('/', getAllItems);
-console.log("1");
 const cart = require('./api/cart');
 app.use('/', cart);
 console.log("2");
+const getAllItems = require('./api/getAll');
+app.use('/', getAllItems);
+console.log("1");
 const checkout = require('./api/checkout');
 app.use('/', checkout);
 console.log("3");
