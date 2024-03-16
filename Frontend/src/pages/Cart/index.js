@@ -58,6 +58,7 @@ function CartPage() {
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState('');
   const [isSuccess, setIsSuccess] = useState(false);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     fetch('http://localhost:3000/getCart', {
@@ -75,6 +76,11 @@ function CartPage() {
         }
         else {
           setProducts(data);
+          let totalCost = 0;
+          for (const item of data) {
+            totalCost += item.productId.price * item.quantity;
+          }
+          setTotal(totalCost);
         }
       });
   }, []);
@@ -98,20 +104,12 @@ function CartPage() {
     }
   }
 
-  let total = 0;
-  if (Array.isArray(products)) {
-    for (const product of products) {
-      const price = product.price;
-      total += price;
-    }
-  }
   if (isSuccess) {
     window.location.href = "/success";
     setTimeout(() => {
       window.location.href = "/";
     }, 10000);
   }
-
   return (
     <>
       <Header />
@@ -132,22 +130,22 @@ function CartPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  {products.map(product => (
-                    <tr key={product._id}>
+                  {products.map(item => (
+                    <tr key={item._id}>
                       <ProductInfoCell>
                         <ProductImageBox>
-                          <img src={product.images?.[0]} alt="" />
+                          <img src={item.productId.images?.[0]} alt="" />
                         </ProductImageBox>
-                        {product.title}
+                        {item.productId.title}
                       </ProductInfoCell>
-                      <td>{product.quantity}</td>
-                      <td>{product.price * product.quantity}</td>
+                      <td>{item.quantity}</td>
+                      <td>₹{item.productId.price * item.quantity}</td>
                     </tr>
                   ))}
                   <tr>
                     <td></td>
                     <td></td>
-                    <td>{total}</td>
+                    <td>₹{total}</td>
                   </tr>
                 </tbody>
               </Table>

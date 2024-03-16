@@ -15,16 +15,18 @@ router.post('/addToCart', authorization, async (req, res) => {
   if (!product) {
     return res.status(404).json({ message: 'Product not found' });
   }
-  if (foundUser.cart.find(item => item.productId.toString() === productId)) {
+  const item = foundUser.cart.find(item => item.productId.toString() === productId);
+  if (item) {
     item.quantity += 1;
     await foundUser.save();
+  } else {
+    if (product.quantity === 0) {
+      return res.status(400).json({ message: 'Product out of stock' });
+    }
+    foundUser.cart.push({ productId: product._id, quantity: 1 });
+    await foundUser.save();
+    await Product.updateOne({ _id: productId }, { $inc: { quantity: -1, buyed: 1 } });
   }
-  if (product.quantity === 0) {
-    return res.status(400).json({ message: 'Product out of stock' });
-  }
-  foundUser.cart.push({ productId: product._id, quantity: 1 });
-  await foundUser.save();
-  await Product.updateOne({ _id: productId }, { $inc: { quantity: -1 }} ,{ $inc: { buyed: 1 } });
   res.json({ message: 'Added to cart' });
 });
 

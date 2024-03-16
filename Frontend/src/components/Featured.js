@@ -65,6 +65,18 @@ const ButtonsWrapper = styled.div`
 
 export default function Featured(id) {
   const [product, setFeaturedProduct] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
+    })
+      .then(res => res.json())
+      .then(data => {
+        setIsLoggedIn(data.loggedIn);
+      });
+  }, []);
 
   useEffect(() => {
     fetch("http://localhost:3000/get/65f2855694db0e6b6f6aebe7", {
@@ -78,13 +90,16 @@ export default function Featured(id) {
         setFeaturedProduct(data);
       });
   }, []);
+
+
   function addFeaturedToCart() {
-    const token = Cookies.get('jwt')
-    if (!token) window.location.href = "/Login";
+    if (!isLoggedIn) {
+      window.location.href = "/Login";
+    }
     else {
       fetch("http://localhost:3000/addToCart", {
         method: 'POST',
-        credentials: 'true',
+        credentials: 'include',
         headers: {
           "Content-Type": "application/json",
         },
@@ -98,33 +113,31 @@ export default function Featured(id) {
           }
           else toast.success("Added to cart");
         });
+      }
     }
+    return (
+      <Bg>
+        <Center>
+          <ColumnsWrapper>
+            <Column>
+              <div>
+                <Title>{product?.title}</Title>
+                <Desc>{product?.description}</Desc>
+                <ButtonsWrapper>
+                  <ButtonLink href={'/product/' + product?._id} $outline $white>Read more</ButtonLink>
+                  <Button $white onClick={addFeaturedToCart}>
+                    <CartIcon />
+                    Add to cart
+                  </Button>
+                </ButtonsWrapper>
+              </div>
+            </Column>
+            <Column>
+              {product?.images && <Image src={product.images[0]} alt="" />}
+            </Column>
+          </ColumnsWrapper>
+        </Center>
+
+      </Bg>
+    );
   }
-
-
-  return (
-    <Bg>
-      <Center>
-        <ColumnsWrapper>
-          <Column>
-            <div>
-              <Title>{product?.title}</Title>
-              <Desc>{product?.description}</Desc>
-              <ButtonsWrapper>
-                <ButtonLink href={'/product/' + product?._id} $outline $white>Read more</ButtonLink>
-                <Button $white onClick={addFeaturedToCart}>
-                  <CartIcon />
-                  Add to cart
-                </Button>
-              </ButtonsWrapper>
-            </div>
-          </Column>
-          <Column>
-            {product?.images && <Image src={product.images[0]} alt="" />}
-          </Column>
-        </ColumnsWrapper>
-      </Center>
-
-    </Bg>
-  );
-}

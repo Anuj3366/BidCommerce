@@ -32,6 +32,7 @@ const ProductSchema = new Schema({
   reviews: { type: Array, default: [] },
   buyed: { type: Number, default: 0 },
   bid: { type: Boolean, required: true },
+  bidders: { type: Array, default: [] }, 
   bidEnd: { type: Date, required: function () { return this.bid; } },
 });
 
