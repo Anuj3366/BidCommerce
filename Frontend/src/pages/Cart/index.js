@@ -154,7 +154,7 @@ function CartPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ productId }),
+      body: JSON.stringify({productId}),
     });
     const data = await response.json();
     if (data.message === 'Increased quantity') {
@@ -165,6 +165,7 @@ function CartPage() {
       ));
       toast.success('Increased quantity');
     } else {
+      console.log(data.message)
       toast.error('Failed to increase quantity');
     }
   }

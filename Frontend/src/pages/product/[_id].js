@@ -27,31 +27,29 @@ const PriceRow = styled.div`
 const Price = styled.span`
   font-size: 1.4rem;
 `;
-const Comment = styled.p`
-  font-size: 1.2rem;
+const CommentBox = styled.div`
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  padding: 5px;
   margin-bottom: 10px;
 `;
+
+const CommentText = styled.p`
+  font-size: 1rem;
+  margin-bottom: 10px;
+`;
+
+const Comment = styled.div`
+  margin-top: 20px;
+`
+
 export default function ProductPage({ product }) {
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
-    fetchComments();
+    setComments(product.comments);
   }, []);
-
-  async function fetchComments() {
-    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-    const data = await res.json();
-    if (data.comments) {
-      setComments(data.comments);
-    }
-  }
 
   const addcomment = async (comment) => {
     const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
@@ -63,12 +61,14 @@ export default function ProductPage({ product }) {
       body: JSON.stringify({ comment }),
     });
     const data = await res.json();
-    if (data.comment) {
+    console.log(data);
+    if (data.message === "Comment added") {
       setComments(prevComments => [...prevComments, data.comment]);
       setNewComment("")
       toast.success("Comment Added")
     }
   }
+
 
   async function addToCart(product) {
     const res = await fetch('http://localhost:3000/isLogin', {
@@ -139,7 +139,11 @@ export default function ProductPage({ product }) {
           </Center>
           <Center>
             <Comment>
-              {comments}
+              {comments.map((commentObj, index) => (
+                <CommentBox key={index}>
+                  <CommentText>{commentObj.comment}</CommentText>
+                </CommentBox>
+              ))}
             </Comment>
           </Center>
         </WhiteBox>
@@ -160,11 +164,11 @@ export async function getServerSideProps(context) {
     });
 
     if (!res.ok) {
+
       throw new Error(`Error fetching product: ${res.status}`);
     }
 
     const product = await res.json();
-
     return {
       props: {
         product,

@@ -48,11 +48,13 @@ router.put('/increaseQuantity', authorization, async (req, res) => {
   if (!product || product.quantity <= 0) {
     return res.status(400).json({ message: 'Product out of stock' });
   }
-  const item = foundUser.cart.find(item => item.productId.toString() === productId);
-  if (!item) {
-    return res.status(404).json({ message: 'Product not found in cart' });
+  const productIdString = String(productId);
+  const itemArray = foundUser.cart.filter(item => item.productId.toString() === productIdString);  
+  if (itemArray.length === 0) {
+    return res.status(404).json({ message: 'Product not found in cart' ,productId});
   }
-  if (product.quantity > item.quantity) {
+  const item = itemArray[0];  
+  if (product.quantity >= item.quantity + 1) {
     item.quantity += 1;
     foundUser.markModified('cart');
     await foundUser.save();
@@ -60,7 +62,6 @@ router.put('/increaseQuantity', authorization, async (req, res) => {
   else {
     return res.status(400).json({ message: 'Product out of stock' });
   }
-  res.json({ message: 'Increased quantity' });
 });
 
 router.put('/decreaseQuantity', authorization, async (req, res) => {

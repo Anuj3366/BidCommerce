@@ -30,12 +30,13 @@ const Comment = styled.p`
   font-size: 1.2rem;
   margin-bottom: 10px;
 `;
-export default function ProductPage({ product, comments: initialComments }) {
+export default function ProductPage({ product}) {
   const [comments, setComments] = useState(initialComments);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [newComment, setNewComment] = useState("");
 
   useEffect(() => {
+    setComments(product.comments);
     fetch('http://localhost:3000/isLogin', {
       method: 'GET',
       credentials: 'include',
@@ -46,26 +47,24 @@ export default function ProductPage({ product, comments: initialComments }) {
       });
   }, []);
 
-  const addcomment = async () => {
-    if (!newComment.trim()) {
-      toast.warning("Please Enter a Comment")
-      return;
-    }
+  const addcomment = async (comment) => {
     const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
       method: 'POST',
       credentials: 'include',
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ comment: newComment }),
+      body: JSON.stringify({ comment }),
     });
     const data = await res.json();
-    if (data.comment) {
+    console.log(data);
+    if (data.message === "Comment added") {
       setComments(prevComments => [...prevComments, data.comment]);
-      setNewComment("");
+      setNewComment("")
       toast.success("Comment Added")
     }
   }
+
 
   function addToCart(product) {
     if (!isLoggedIn) window.location.href = "/Login";
@@ -83,7 +82,7 @@ export default function ProductPage({ product, comments: initialComments }) {
           if (data.redirectToLogin) {
             window.location.href = "/Login";
           }
-          else{ 
+          else {
             toast.success("Added to cart")
           };
         });
@@ -118,8 +117,13 @@ export default function ProductPage({ product, comments: initialComments }) {
           <Title>Comments</Title>
           <Center><p>Add a comment</p>
 
-            <Input type="text" placeholder="Add a comment" />
-            <Button $primary onClick={() => addcomment("Hello")}>
+          <Input
+              type="text"
+              placeholder="Add a comment"
+              value={newComment}
+              onChange={(e) => setNewComment(e.target.value)}
+            />
+            <Button onClick={() => addcomment(newComment)}>
               Add
             </Button>
           </Center>
@@ -151,24 +155,9 @@ export async function getServerSideProps(context) {
 
     const product = await res.json();
 
-    const commentsRes = await fetch(`http://localhost:3000/product/${_id}/comment`, {
-      method: 'GET',
-      credentials: 'include',
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
-
-    if (!commentsRes.ok) {
-      throw new Error(`Error fetching comments: ${commentsRes.status}`);
-    }
-
-    const comments = await commentsRes.json();
-
     return {
       props: {
         product,
-        comments,
       },
     };
   } catch (error) {

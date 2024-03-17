@@ -21,7 +21,7 @@ router.post('/product/:productID/comment', authorization, async (req, res) => {
     };
     product.comments.push(commentObj);
     const saved = await product.save();
-    res.json(saved);
+    res.json({ message: "Comment added", comment: commentObj });
   }
 });
 
