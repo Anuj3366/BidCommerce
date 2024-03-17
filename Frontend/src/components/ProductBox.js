@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import Button from "@/components/Button";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 
 const ProductWrapper = styled.div`
@@ -63,18 +62,6 @@ const Price = styled.div`
 `;
 
 export default function ProductBox({ _id, title, price, images, bid }) {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    fetch('http://localhost:3000/isLogin', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => {
-        setIsLoggedIn(data.loggedIn);
-      });
-  }, []);
 
   let url = '/product/' + _id;
   let buttonText = 'Add to cart';
@@ -85,27 +72,22 @@ export default function ProductBox({ _id, title, price, images, bid }) {
   }
 
   function addFeaturedToCart() {
-    if (!isLoggedIn) {
-      window.location.href = "/Login";
-    }
-    else {
-      fetch("http://localhost:3000/addToCart", {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId: _id }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.redirectToLogin) {
-            localStorage.removeItem('token');
-            window.location.href = "/Login";
-          }
-          else toast.success("Added to cart");
-        });
-    }
+    fetch("http://localhost:3000/addToCart", {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ productId: _id }),
+    })
+      .then(response => response.json())
+      .then(data => {
+        if (data.redirectToLogin) {
+          localStorage.removeItem('token');
+          window.location.href = "/Login";
+        }
+        else toast.success("Added to cart");
+      });
   }
   return (
     <ProductWrapper>
@@ -120,9 +102,17 @@ export default function ProductBox({ _id, title, price, images, bid }) {
           <Price>
             {bid ? `₹${price}` : `Price: ₹${price}`}
           </Price>
-          <Button block onClick={buttonText === 'Add to cart' ? addFeaturedToCart : null} $white $outline>
-            {buttonText}
-          </Button>
+          {buttonText === 'Add to cart' ? (
+            <Button block onClick={addFeaturedToCart} $white $outline>
+              {buttonText}
+            </Button>
+          ) : (
+            <Link href={url}>
+              <Button block $white $outline>
+                {buttonText}
+              </Button>
+            </Link>
+          )}
         </PriceRow>
       </ProductInfoBox>
     </ProductWrapper>

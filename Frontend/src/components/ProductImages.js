@@ -90,7 +90,6 @@ export default function ProductImages({ images }) {
 
   return (
     <>
-    <div id="root"></div>
       <BigImageWrapper>
         <BigImage src={images[activeImageIndex]} alt="Product" onClick={openModal} />
       </BigImageWrapper>

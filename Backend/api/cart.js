@@ -25,9 +25,9 @@ router.post('/addToCart', authorization, async (req, res) => {
     }
     foundUser.cart.push({ productId: product._id, quantity: 1 });
     await foundUser.save();
-    await Product.updateOne({ _id: productId }, { $inc: { quantity: -1, buyed: 1 } });
   }
-  res.json({ message: 'Added to cart' });
+  if(product.quantity >= item.quantity) res.json({ message: 'Added to cart' });
+  else res.status(400).json({ message: 'Product out of stock' });
 });
 
 router.get('/getCart', authorization, async (req, res) => {

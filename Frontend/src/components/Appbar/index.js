@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styled from "styled-components";
 import Center from "@/components/Center";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import CloseIcon from "@/components/icons/Close";
 import BarsIcon from "@/components/icons/Bars";
 import { Toaster, toast } from 'sonner'
@@ -66,21 +66,8 @@ const NavButton = styled.button`
   }
 `;
 
-export default function Header() {
+export default function Header(isLoggedIn) {
   const [mobileNavActive, setMobileNavActive] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-  useEffect(() => {
-    fetch('http://localhost:3000/isLogin', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => {
-        setIsLoggedIn(data.loggedIn);
-      });
-  }, []);
-
   const handleLogout = () => {
     fetch('http://localhost:3000/logout', {
       method: 'GET',

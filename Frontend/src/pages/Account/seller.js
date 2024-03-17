@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Input from "@/components/Input";
 import Button from "@/components/Button";
 import Center from "@/components/Center";
@@ -60,7 +60,9 @@ const StyledSelect = styled.select`
 `;
 
 function SellerProducts() {
+  
   const [products, setProducts] = useState([]);
+  const [submitProduct, setSubmitProduct] = useState(false);
   const [productDetails, setProductDetails] = useState({
     title: '',
     description: '',
@@ -69,7 +71,6 @@ function SellerProducts() {
     category: '',
     quantity: '',
     bid: false,
-    bidPrice: '',
     bidEnd: '',
   });
 
@@ -95,12 +96,13 @@ function SellerProducts() {
 
 
   const handleImageChange = (event) => {
-    setProductDetails({
-      ...productDetails,
-      images: Array.from(event.target.files),
-    });
+    if (event.target.files) {
+      setProductDetails(prevDetails => ({
+        ...prevDetails,
+        images: Array.from(event.target.files),
+      }));
+    }
   };
-
   const saveImage = async () => {
     try {
       const urls = await Promise.all(productDetails.images.map(async (image) => {
@@ -119,21 +121,19 @@ function SellerProducts() {
         }
 
         const cloudData = await res.json();
-
-        if (typeof cloudData.url !== 'string') {
-          console.error('Cloudinary API returned unexpected data:', cloudData);
-          throw new Error('Invalid URL returned from Cloudinary');
-        }
         return cloudData.url;
       }));
+
       setProductDetails(prevDetails => ({
         ...prevDetails,
         images: urls,
       }));
+      setSubmitProduct(true);
     } catch (error) {
       console.error('Error in saveImage:', error);
     }
   };
+
 
   const increaseQuantity = (productId, increaseBy) => {
 
@@ -148,7 +148,7 @@ function SellerProducts() {
       .then(res => res.json())
       .then(data => {
         toast.success("Quantity Increased")
-        console.log(data.message)
+        // console.log(data.message)
       })
       .catch(err => {
         toast.error("Error Please Reload")
@@ -156,32 +156,40 @@ function SellerProducts() {
       });
   };
 
-  function handleProductDetailsChange(event) {
+
+  const handleProductDetailsChange = (event) => {
     const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setProductDetails({
       ...productDetails,
-      [event.target.name]: value
+      [event.target.name]: value,
     });
-  }
+  };
+
   const handleProductSubmit = async (event) => {
     event.preventDefault();
     await saveImage();
-
-    try {
-      const response = await fetch('http://localhost:3000/uploadProduct', {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...productDetails,
-          reviews: [],
-          buyed: 0,
-        })
-      });
-      const data = await response.json();
-      toast.success("Product Added")
+    if (submitProduct) {
+      try {
+        // console.log(productDetails)
+        const response = await fetch('http://localhost:3000/uploadProduct', {
+          method: 'POST',
+          credentials: 'include',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...productDetails,
+            reviews: [],
+            buyed: 0,
+          })
+        });
+        const data = await response.json();
+        toast.success("Product Added")
+        // console.log(data.message);
+      } catch (err) {
+        toast.success("Error in Adding Product")
+        console.error(err);
+      }
       setProductDetails({
         title: '',
         description: '',
@@ -190,15 +198,11 @@ function SellerProducts() {
         category: '',
         quantity: '',
         bid: false,
-        bidPrice: '',
         bidEnd: '',
       });
-      console.log(data.message);
-    } catch (err) {
-      toast.success("Error in Adding Product")
-      console.error(err);
+      setSubmitProduct(false);
     }
-  };
+  }
   return (
     <Center>
       <h1>Sell a Product</h1>
@@ -235,7 +239,6 @@ function SellerProducts() {
         <input type="checkbox" name="bid" checked={productDetails.bid} onChange={handleProductDetailsChange} /> Bid Item
         {productDetails.bid && (
           <>
-            <Input type="number" name="bidPrice" value={productDetails.bidPrice} onChange={handleProductDetailsChange} placeholder="Bid Price" required />
             <Input type="date" name="bidEnd" value={productDetails.bidEnd} onChange={handleProductDetailsChange} placeholder="Bid End Date" required />
           </>
         )}
@@ -244,13 +247,13 @@ function SellerProducts() {
         </div>
       </form>
       {products.map(product => (
-  <ProductCard key={product._id}>
-    <ProductTitle>{product.title}</ProductTitle>
-    <ProductCategory>{product.category}</ProductCategory>
-    <ProductQuantity>{product.quantity}</ProductQuantity>
-    <IncreaseButton onClick={() => increaseQuantity(product._id, 1)}>Increase Quantity</IncreaseButton>
-  </ProductCard>
-))}
+        <ProductCard key={product._id}>
+          <ProductTitle>{product.title}</ProductTitle>
+          <ProductCategory>{product.category}</ProductCategory>
+          <ProductQuantity>{product.quantity}</ProductQuantity>
+          <IncreaseButton onClick={() => increaseQuantity(product._id, 1)}>Increase Quantity</IncreaseButton>
+        </ProductCard>
+      ))}
     </Center>
   )
 };

@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import Center from '@/components/Center';
 import Layout from '@/components/Layout';
 import Title from '@/components/Title';
@@ -8,6 +9,7 @@ import Button from '@/components/Button';
 import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
 import { toast } from 'sonner';
+import Countdown from 'react-countdown';
 
 const ColWrapper = styled.div`
   display: grid;
@@ -26,27 +28,43 @@ const PriceRow = styled.div`
 const Price = styled.span`
   font-size: 1.4rem;
 `;
-const Comment = styled.p`
-  font-size: 1.2rem;
+const CommentBox = styled.div`
+  background-color: #f2f2f2;
+  border-radius: 5px;
+  padding: 5px;
   margin-bottom: 10px;
 `;
+
+const CommentText = styled.p`
+  font-size: 1rem;
+  margin-bottom: 10px;
+`;
+
+const Comment = styled.div`
+  margin-top: 20px;
+`
+const BidRow = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: center;
+`;
+
+const BidInput = styled(Input)`
+  width: 100px;
+`;
+
 export default function ProductPage({ product }) {
-  const [comments, setComments] = useState(initialComments);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
+  const [bid, setBid] = useState(product.price);
+  const [bidEnded, setBidEnded] = useState(false);
 
   useEffect(() => {
     setComments(product.comments);
-    fetch('http://localhost:3000/isLogin', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => {
-        setIsLoggedIn(data.loggedIn);
-      });
+    if (new Date(product.bidEnd).getTime() < Date.now()) {
+      setBidEnded(true);
+    }
   }, []);
-
   const addcomment = async (comment) => {
     const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
       method: 'POST',
@@ -65,9 +83,33 @@ export default function ProductPage({ product }) {
     }
   }
 
+  const placeBid = async () => {
+    if (bid <= product.price) {
+      toast.error("Your bid must be higher than the current price.");
+      return;
+    }
+    const res = await fetch(`http://localhost:3000/product/${product._id}/bid`, {
+      method: 'POST',
+      credentials: 'include',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ bid }),
+    });
+    const data = await res.json();
+    if (data.message === "Bid placed") {
+      toast.success("Bid placed");
+      product.price = bid;
+    }
+  }
 
-  function addToCart(product) {
-    if (!isLoggedIn) window.location.href = "/Login";
+  async function addToCart(product) {
+    const res = await fetch('http://localhost:3000/isLogin', {
+      method: 'GET',
+      credentials: 'include',
+    });
+    const data = await res.json();
+    if (!data.loggedIn) window.location.href = "/Login";
     else {
       fetch("http://localhost:3000/addToCart", {
         method: 'POST',
@@ -80,17 +122,18 @@ export default function ProductPage({ product }) {
         .then(response => response.json())
         .then(data => {
           if (data.redirectToLogin) {
+            localStorage.removeItem('token');
             window.location.href = "/Login";
           }
-          else {
-            toast.success("Added to cart")
-          };
+          else toast.success("Added to cart");
         });
     }
   }
+
   return (
     <>
       <Layout>
+        <div id="root"></div>
         <Center>
           <ColWrapper>
             <WhiteBox>
@@ -101,22 +144,34 @@ export default function ProductPage({ product }) {
               <p>{product.description}</p>
               <PriceRow>
                 <div>
-                  <Price>₹{product.price}</Price>
+                  <Title>
+                    <Price>₹{product.price}</Price>
+                  </Title>
                 </div>
                 <div>
-                  <Button $primary onClick={() => addToCart(product)}>
-                    <CartIcon />Add to cart
-                  </Button>
+                  {!bidEnded && (
+                    <BidRow>
+                      <BidInput
+                        type="number"
+                        min={product.price + 1}
+                        value={bid}
+                        onChange={(e) => setBid(e.target.value)}
+                      />
+                      <Button onClick={placeBid}>Place Bid</Button>
+                    </BidRow>
+                  )}
+                  {bidEnded && <p>Bidding has ended.</p>}
                 </div>
               </PriceRow>
+              <Countdown date={new Date(product.bidEnd)} />
             </div>
           </ColWrapper>
         </Center>
         <Center>
           <WhiteBox>
             <Title>Comments</Title>
-            <Center><p>Add a comment</p>
-
+            <Center>
+              <p>Add a comment</p>
               <Input
                 type="text"
                 placeholder="Add a comment"
@@ -129,7 +184,11 @@ export default function ProductPage({ product }) {
             </Center>
             <Center>
               <Comment>
-                {comments}
+                {comments.map((commentObj, index) => (
+                  <CommentBox key={index}>
+                    <CommentText>{commentObj.comment}</CommentText>
+                  </CommentBox>
+                ))}
               </Comment>
             </Center>
           </WhiteBox>
@@ -151,11 +210,11 @@ export async function getServerSideProps(context) {
     });
 
     if (!res.ok) {
+
       throw new Error(`Error fetching product: ${res.status}`);
     }
 
     const product = await res.json();
-
     return {
       props: {
         product,

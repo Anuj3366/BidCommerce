@@ -25,6 +25,21 @@ router.post('/product/:productID/comment', authorization, async (req, res) => {
   }
 });
 
+router.post('/product/:id/bid', authorization ,async (req, res) => {
+  const { id } = req.params;
+  const { bid } = req.body;
+  const product = await Product.findById(id);
+  if (!product) {
+    return res.status(404).json({ message: "Product not found" });
+  }
+  if (product.price >= bid) {
+    return res.status(400).json({ message: "Bid must be higher than current price" });
+  }
+  product.price = bid;
+  product.bidders.push(req.user.email);
+  await product.save();
+  res.json({ message: "Bid placed" });
+});
 
 
 module.exports = router;
