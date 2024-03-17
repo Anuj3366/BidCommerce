@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { toast } from 'sonner';
 
 const ProductWrapper = styled.div`
-  
+
 `;
 
 const Image = styled.img`
@@ -62,7 +62,7 @@ const Price = styled.div`
   }
 `;
 
-export default function ProductBox({ _id, title, description, price, images, bid, bidEnd }) {
+export default function ProductBox({ _id, title, price, images, bid }) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {

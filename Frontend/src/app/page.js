@@ -1,13 +1,15 @@
-import Header from "../components/Appbar";
+
 import Featured from "../components/Featured";
 import NewProducts from "../components/NewProducts";
+import Layout from "../components/Layout";
 
 export default function HomePage() {
   return (
     <>
-      <Header />
+    <Layout>
       <Featured />
       <NewProducts />
+    </Layout>
     </>
   );
 }

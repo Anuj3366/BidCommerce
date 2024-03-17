@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import Header from "../../components/Appbar";
+import Layout from "../../components/Layout";
 import Center from "@/components/Center";
 import ProductsGrid from "@/components/ProductsGrid";
 import Title from "@/components/Title";
@@ -22,11 +22,12 @@ export default function ProductsPage() {
 
   return (
     <>
-      <Header />
-      <Center>
-        <Title>All Auctions</Title>
-        <ProductsGrid products={products} bid="true" />
-      </Center>
+      <Layout>
+        <Center>
+          <Title>All Auctions</Title>
+          <ProductsGrid products={products} bid="true" />
+        </Center>
+      </Layout>
     </>
   );
 }

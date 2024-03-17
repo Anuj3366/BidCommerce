@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import Center from '@/components/Center';
 
 const ColumnsWrapper = styled.div`
@@ -22,15 +22,16 @@ const Box = styled.div`
 export default function CartPage() {
   return (
     <>
-      <Header />
-      <Center>
-        <ColumnsWrapper>
-          <Box>
-            <h1>Thanks for your order!</h1>
-            <p>We will email you when your order will be sent.</p>
-          </Box>
-        </ColumnsWrapper>
-      </Center>
+      <Layout>
+        <Center>
+          <ColumnsWrapper>
+            <Box>
+              <h1>Thanks for your order!</h1>
+              <p>We will email you when your order will be sent.</p>
+            </Box>
+          </ColumnsWrapper>
+        </Center>
+      </Layout>
     </>
   );
 }

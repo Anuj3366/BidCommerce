@@ -1,5 +1,5 @@
 import Center from '@/components/Center';
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import Title from '@/components/Title';
 import styled from 'styled-components';
 import WhiteBox from '@/components/WhiteBox';
@@ -30,7 +30,7 @@ const Comment = styled.p`
   font-size: 1.2rem;
   margin-bottom: 10px;
 `;
-export default function ProductPage({ product}) {
+export default function ProductPage({ product }) {
   const [comments, setComments] = useState(initialComments);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -90,50 +90,51 @@ export default function ProductPage({ product}) {
   }
   return (
     <>
-      <Header />
-      <Center>
-        <ColWrapper>
+      <Layout>
+        <Center>
+          <ColWrapper>
+            <WhiteBox>
+              <ProductImages images={product.images} />
+            </WhiteBox>
+            <div>
+              <Title>{product.title}</Title>
+              <p>{product.description}</p>
+              <PriceRow>
+                <div>
+                  <Price>₹{product.price}</Price>
+                </div>
+                <div>
+                  <Button $primary onClick={() => addToCart(product)}>
+                    <CartIcon />Add to cart
+                  </Button>
+                </div>
+              </PriceRow>
+            </div>
+          </ColWrapper>
+        </Center>
+        <Center>
           <WhiteBox>
-            <ProductImages images={product.images} />
-          </WhiteBox>
-          <div>
-            <Title>{product.title}</Title>
-            <p>{product.description}</p>
-            <PriceRow>
-              <div>
-                <Price>₹{product.price}</Price>
-              </div>
-              <div>
-                <Button $primary onClick={() => addToCart(product)}>
-                  <CartIcon />Add to cart
-                </Button>
-              </div>
-            </PriceRow>
-          </div>
-        </ColWrapper>
-      </Center>
-      <Center>
-        <WhiteBox>
-          <Title>Comments</Title>
-          <Center><p>Add a comment</p>
+            <Title>Comments</Title>
+            <Center><p>Add a comment</p>
 
-          <Input
-              type="text"
-              placeholder="Add a comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <Button onClick={() => addcomment(newComment)}>
-              Add
-            </Button>
-          </Center>
-          <Center>
-            <Comment>
-              {comments}
-            </Comment>
-          </Center>
-        </WhiteBox>
-      </Center>
+              <Input
+                type="text"
+                placeholder="Add a comment"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <Button onClick={() => addcomment(newComment)}>
+                Add
+              </Button>
+            </Center>
+            <Center>
+              <Comment>
+                {comments}
+              </Comment>
+            </Center>
+          </WhiteBox>
+        </Center>
+      </Layout>
     </>
   );
 }

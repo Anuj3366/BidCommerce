@@ -1,5 +1,5 @@
 "use client";
-import Header from "../../components/Appbar";
+import Layout from "../../components/Layout";
 import styled from "styled-components";
 import Center from "@/components/Center";
 import Button from "@/components/Button";
@@ -83,7 +83,7 @@ function CartPage() {
           setTotal(totalCost);
         }
       });
-      console.log(products);
+    console.log(products);
   }, []);
 
   async function goToPayment() {
@@ -154,7 +154,7 @@ function CartPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({productId}),
+      body: JSON.stringify({ productId }),
     });
     const data = await response.json();
     if (data.message === 'Increased quantity') {
@@ -169,75 +169,76 @@ function CartPage() {
       toast.error('Failed to increase quantity');
     }
   }
-  
+
   return (
     <>
-      <Header />
-      <Center>
-        <ColumnsWrapper>
-          <Box>
-            <h2>Cart</h2>
-            {!products?.length && (
-              <div>Your cart is empty</div>
-            )}
-            {products?.length > 0 && (
-              <Table>
-                <thead>
-                  <tr>
-                    <th>Product</th>
-                    <th></th>
-                    <th>Quantity</th>
-                    <th></th>
-                    <th>Price</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {products.map(item => (
-                    <tr key={item._id}>
-                      <ProductInfoCell>
-                        <ProductImageBox>
-                          <img src={item.productId.images?.[0]} alt="" />
-                        </ProductImageBox>
-                        {item.productId.title}
-                      </ProductInfoCell>
-                      <td><button onClick={() => decreaseQuantity(item.productId)}>-</button></td>
-                      <td>{item.quantity}</td>
-                      <td><button onClick={() => increaseQuantity(item.productId)}>+</button></td>
-                      <td>₹{item.productId.price * item.quantity}</td>
-                      <td>
-                        <button onClick={() => removeFromCart(item.productId)}>x</button>
-                      </td>
-                    </tr>
-                  ))}
-
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td>₹{total}</td>
-                  </tr>
-                </tbody>
-              </Table>
-            )}
-          </Box>
-          {!!products?.length && (
+      <Layout>
+        <Center>
+          <ColumnsWrapper>
             <Box>
-              <h2>Order information</h2>
-              <Input type="text"
-                placeholder="Address"
-                value={address}
-                name="address"
-                onChange={ev => setAddress(ev.target.value)} />
-              <Button black block
-                onClick={goToPayment}>
-                Continue to payment
-              </Button>
+              <h2>Cart</h2>
+              {!products?.length && (
+                <div>Your cart is empty</div>
+              )}
+              {products?.length > 0 && (
+                <Table>
+                  <thead>
+                    <tr>
+                      <th>Product</th>
+                      <th></th>
+                      <th>Quantity</th>
+                      <th></th>
+                      <th>Price</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {products.map(item => (
+                      <tr key={item._id}>
+                        <ProductInfoCell>
+                          <ProductImageBox>
+                            <img src={item.productId.images?.[0]} alt="" />
+                          </ProductImageBox>
+                          {item.productId.title}
+                        </ProductInfoCell>
+                        <td><button onClick={() => decreaseQuantity(item.productId)}>-</button></td>
+                        <td>{item.quantity}</td>
+                        <td><button onClick={() => increaseQuantity(item.productId)}>+</button></td>
+                        <td>₹{item.productId.price * item.quantity}</td>
+                        <td>
+                          <button onClick={() => removeFromCart(item.productId)}>x</button>
+                        </td>
+                      </tr>
+                    ))}
+
+                    <tr>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td></td>
+                      <td>₹{total}</td>
+                    </tr>
+                  </tbody>
+                </Table>
+              )}
             </Box>
-          )}
-        </ColumnsWrapper>
-      </Center>
+            {!!products?.length && (
+              <Box>
+                <h2>Order information</h2>
+                <Input type="text"
+                  placeholder="Address"
+                  value={address}
+                  name="address"
+                  onChange={ev => setAddress(ev.target.value)} />
+                <Button black block
+                  onClick={goToPayment}>
+                  Continue to payment
+                </Button>
+              </Box>
+            )}
+          </ColumnsWrapper>
+        </Center>
+      </Layout>
     </>
   );
 }

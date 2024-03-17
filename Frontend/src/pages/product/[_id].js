@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Center from '@/components/Center';
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import Title from '@/components/Title';
 import styled from 'styled-components';
 import WhiteBox from '@/components/WhiteBox';
@@ -98,56 +98,57 @@ export default function ProductPage({ product }) {
   }
   return (
     <>
-      <Header />
-      <Center>
-        <ColWrapper>
+      <Layout>
+        <Center>
+          <ColWrapper>
+            <WhiteBox>
+              <ProductImages images={product.images} />
+            </WhiteBox>
+            <div>
+              <Title>{product.title}</Title>
+              <p>{product.description}</p>
+              <PriceRow>
+                <div>
+                  <Title>
+                    <Price>₹{product.price}</Price>
+                  </Title>
+                </div>
+                <div>
+                  <Button $primary $center onClick={() => addToCart(product)}>
+                    <CartIcon />Add to cart
+                  </Button>
+                </div>
+              </PriceRow>
+            </div>
+          </ColWrapper>
+        </Center>
+        <Center>
           <WhiteBox>
-            <ProductImages images={product.images} />
+            <Title>Comments</Title>
+            <Center>
+              <p>Add a comment</p>
+              <Input
+                type="text"
+                placeholder="Add a comment"
+                value={newComment}
+                onChange={(e) => setNewComment(e.target.value)}
+              />
+              <Button onClick={() => addcomment(newComment)}>
+                Add
+              </Button>
+            </Center>
+            <Center>
+              <Comment>
+                {comments.map((commentObj, index) => (
+                  <CommentBox key={index}>
+                    <CommentText>{commentObj.comment}</CommentText>
+                  </CommentBox>
+                ))}
+              </Comment>
+            </Center>
           </WhiteBox>
-          <div>
-            <Title>{product.title}</Title>
-            <p>{product.description}</p>
-            <PriceRow>
-              <div>
-                <Title>
-                  <Price>₹{product.price}</Price>
-                </Title>
-              </div>
-              <div>
-                <Button $primary $center onClick={() => addToCart(product)}>
-                  <CartIcon />Add to cart
-                </Button>
-              </div>
-            </PriceRow>
-          </div>
-        </ColWrapper>
-      </Center>
-      <Center>
-        <WhiteBox>
-          <Title>Comments</Title>
-          <Center>
-            <p>Add a comment</p>
-            <Input
-              type="text"
-              placeholder="Add a comment"
-              value={newComment}
-              onChange={(e) => setNewComment(e.target.value)}
-            />
-            <Button onClick={() => addcomment(newComment)}>
-              Add
-            </Button>
-          </Center>
-          <Center>
-            <Comment>
-              {comments.map((commentObj, index) => (
-                <CommentBox key={index}>
-                  <CommentText>{commentObj.comment}</CommentText>
-                </CommentBox>
-              ))}
-            </Comment>
-          </Center>
-        </WhiteBox>
-      </Center>
+        </Center>
+      </Layout>
     </>
   );
 }

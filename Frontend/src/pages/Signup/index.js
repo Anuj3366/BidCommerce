@@ -5,7 +5,7 @@ import Button from '@/components/Button';
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import { toast } from 'sonner';
 
 
@@ -56,7 +56,7 @@ export default function Signup() {
           toast.success("Signup successful");
           setTimeout(() => {
             router.push('/');
-          },2000);
+          }, 2000);
         } else {
           toast.success("Failed to signup");
         }
@@ -65,39 +65,40 @@ export default function Signup() {
 
   return (
     <>
-      <Header />
-      <Center>
-        <Box>
-          <Title>Signup</Title>
-          <Input
-            type="text"
-            name="Name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
-          <Input
-            type="email"
-            name="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <Input
-            type="password"
-            name="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-          <Input
-            type="text"
-            name="Address"
-            value={address}
-            onChange={(e) => setAddress(e.target.value)}
-          />
-          <Button $black onClick={signup}>
-            Signup
-          </Button>
-        </Box>
-      </Center>
+      <Layout>
+        <Center>
+          <Box>
+            <Title>Signup</Title>
+            <Input
+              type="text"
+              name="Name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+            <Input
+              type="email"
+              name="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            />
+            <Input
+              type="password"
+              name="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            />
+            <Input
+              type="text"
+              name="Address"
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+            />
+            <Button $black onClick={signup}>
+              Signup
+            </Button>
+          </Box>
+        </Center>
+      </Layout>
     </>
   );
 }

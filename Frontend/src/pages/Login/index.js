@@ -5,7 +5,7 @@ import Button from '@/components/Button';
 import styled from 'styled-components';
 import Input from '@/components/Input';
 import Title from '@/components/Title';
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import { toast } from 'sonner';
 
 const Box = styled.div`
@@ -56,7 +56,7 @@ export default function Login() {
 
   return (
     <>
-      <Header />
+      <Layout>
       <Center>
         <Box>
           <Title>Login</Title>
@@ -77,6 +77,7 @@ export default function Login() {
           </Button>
         </Box>
       </Center>
+      </Layout>
     </>
   );
 }

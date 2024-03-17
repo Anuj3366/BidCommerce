@@ -1,7 +1,7 @@
 "use clients"
 import React, { useEffect, useState } from 'react';
 import ProductsGrid from "@/components/ProductsGrid";
-import Header from '@/components/Appbar';
+import Layout from '@/components/Layout';
 import Center from '@/components/Center';
 
 function CategoryPage() {
@@ -27,7 +27,7 @@ function CategoryPage() {
 
   return (
     <>
-      <Header />
+      <Layout>
       <Center>
         <div>
           <h2>Categories</h2>
@@ -44,6 +44,7 @@ function CategoryPage() {
           <ProductsGrid products={selectedCategory ? products.filter(product => product.category === selectedCategory) : products} />
         </div>
       </Center>
+      </Layout>
     </>
   );
 }

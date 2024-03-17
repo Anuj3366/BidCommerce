@@ -135,9 +135,6 @@ function SellerProducts() {
     }
   };
 
-
-
-
   const increaseQuantity = (productId, increaseBy) => {
 
     fetch(`http://localhost:3000/product/${productId}/quantity`, {
@@ -159,12 +156,13 @@ function SellerProducts() {
       });
   };
 
-  const handleProductDetailsChange = (event) => {
+  function handleProductDetailsChange(event) {
+    const value = event.target.type === 'checkbox' ? event.target.checked : event.target.value;
     setProductDetails({
       ...productDetails,
-      [event.target.name]: event.target.value,
+      [event.target.name]: value
     });
-  };
+  }
   const handleProductSubmit = async (event) => {
     event.preventDefault();
     await saveImage();
@@ -184,6 +182,17 @@ function SellerProducts() {
       });
       const data = await response.json();
       toast.success("Product Added")
+      setProductDetails({
+        title: '',
+        description: '',
+        price: '',
+        images: [],
+        category: '',
+        quantity: '',
+        bid: false,
+        bidPrice: '',
+        bidEnd: '',
+      });
       console.log(data.message);
     } catch (err) {
       toast.success("Error in Adding Product")
