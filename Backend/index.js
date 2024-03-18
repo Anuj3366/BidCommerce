@@ -4,6 +4,8 @@ const cors = require('cors');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
+const path = require('path');
+
 
 // Middleware setup
 app.use(cookieParser());
@@ -42,7 +44,7 @@ app.use('/', account);
 console.log("All routes are running");
 
 // Serve static files from the 'public' directory
-app.use(express.static('public'));
+app.use(express.static(path.join(__dirname, '../frontend/.next')));
 
 // Start the server
 app.listen(3000, () => {
