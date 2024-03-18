@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import Table from "@/components/Table";
 import Input from "@/components/Input";
 import { toast } from 'sonner';
+import Router from 'next/router';
 
 
 const Box = styled.div`
@@ -18,7 +19,6 @@ const Box = styled.div`
   border-radius: 10px;
   background-color: #fff;
 `;
-
 const ColumnsWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr;
@@ -28,11 +28,9 @@ const ColumnsWrapper = styled.div`
     grid-template-columns: 1.2fr .8fr;
   }
 `;
-
 const ProductInfoCell = styled.td`
   padding: 10px 0;
 `;
-
 const ProductImageBox = styled.div`
   width: 70px;
   height: 100px;
@@ -54,6 +52,7 @@ const ProductImageBox = styled.div`
   }
 `;
 
+
 function CartPage() {
   const [products, setProducts] = useState([]);
   const [address, setAddress] = useState('');
@@ -71,8 +70,7 @@ function CartPage() {
       .then(response => response.json())
       .then(data => {
         if (data.redirectToLogin) {
-          localStorage.removeItem('token');
-          window.location.href = "/Login";
+          Router.push('/Login');
         }
         else {
           setProducts(data);
@@ -85,6 +83,7 @@ function CartPage() {
       });
     console.log(products);
   }, []);
+
 
   async function goToPayment() {
     const response = await fetch("http://localhost:3000/checkout", {
@@ -105,12 +104,6 @@ function CartPage() {
     }
   }
 
-  if (isSuccess) {
-    window.location.href = "/success";
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 10000);
-  }
   async function removeFromCart(productId) {
     const response = await fetch("http://localhost:3000/removeFromCart", {
       method: 'PUT',
@@ -123,8 +116,11 @@ function CartPage() {
     const data = await response.json();
     if (data.message === 'Removed from cart') {
       setProducts(products.filter(item => item.productId._id !== productId));
+      toast.success("Removed from cart");
+    } else {
+      console.log(data.message);
+      toast.error('Failed to remove from cart');
     }
-    toast.success("Removed from cart");
   }
 
   async function decreaseQuantity(productId) {
@@ -139,14 +135,17 @@ function CartPage() {
     const data = await response.json();
     if (data.message === 'Decreased quantity') {
       setProducts(products.map(item =>
-        item.productId._id === productId
+        item.productId._id === productId && item.quantity > 1
           ? { ...item, quantity: item.quantity - 1 }
           : item
       ));
       toast.success('Decreased quantity');
+    } else {
+      console.log(data.message);
+      toast.error('Failed to decrease quantity');
     }
   }
-
+  
   async function increaseQuantity(productId) {
     const response = await fetch("http://localhost:3000/increaseQuantity", {
       method: 'PUT',
@@ -157,6 +156,7 @@ function CartPage() {
       body: JSON.stringify({ productId }),
     });
     const data = await response.json();
+    console.log(data);
     if (data.message === 'Increased quantity') {
       setProducts(products.map(item =>
         item.productId._id === productId
@@ -169,6 +169,16 @@ function CartPage() {
       toast.error('Failed to increase quantity');
     }
   }
+
+  
+
+  if (isSuccess) {
+    window.location.href = "/success";
+    setTimeout(() => {
+      window.location.href = "/";
+    }, 10000);
+  }
+
 
   return (
     <>
@@ -201,12 +211,12 @@ function CartPage() {
                           </ProductImageBox>
                           {item.productId.title}
                         </ProductInfoCell>
-                        <td><button onClick={() => decreaseQuantity(item.productId)}>-</button></td>
+                        <td><button onClick={() => decreaseQuantity(item.productId._id)}>-</button></td>
                         <td>{item.quantity}</td>
-                        <td><button onClick={() => increaseQuantity(item.productId)}>+</button></td>
+                        <td><button onClick={() => increaseQuantity(item.productId._id)}>+</button></td>
                         <td>₹{item.productId.price * item.quantity}</td>
                         <td>
-                          <button onClick={() => removeFromCart(item.productId)}>x</button>
+                          <button onClick={() => removeFromCart(item.productId._id)}>x</button>
                         </td>
                       </tr>
                     ))}

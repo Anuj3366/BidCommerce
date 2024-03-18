@@ -66,20 +66,25 @@ const NavButton = styled.button`
   }
 `;
 
-export default function Header(isLoggedIn) {
+export default function Header({isLoggedIn, setIsLoggedIn}) {
   const [mobileNavActive, setMobileNavActive] = useState(false);
-  const handleLogout = () => {
-    fetch('http://localhost:3000/logout', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(() => {
-        setIsLoggedIn(false);
-        toast.success('You are now logged out');
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 2000);
+  const handleLogout = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/logout', {
+        method: 'GET',
+        credentials: 'include',
       });
+      if (!response.ok) {
+        throw new Error('Logout failed. Please try again.');
+      }
+      setIsLoggedIn(false);
+      toast.success('You are now logged out');
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    } catch (error) {
+      toast.error(error.message);
+    }
   };
   return (
     <>

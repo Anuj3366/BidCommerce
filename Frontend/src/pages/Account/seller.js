@@ -148,7 +148,16 @@ function SellerProducts() {
       .then(res => res.json())
       .then(data => {
         toast.success("Quantity Increased")
-        // console.log(data.message)
+        const updatedProducts = products.map(product => {
+          if (product._id === productId) {
+            return {
+              ...product,
+              quantity: product.quantity + increaseBy,
+            };
+          }
+          return product;
+        });
+        setProducts(updatedProducts);
       })
       .catch(err => {
         toast.error("Error Please Reload")
