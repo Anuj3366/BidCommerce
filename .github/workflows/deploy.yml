@@ -1,0 +1,25 @@
+name: Deploy to EC2
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build frontend (if applicable)
+        run: npm run build
+
+      - name: Deploy to EC2
+        run: |
+          scp -i path/to/your/key.pem -r . ec2-user@your-ec2-public-ip:/path/to/your/app
+          ssh -i path/to/your/key.pem ec2-user@your-ec2-public-ip 'cd /path/to/your/app && pm2 restart my-backend'
