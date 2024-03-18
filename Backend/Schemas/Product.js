@@ -14,7 +14,7 @@ const ProductSchema = new Schema({
     enum: [
       'Electronics', 'Clothes', 'Furniture', 'Books', 'Home Appliances',
       'Sports', 'Toys', 'Beauty & Health', 'Automotive', 'Garden',
-      'Music', 'Movies & TV Shows', 'Video Games', 'Computers', 'Office Supplies',
+      'Music', 'Movies & TV Shows', 'Video Games', 'Computers or PC or Laptops', 'Office Supplies',
       'Pet Supplies', 'Baby', 'Grocery', 'Tools & Home Improvement', 'Arts & Crafts'
     ],
     required: true

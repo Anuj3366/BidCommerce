@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import WhiteBox from '@/components/WhiteBox';
 import ProductImages from '@/components/ProductImages';
 import Button from '@/components/Button';
-import CartIcon from '@/components/icons/CartIcon';
 import Input from '@/components/Input';
 import { toast } from 'sonner';
 import Countdown from 'react-countdown';
@@ -31,34 +30,41 @@ const Price = styled.span`
 const CommentBox = styled.div`
   background-color: #f2f2f2;
   border-radius: 5px;
-  padding: 5px;
-  margin-bottom: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ddd; 
+  &:hover {
+    background-color: #f8f8f8;
+  }
 `;
-
 const CommentText = styled.p`
   font-size: 1rem;
   margin-bottom: 10px;
 `;
-
 const Comment = styled.div`
   margin-top: 20px;
-`
+`;
 const BidRow = styled.div`
   display: flex;
   gap: 20px;
   align-items: center;
 `;
-
 const BidInput = styled(Input)`
   width: 100px;
 `;
 
 export default function ProductPage({ product }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [comments, setComments] = useState([]);
   const [newComment, setNewComment] = useState("");
   const [bid, setBid] = useState(product.price);
   const [bidEnded, setBidEnded] = useState(false);
+  const [price, setPrice] = useState(product.price);
+  const [highestBidder, setHighestBidder] = useState(false);
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   useEffect(() => {
     setComments(product.comments);
     if (new Date(product.bidEnd).getTime() < Date.now()) {
@@ -98,35 +104,10 @@ export default function ProductPage({ product }) {
     });
     const data = await res.json();
     if (data.message === "Bid placed") {
-      toast.success("Bid placed");
+      toast.success("Highest Bid placed");
       product.price = bid;
-    }
-  }
-
-  async function addToCart(product) {
-    const res = await fetch('http://localhost:3000/isLogin', {
-      method: 'GET',
-      credentials: 'include',
-    });
-    const data = await res.json();
-    if (!data.loggedIn) window.location.href = "/Login";
-    else {
-      fetch("http://localhost:3000/addToCart", {
-        method: 'POST',
-        credentials: 'include',
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ productId: product._id }),
-      })
-        .then(response => response.json())
-        .then(data => {
-          if (data.redirectToLogin) {
-            localStorage.removeItem('token');
-            window.location.href = "/Login";
-          }
-          else toast.success("Added to cart");
-        });
+      setPrice(bid);
+      setHighestBidder(true);
     }
   }
 
@@ -145,7 +126,7 @@ export default function ProductPage({ product }) {
               <PriceRow>
                 <div>
                   <Title>
-                    <Price>₹{product.price}</Price>
+                    <Price>₹{price}</Price>
                   </Title>
                 </div>
                 <div>
@@ -156,14 +137,15 @@ export default function ProductPage({ product }) {
                         min={product.price + 1}
                         value={bid}
                         onChange={(e) => setBid(e.target.value)}
-                      />
+                        />
                       <Button onClick={placeBid}>Place Bid</Button>
+                        {highestBidder && <p>You are the highest bidder!</p>}
                     </BidRow>
                   )}
                   {bidEnded && <p>Bidding has ended.</p>}
                 </div>
               </PriceRow>
-              <Countdown date={new Date(product.bidEnd)} />
+              {isMounted && <Countdown date={new Date(product.bidEnd)} />}
             </div>
           </ColWrapper>
         </Center>
