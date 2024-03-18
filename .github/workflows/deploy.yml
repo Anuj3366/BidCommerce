@@ -21,5 +21,6 @@ jobs:
 
       - name: Deploy to EC2
         run: |
-          scp -i path/to/your/key.pem -r . ec2-user@your-ec2-public-ip:/path/to/your/app
-          ssh -i path/to/your/key.pem ec2-user@your-ec2-public-ip 'cd /path/to/your/app && pm2 restart my-backend'
+          ssh -i "imp_key.pem" ec2-user@ec2-65-1-165-105.ap-south-1.compute.amazonaws.com:/home/ec2-user/BidCommerce/Frontend
+          ssh -i "imp_key.pem" ec2-user@ec2-65-1-165-105.ap-south-1.compute.amazonaws.com: 'cd /home/ec2-user/BidCommerce/Frontend && pm2 restart my-backend'
+
