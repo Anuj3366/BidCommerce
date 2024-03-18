@@ -13,6 +13,10 @@ router.get('/getAllProduct', async (req, res) => {
   const products = await Product.find({ bid: false }, null, { sort: { '_id': -1 } });
   res.json(products);
 });
+router.get('/getAll', async (req, res) => {
+  const products = await Product.find();
+  res.json(products);
+});
 
 router.get('/getAllAuction', async (req, res) => {
   const products = await Product.find({ bid: true }, null, { sort: { '_id': -1 } });
