@@ -68,7 +68,7 @@ export default function Featured(id) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetch('http://localhost:3000/isLogin', {
+    fetch('http://65.0.145.134:3000/isLogin', {
       method: 'GET',
       credentials: 'include',
     })
@@ -79,7 +79,7 @@ export default function Featured(id) {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/get/65f2855694db0e6b6f6aebe7", {
+    fetch("http://65.0.145.134:3000/get/65f2855694db0e6b6f6aebe7", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export default function Featured(id) {
       window.location.href = "/Login";
     }
     else {
-      fetch("http://localhost:3000/addToCart", {
+      fetch("http://65.0.145.134:3000/addToCart", {
         method: 'POST',
         credentials: 'include',
         headers: {

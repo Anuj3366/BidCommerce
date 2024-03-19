@@ -60,7 +60,7 @@ function CartPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetch("http://localhost:3000/getCart", {
+    fetch("http://65.0.145.134:3000/getCart", {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -86,7 +86,7 @@ function CartPage() {
 
 
   async function goToPayment() {
-    const response = await fetch("http://localhost:3000/checkout", {
+    const response = await fetch("http://65.0.145.134:3000/checkout", {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -105,7 +105,7 @@ function CartPage() {
   }
 
   async function removeFromCart(productId) {
-    const response = await fetch("http://localhost:3000/removeFromCart", {
+    const response = await fetch("http://65.0.145.134:3000/removeFromCart", {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -124,7 +124,7 @@ function CartPage() {
   }
 
   async function decreaseQuantity(productId) {
-    const response = await fetch("http://localhost:3000/decreaseQuantity", {
+    const response = await fetch("http://65.0.145.134:3000/decreaseQuantity", {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -147,7 +147,7 @@ function CartPage() {
   }
   
   async function increaseQuantity(productId) {
-    const response = await fetch("http://localhost:3000/increaseQuantity", {
+    const response = await fetch("http://65.0.145.134:3000/increaseQuantity", {
       method: 'PUT',
       credentials: 'include',
       headers: {

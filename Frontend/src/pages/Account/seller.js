@@ -76,7 +76,7 @@ function SellerProducts() {
 
 
   useEffect(() => {
-    fetch('http://localhost:3000/seller/products', {
+    fetch('http://65.0.145.134:3000/seller/products', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -137,7 +137,7 @@ function SellerProducts() {
 
   const increaseQuantity = (productId, increaseBy) => {
 
-    fetch(`http://localhost:3000/product/${productId}/quantity`, {
+    fetch(`http://65.0.145.134:3000/product/${productId}/quantity`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -180,7 +180,7 @@ function SellerProducts() {
     if (submitProduct) {
       try {
         // console.log(productDetails)
-        const response = await fetch('http://localhost:3000/uploadProduct', {
+        const response = await fetch('http://65.0.145.134:3000/uploadProduct', {
           method: 'POST',
           credentials: 'include',
           headers: {
