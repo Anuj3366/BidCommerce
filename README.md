@@ -46,7 +46,7 @@ Follow these steps to get a local development environment running:
     npm start
     ```
 
-Your application should now be running on `localhost`. The frontend will typically be on `localhost:1234`, and the backend will be on `65.0.145.134:3000`.
+Your application should now be running on `localhost`. The frontend will typically be on `localhost:1234`, and the backend will be on `localhost:3000`.
 
 ## Deployment
 

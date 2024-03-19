@@ -22,7 +22,7 @@ function AdminPanel() {
 
   useEffect(() => {
 
-    fetch(`http://65.0.145.134:3000/admin/users`, {
+    fetch(`http://localhost:3000/admin/users`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -38,7 +38,7 @@ function AdminPanel() {
 
   const promoteUser = (userId) => {
 
-    fetch(`http://65.0.145.134:3000/user/${userId}/promote`, {
+    fetch(`http://localhost:3000/user/${userId}/promote`, {
       method: 'PUT',
       credentials: 'include',
       headers: {

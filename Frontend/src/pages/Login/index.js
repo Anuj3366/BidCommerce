@@ -32,7 +32,7 @@ export default function Login() {
   const router = useRouter();
 
   function login() {
-    fetch("http://65.0.145.134:3000/login", {
+    fetch("http://localhost:3000/login", {
       method: 'POST',
       credentials: 'include',
       headers: {
