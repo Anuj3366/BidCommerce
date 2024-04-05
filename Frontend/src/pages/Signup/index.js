@@ -42,7 +42,7 @@ export default function Signup() {
       return;
     }
     console.log(name, email, password, address);
-    fetch("http://localhost:3000/signup", {
+    fetch("http://65.0.145.134:3000/signup", {
       method: 'POST',
       credentials: 'include',
       headers: {
