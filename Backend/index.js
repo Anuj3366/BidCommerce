@@ -9,7 +9,7 @@ const path = require('path');
 
 // Middleware setup
 app.use(cookieParser());
-app.use(cors({ origin: 'http://localhost:1234', credentials: true }));
+app.use(cors({ origin: 'http://65.0.145.134:1234', credentials: true }));
 app.use(bodyParser.json());
 
 // Connect to MongoDB (assuming you have a separate file for this)
