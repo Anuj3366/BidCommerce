@@ -69,6 +69,13 @@ export default function ProductPage({ product }) {
     setComments(product.comments);
     if (new Date(product.bidEnd).getTime() < Date.now()) {
       setBidEnded(true);
+      fetch(`http://localhost:3000/product/${product._id}/topbidder`, {
+        method: 'POST',
+        credentials: 'include',
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
     }
   }, []);
   const addcomment = async (comment) => {
@@ -114,7 +121,6 @@ export default function ProductPage({ product }) {
   return (
     <>
       <Layout>
-        <div id="root"></div>
         <Center>
           <ColWrapper>
             <WhiteBox>
@@ -137,9 +143,9 @@ export default function ProductPage({ product }) {
                         min={product.price + 1}
                         value={bid}
                         onChange={(e) => setBid(e.target.value)}
-                        />
+                      />
                       <Button onClick={placeBid}>Place Bid</Button>
-                        {highestBidder && <p>You are the highest bidder!</p>}
+                      {highestBidder && <p>You are the highest bidder!</p>}
                     </BidRow>
                   )}
                   {bidEnded && <p>Bidding has ended.</p>}

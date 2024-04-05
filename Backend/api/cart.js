@@ -100,5 +100,24 @@ router.put('/removeFromCart', authorization, async (req, res) => {
   res.json({ message: 'Removed from cart' });
 });
 
+router.post('/topbidder', async (req, res) => {
+  const productId = req.body.productId;
+  const product = await Product.findOne({ _id: productId });
+  if (!product) {
+    return res.status(404).json({ message: 'Product not found' });
+  }
+  const topBidder = product.bids[product.bids.length - 1].email;
+  const found = await User.findOne({ email: topBidder });
+  if (!found) {
+    return res.status(404).json({ message: 'User not found' });
+  }
+  const productExists = found.products.find(product => product.productId.toString() === productId);
+  if (productExists) {
+    return res.json({ message: 'User already has the product' });
+  }
+  found.products.push({ productId: productId });
+  await found.save();
+  return res.json({ message: 'Product added to user' });
+});
 
 module.exports = router;

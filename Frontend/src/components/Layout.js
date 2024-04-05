@@ -18,7 +18,8 @@ const Layout = ({ children }) => {
 
   return (
     <>
-      <Header isLoggedIn={isLoggedIn} setIsLoggedIn ={setIsLoggedIn} />
+      <Header isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <div id="root"></div>
       {children}
     </>
   );

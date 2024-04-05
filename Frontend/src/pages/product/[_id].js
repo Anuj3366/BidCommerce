@@ -99,7 +99,6 @@ export default function ProductPage({ product }) {
   return (
     <>
       <Layout>
-      <div id="root"></div>
         <Center>
           <ColWrapper>
             <WhiteBox>
