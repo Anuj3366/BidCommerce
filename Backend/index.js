@@ -35,8 +35,8 @@ app.use('/', postAll);
 const update = require('./api/update');
 app.use('/', update);
 
-const webhook = require('./api/webhook');
-app.use('/', webhook);
+// const webhook = require('./api/webhook');
+// app.use('/', webhook);
 
 const account = require('./api/account');
 app.use('/', account);

@@ -97,10 +97,25 @@ function CartPage() {
       }),
     });
     const data = await response.json();
-    if (data.url) {
-      window.location = data.url;
-    } else if (data.message === 'Product out of stock') {
-      toast.error('Product out of stock');
+    if (data.message === 'Order placed') {
+      setProducts([]);
+      toast.success('Order placed');
+
+      await fetch("http://localhost:3000/empty-cart", {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } else {
+      switch (data.message) {
+        case 'Product out of stock':
+          toast.error('Product out of stock');
+          break;
+        case 'User not found':
+          toast.error('User not found');
+          break;
+        default:
+          toast.error('An error occurred');
+      }
     }
   }
 
@@ -145,7 +160,7 @@ function CartPage() {
       toast.error('Failed to decrease quantity');
     }
   }
-  
+
   async function increaseQuantity(productId) {
     const response = await fetch("http://localhost:3000/increaseQuantity", {
       method: 'PUT',
@@ -170,7 +185,7 @@ function CartPage() {
     }
   }
 
-  
+
 
   if (isSuccess) {
     window.location.href = "/success";

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Product = require('../Product');
 const CustomerSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
@@ -12,6 +11,7 @@ const CustomerSchema = new mongoose.Schema({
   orders: Object,
   wishlist: Object,
   userType: { type: String, enum: ['user', 'seller', 'worker', 'moderator', 'admin', 'notverified'] },
+  orders: [{type: mongoose.Schema.Types.ObjectId, ref: 'Order'}],
 });
 
 const Customer = mongoose.model('Customer', CustomerSchema);
