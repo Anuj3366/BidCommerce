@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const stripe = require('stripe')('sk_test_51OjbePSANzotrKjrEhOotweNxlEeffTleihOuiHZlItC6BvNohairkq2ro6LOhXb0Q7A18Ss0J3tlo6AcChPWH4n00ncoUx5Os');
+require('dotenv').config();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 const Order = require('../Schemas/Order');
 const User = require('../Schemas/Users/customers.js');
 const authorization = require('./authorization');
