@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon index.js",
-    "build": "next i"
+    "build": "npm i && next build"
   },
   "dependencies": {
     "bcrypt": "^5.1.1",
