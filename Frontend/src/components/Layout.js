@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 const Layout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    fetch('http://65.0.145.134:3000/isLogin', {
+    fetch('https://bidcommerce.onrender.com/isLogin', {
       method: 'GET',
       credentials: 'include',
     })

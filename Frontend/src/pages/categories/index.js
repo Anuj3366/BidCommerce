@@ -13,7 +13,7 @@ function CategoryPage() {
   };
 
   useEffect(() => {
-    fetch("http://65.0.145.134:3000/getAll", {
+    fetch("https://bidcommerce.onrender.com/getAll", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",

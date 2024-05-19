@@ -21,7 +21,7 @@ function ModeratorPanel() {
 
   useEffect(() => {
 
-    fetch(`http://65.0.145.134:3000/getseller`, {
+    fetch(`https://bidcommerce.onrender.com/getseller`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -41,7 +41,7 @@ function ModeratorPanel() {
 
   useEffect(() => {
 
-    fetch(`http://65.0.145.134:3000/getworker`, {
+    fetch(`https://bidcommerce.onrender.com/getworker`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -61,7 +61,7 @@ function ModeratorPanel() {
 
   const verifySeller = (sellerId) => {
 
-    fetch(`http://65.0.145.134:3000/seller/${sellerId}/verify`,
+    fetch(`https://bidcommerce.onrender.com/seller/${sellerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',
@@ -82,7 +82,7 @@ function ModeratorPanel() {
     
     const verifyWorker = (workerId) => {
       
-      fetch(`http://65.0.145.134:3000/worker/${workerId}/verify`,
+      fetch(`https://bidcommerce.onrender.com/worker/${workerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',

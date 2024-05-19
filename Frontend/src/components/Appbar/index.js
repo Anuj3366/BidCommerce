@@ -70,7 +70,7 @@ export default function Header({isLoggedIn, setIsLoggedIn}) {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://65.0.145.134:3000/logout', {
+      const response = await fetch('https://bidcommerce.onrender.com/logout', {
         method: 'GET',
         credentials: 'include',
       });

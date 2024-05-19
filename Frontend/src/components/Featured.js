@@ -68,7 +68,7 @@ export default function Featured(id) {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
-    fetch('http://65.0.145.134:3000/isLogin', {
+    fetch('https://bidcommerce.onrender.com/isLogin', {
       method: 'GET',
       credentials: 'include',
     })
@@ -79,7 +79,7 @@ export default function Featured(id) {
   }, []);
 
   useEffect(() => {
-    fetch("http://65.0.145.134:3000/get/65f2855694db0e6b6f6aebe7", {
+    fetch("https://bidcommerce.onrender.com/get/65f2855694db0e6b6f6aebe7", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -97,7 +97,7 @@ export default function Featured(id) {
       window.location.href = "/Login";
     }
     else {
-      fetch("http://65.0.145.134:3000/addToCart", {
+      fetch("https://bidcommerce.onrender.com/addToCart", {
         method: 'POST',
         credentials: 'include',
         headers: {

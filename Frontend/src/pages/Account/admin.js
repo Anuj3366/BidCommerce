@@ -22,7 +22,7 @@ function AdminPanel() {
 
   useEffect(() => {
 
-    fetch(`http://65.0.145.134:3000/admin/users`, {
+    fetch(`https://bidcommerce.onrender.com/admin/users`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -38,7 +38,7 @@ function AdminPanel() {
 
   const promoteUser = (userId) => {
 
-    fetch(`http://65.0.145.134:3000/user/${userId}/promote`, {
+    fetch(`https://bidcommerce.onrender.com/user/${userId}/promote`, {
       method: 'PUT',
       credentials: 'include',
       headers: {
