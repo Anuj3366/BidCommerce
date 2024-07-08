@@ -6,14 +6,23 @@ import { useState, useEffect } from "react";
 const Layout = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
-    fetch('https://bidcommerce.onrender.com/isLogin', {
-      method: 'GET',
-      credentials: 'include',
-    })
-      .then(res => res.json())
-      .then(data => {
-        setIsLoggedIn(data.loggedIn);
-      });
+    async function fetchData() {
+      try {
+        const response = await fetch('https://bidcommerce.onrender.com/isLogin', {
+          method: 'GET',
+          credentials: 'include',
+        });
+        if (!response.ok) {
+          console.error('HTTP error:', response.status);
+          return;
+        }
+        const data = await response.json();
+        setIsLoggedIn(data?.isLoggedIn);
+      } catch (error) {
+        console.error('Network error:', error);
+      }
+    }
+    fetchData();
   }, []);
 
   return (
