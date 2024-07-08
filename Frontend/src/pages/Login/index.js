@@ -32,7 +32,7 @@ export default function Login() {
   const router = useRouter();
 
   function login() {
-    fetch("https://bidcommerce.onrender.com/login", {
+    fetch("https://bidcommerce.onrender.com/isLogin", {
       method: 'POST',
       credentials: 'include',
       headers: {
