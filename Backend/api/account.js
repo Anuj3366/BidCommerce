@@ -10,7 +10,6 @@ const bcrypt = require('bcrypt');
 router.get('/checkuserType', authorization, async (req, res) => {
   const founded = req.user;
   const { password, ...user } = founded;
-
   if (founded.userType === "seller") {
     const seller = await Seller.findOne({ email: founded.email });
     if (seller && seller.verified && bcrypt.compareSync(seller.password, founded.password)) {

@@ -7,7 +7,7 @@ const OrderSchema = new Schema({
   email:{type:String,required:true},
   address:{type:String,required:true},
   paid:{type:Boolean,required:true},
-  orderId: {type: mongoose.Schema.Types.ObjectId, ref: 'Order'},
+  orderId: {type: mongoose.Schema.Types.ObjectId, ref:'Order'},
 });
 
 const Order = models.Order || model('Order', OrderSchema);

@@ -7,7 +7,7 @@ import Title from "@/components/Title";
 export default function ProductsPage() {
   const [products, setProducts] = useState({});
   useEffect(() => {
-    fetch("https://bidcommerce.onrender.com/getAllAuction", {
+    fetch("http://localhost:3000/getAllAuction", {
       method: 'GET',
       credentials: 'include',
       headers: {

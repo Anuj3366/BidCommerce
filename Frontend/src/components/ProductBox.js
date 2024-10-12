@@ -72,7 +72,7 @@ export default function ProductBox({ _id, title, price, images, bid }) {
   }
 
   function addFeaturedToCart() {
-    fetch("https://bidcommerce.onrender.com/addToCart", {
+    fetch("http://localhost:3000/addToCart", {
       method: 'POST',
       credentials: 'include',
       headers: {

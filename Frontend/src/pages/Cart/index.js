@@ -60,7 +60,7 @@ function CartPage() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    fetch("https://bidcommerce.onrender.com/getCart", {
+    fetch("http://localhost:3000/getCart", {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -86,7 +86,7 @@ function CartPage() {
 
 
   async function goToPayment() {
-    const response = await fetch("https://bidcommerce.onrender.com/checkout", {
+    const response = await fetch("http://localhost:3000/checkout", {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -101,7 +101,7 @@ function CartPage() {
       setProducts([]);
       toast.success('Order placed');
 
-      await fetch("https://bidcommerce.onrender.com/empty-cart", {
+      await fetch("http://localhost:3000/empty-cart", {
         method: 'POST',
         credentials: 'include',
       });
@@ -120,7 +120,7 @@ function CartPage() {
   }
 
   async function removeFromCart(productId) {
-    const response = await fetch("https://bidcommerce.onrender.com/removeFromCart", {
+    const response = await fetch("http://localhost:3000/removeFromCart", {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -139,7 +139,7 @@ function CartPage() {
   }
 
   async function decreaseQuantity(productId) {
-    const response = await fetch("https://bidcommerce.onrender.com/decreaseQuantity", {
+    const response = await fetch("http://localhost:3000/decreaseQuantity", {
       method: 'PUT',
       credentials: 'include',
       headers: {
@@ -162,7 +162,7 @@ function CartPage() {
   }
 
   async function increaseQuantity(productId) {
-    const response = await fetch("https://bidcommerce.onrender.com/increaseQuantity", {
+    const response = await fetch("http://localhost:3000/increaseQuantity", {
       method: 'PUT',
       credentials: 'include',
       headers: {

@@ -15,7 +15,7 @@ export default function NewProducts() {
   const [products, setNewProducts] = useState([]);
 
   useEffect(() => {
-    fetch("https://bidcommerce.onrender.com/getAllProduct", {
+    fetch("http://localhost:3000/getAllProduct", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",

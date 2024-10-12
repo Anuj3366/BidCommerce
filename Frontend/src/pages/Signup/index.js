@@ -42,7 +42,7 @@ export default function Signup() {
       return;
     }
     console.log(name, email, password, address);
-    fetch("https://bidcommerce.onrender.com/signup", {
+    fetch("http://localhost:3000/signup", {
       method: 'POST',
       credentials: 'include',
       headers: {

@@ -50,7 +50,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
 
-    fetch('https://bidcommerce.onrender.com/checkuserType', {
+    fetch('http://localhost:3000/checkuserType', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -120,7 +120,7 @@ export default function ProductsPage() {
       toast.error('Address is required');
       return;
     }
-    await fetch('https://bidcommerce.onrender.com/becomeSeller', {
+    await fetch('http://localhost:3000/becomeSeller', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -144,7 +144,7 @@ export default function ProductsPage() {
       toast.error('Valid Adhaar number is required');
       return;
     }
-    fetch('https://bidcommerce.onrender.com/becomeWorker', {
+    fetch('http://localhost:3000/becomeWorker', {
       method: 'POST',
       credentials: 'include',
       headers: {
