@@ -7,6 +7,13 @@ const bodyParser = require('body-parser');
 const path = require('path');
 
 
+// const Parse = require('parse/node');
+// require('dotenv').config();
+
+// Parse.initialize(process.env.APPLICATION_ID_BACK4APP,process.env.JAVASCRIPT_KEY_BACK4APP);
+// Parse.serverURL = 'https://parseapi.back4app.com/';
+
+
 // Middleware setup
 app.use(cookieParser());
 app.use(cors({ origin: '*', credentials: true }));
