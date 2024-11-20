@@ -5,20 +5,16 @@
   "scripts": {
     "start": "nodemon index.js",
     "dev": "nodemon index.js",
-    "build": "npm i && npm install -g nodemon"
+    "build": "npm install"
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^2.1.0",
     "bcrypt": "^5.1.1",
     "body-parser": "*",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "eslint": "^9.15.0",
-    "eslint-config-next": "^15.0.3",
     "express": "^4.21.1",
     "jsonwebtoken": "^9.0.2",
-    "micro": "^10.0.1",
     "mongoose": "^8.8.2",
     "next": "15.0.3",
     "parse": "^3.5.1",
@@ -27,6 +23,7 @@
   "devDependencies": {
     "autoprefixer": "^10.4.20",
     "concurrently": "^9.1.0",
+    "nodemon": "^3.0.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.15"
   }

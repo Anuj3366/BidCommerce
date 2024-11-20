@@ -7,15 +7,17 @@ WORKDIR /app
 # Copy package.json and package-lock.json to the working directory
 COPY package*.json ./
 
-# Install the application dependencies
-RUN npm install
+# Install dependencies and nodemon in one step
+RUN npm install && npm install -g nodemon
 
 # Copy the application files into the working directory
 COPY . .
 
-# Install nodemon globally
-RUN npm install -g nodemon
+# Set the environment to production (optional)
+ENV NODE_ENV=production
 
+# Expose the application's port
+EXPOSE 3000
 
 # Define the entry point for the container
 CMD ["npm", "start"]
