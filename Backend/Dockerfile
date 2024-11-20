@@ -16,8 +16,6 @@ COPY . .
 # Install nodemon globally
 RUN npm install -g nodemon
 
-# Expose the port that your application will run on
-EXPOSE 3000
 
 # Define the entry point for the container
 CMD ["npm", "start"]
