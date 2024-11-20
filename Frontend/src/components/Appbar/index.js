@@ -70,7 +70,7 @@ export default function Header({isLoggedIn, setIsLoggedIn}) {
   const [mobileNavActive, setMobileNavActive] = useState(false);
   const handleLogout = async () => {
     try {
-      const response = await fetch('http://localhost:3000/logout', {
+      const response = await fetch('http://localhost:8080/logout', {
         method: 'GET',
         credentials: 'include',
       });

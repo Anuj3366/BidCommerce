@@ -8,7 +8,7 @@ const Layout = ({ children }) => {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3000/isLogin', {
+        const response = await fetch('http://localhost:8080/isLogin', {
           method: 'GET',
           credentials: 'include',
         });

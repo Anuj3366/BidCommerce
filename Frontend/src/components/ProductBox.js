@@ -72,7 +72,7 @@ export default function ProductBox({ _id, title, price, images, bid }) {
   }
 
   function addFeaturedToCart() {
-    fetch("http://localhost:3000/addToCart", {
+    fetch("http://localhost:8080/addToCart", {
       method: 'POST',
       credentials: 'include',
       headers: {

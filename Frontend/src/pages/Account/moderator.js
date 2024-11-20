@@ -21,7 +21,7 @@ function ModeratorPanel() {
 
   useEffect(() => {
 
-    fetch(`http://localhost:3000/getseller`, {
+    fetch(`http://localhost:8080/getseller`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -41,7 +41,7 @@ function ModeratorPanel() {
 
   useEffect(() => {
 
-    fetch(`http://localhost:3000/getworker`, {
+    fetch(`http://localhost:8080/getworker`, {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -61,7 +61,7 @@ function ModeratorPanel() {
 
   const verifySeller = (sellerId) => {
 
-    fetch(`http://localhost:3000/seller/${sellerId}/verify`,
+    fetch(`http://localhost:8080/seller/${sellerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',
@@ -82,7 +82,7 @@ function ModeratorPanel() {
     
     const verifyWorker = (workerId) => {
       
-      fetch(`http://localhost:3000/worker/${workerId}/verify`,
+      fetch(`http://localhost:8080/worker/${workerId}/verify`,
       {
         method: 'PUT',
         credentials: 'include',

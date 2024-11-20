@@ -7,7 +7,7 @@ import Title from "@/components/Title";
 export default function ProductsPage() {
   const [products, setProducts] = useState({});
   useEffect(() => {
-    fetch("http://localhost:3000/getAllAuction", {
+    fetch("http://localhost:8080/getAllAuction", {
       method: 'GET',
       credentials: 'include',
       headers: {

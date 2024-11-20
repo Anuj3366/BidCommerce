@@ -15,7 +15,7 @@ export default function NewProducts() {
   const [products, setNewProducts] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:3000/getAllProduct", {
+    fetch("http://localhost:8080/getAllProduct", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",

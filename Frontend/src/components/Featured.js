@@ -70,7 +70,7 @@ export default function Featured() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const response = await fetch('http://localhost:3000/isLogin', {
+        const response = await fetch('http://localhost:8080/isLogin', {
           method: 'GET',
           credentials: 'include',
         });
@@ -88,7 +88,7 @@ export default function Featured() {
   }, []);
 
   useEffect(() => {
-    fetch("http://localhost:3000/get/65f2855694db0e6b6f6aebe7", {
+    fetch("http://localhost:8080/get/65f2855694db0e6b6f6aebe7", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",
@@ -106,7 +106,7 @@ export default function Featured() {
       window.location.href = "/Login";
     }
     else {
-      fetch("http://localhost:3000/addToCart", {
+      fetch("http://localhost:8080/addToCart", {
         method: 'POST',
         credentials: 'include',
         headers: {

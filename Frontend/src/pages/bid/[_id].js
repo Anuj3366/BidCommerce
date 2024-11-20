@@ -69,7 +69,7 @@ export default function ProductPage({ product }) {
     setComments(product.comments);
     if (new Date(product.bidEnd).getTime() < Date.now()) {
       setBidEnded(true);
-      fetch(`http://localhost:3000/product/${product._id}/topbidder`, {
+      fetch(`http://localhost:8080/product/${product._id}/topbidder`, {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -79,7 +79,7 @@ export default function ProductPage({ product }) {
     }
   }, []);
   const addcomment = async (comment) => {
-    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+    const res = await fetch(`http://localhost:8080/product/${product._id}/comment`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -101,7 +101,7 @@ export default function ProductPage({ product }) {
       toast.error("Your bid must be higher than the current price.");
       return;
     }
-    const res = await fetch(`http://localhost:3000/product/${product._id}/bid`, {
+    const res = await fetch(`http://localhost:8080/product/${product._id}/bid`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -189,7 +189,7 @@ export default function ProductPage({ product }) {
 export async function getServerSideProps(context) {
   const { _id } = context.params;
   try {
-    const res = await fetch(`http://localhost:3000/get/${_id}`, {
+    const res = await fetch(`http://localhost:8080/get/${_id}`, {
       method: 'GET',
       credentials: 'include',
       headers: {

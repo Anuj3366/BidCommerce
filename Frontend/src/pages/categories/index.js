@@ -13,7 +13,7 @@ function CategoryPage() {
   };
 
   useEffect(() => {
-    fetch("http://localhost:3000/getAll", {
+    fetch("http://localhost:8080/getAll", {
       method: 'GET',
       headers: {
         "Content-Type": "application/json",

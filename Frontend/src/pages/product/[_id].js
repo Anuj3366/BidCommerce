@@ -52,7 +52,7 @@ export default function ProductPage({ product }) {
   }, []);
 
   const addcomment = async (comment) => {
-    const res = await fetch(`http://localhost:3000/product/${product._id}/comment`, {
+    const res = await fetch(`http://localhost:8080/product/${product._id}/comment`, {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -71,14 +71,14 @@ export default function ProductPage({ product }) {
 
 
   async function addToCart(product) {
-    const res = await fetch('http://localhost:3000/isLogin', {
+    const res = await fetch('http://localhost:8080/isLogin', {
       method: 'GET',
       credentials: 'include',
     });
     const data = await res.json();
     if (!data.loggedIn) window.location.href = "/Login";
     else {
-      fetch("http://localhost:3000/addToCart", {
+      fetch("http://localhost:8080/addToCart", {
         method: 'POST',
         credentials: 'include',
         headers: {
@@ -156,7 +156,7 @@ export default function ProductPage({ product }) {
 export async function getServerSideProps(context) {
   const { _id } = context.params;
   try {
-    const res = await fetch(`http://localhost:3000/get/${_id}`, {
+    const res = await fetch(`http://localhost:8080/get/${_id}`, {
       method: 'GET',
       credentials: 'include',
       headers: {

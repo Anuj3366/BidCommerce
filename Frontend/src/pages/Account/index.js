@@ -50,7 +50,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
 
-    fetch('http://localhost:3000/checkuserType', {
+    fetch('http://localhost:8080/checkuserType', {
       method: 'GET',
       credentials: 'include',
       headers: {
@@ -120,7 +120,7 @@ export default function ProductsPage() {
       toast.error('Address is required');
       return;
     }
-    await fetch('http://localhost:3000/becomeSeller', {
+    await fetch('http://localhost:8080/becomeSeller', {
       method: 'POST',
       credentials: 'include',
       headers: {
@@ -144,7 +144,7 @@ export default function ProductsPage() {
       toast.error('Valid Adhaar number is required');
       return;
     }
-    fetch('http://localhost:3000/becomeWorker', {
+    fetch('http://localhost:8080/becomeWorker', {
       method: 'POST',
       credentials: 'include',
       headers: {
