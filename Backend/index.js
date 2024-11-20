@@ -54,6 +54,6 @@ console.log("All routes are running");
 app.use(express.static(path.join(__dirname, '../frontend/.next')));
 
 // Start the server
-app.listen(3000, () => {
+app.listen(8080, () => {
   console.log('Server is running on port 3000');
 });
