@@ -23,11 +23,6 @@ const Wrapper = styled.div`
   padding: 20px 0;
 `;
 const StyledNav = styled.nav`
-  ${props => props.mobileNavActive ? `
-    display: block;
-  ` : `
-    display: none;
-  `}
   gap: 15px;
   position: fixed;
   top: 0;
@@ -67,7 +62,7 @@ const NavButton = styled.button`
 `;
 
 export default function Header({isLoggedIn, setIsLoggedIn}) {
-  const [mobileNavActive, setMobileNavActive] = useState(false);
+  // const [mobileNavActive, setMobileNavActive] = useState(false);
   const handleLogout = async () => {
     try {
       const response = await fetch('http://localhost:8080/logout', {
@@ -93,7 +88,7 @@ export default function Header({isLoggedIn, setIsLoggedIn}) {
         <Center>
           <Wrapper>
             <Logo href={'/'}>BidCommerce</Logo>
-            <StyledNav mobileNavActive={mobileNavActive}>
+            <StyledNav>
               <NavLink href={"/"}>Home</NavLink>
               <NavLink href={"/Auction"}>Auction</NavLink>
               <NavLink href={"/categories"}>Categories</NavLink>
@@ -110,9 +105,9 @@ export default function Header({isLoggedIn, setIsLoggedIn}) {
                 </>
               )}
             </StyledNav>
-            <NavButton onClick={() => setMobileNavActive(!mobileNavActive)}>
+            {/* <NavButton>
               {mobileNavActive ? <CloseIcon /> : <BarsIcon />}
-            </NavButton>
+            </NavButton> */}
           </Wrapper>
         </Center>
       </StyledHeader>
