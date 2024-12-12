@@ -77,7 +77,6 @@ export default function ProductPage({ product }) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ email, password }),
     });
     const data = await res.json();
     if (!data.loggedIn) window.location.href = "/Login";

@@ -76,7 +76,6 @@ export default function Featured() {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, password }),
         });
         if (!response.ok) {
           console.error('HTTP error:', response.status);
