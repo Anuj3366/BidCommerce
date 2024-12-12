@@ -11,6 +11,10 @@ const Layout = ({ children }) => {
         const response = await fetch('http://localhost:8080/isLogin', {
           method: 'GET',
           credentials: 'include',
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
         });
         if (!response.ok) {
           console.error('HTTP error:', response.status);

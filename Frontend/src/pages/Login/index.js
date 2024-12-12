@@ -33,7 +33,7 @@ export default function Login() {
 
   function login() {
     fetch("http://localhost:8080/isLogin", {
-      method: 'POST',
+      method: 'GET',
       credentials: 'include',
       headers: {
         "Content-Type": "application/json",
